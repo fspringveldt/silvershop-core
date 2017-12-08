@@ -1,6 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use SilverStripe\Omnipay\GatewayInfo;
+use Member;
+use Session;
+
 
 /**
  * Helper class for getting an order throught the checkout process
@@ -124,7 +130,7 @@ class Checkout
         if (!isset($methods[$paymentmethod])) {
             Session::set("Checkout.PaymentMethod", null);
             Session::clear("Checkout.PaymentMethod");
-            return $this->error(_t("Checkout.NoPaymentMethod", "Payment method does not exist"));
+            return $this->error(_t("SilverShop\\Core\\Checkout.NoPaymentMethod", "Payment method does not exist"));
         }
         Session::set("Checkout.PaymentMethod", $paymentmethod);
         return true;
@@ -173,7 +179,7 @@ class Checkout
      * Store a message to be fed back to user.
      *
      * @param string $message
-     * @param string $type - good, bad, warning
+     * @param string $type    - good, bad, warning
      */
     protected function message($message, $type = "good")
     {

@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use SilverShop\Core\I18nDatetime;
+
+
+
 class I18nDatetimeTest extends SapphireTest
 {
     public function testField()

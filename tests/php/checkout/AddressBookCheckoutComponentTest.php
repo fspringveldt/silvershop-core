@@ -1,20 +1,45 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+
+
+
+use SilverShop\Core\CheckoutConfig;
+use SilverShop\Core\Order;
+use SilverShop\Core\Address;
+use SilverShop\Core\CheckoutComponentConfig;
+use SilverShop\Core\BillingAddressBookCheckoutComponent;
+
+
+
 class AddressBookCheckoutComponentTest extends SapphireTest
 {
     protected static $fixture_file = array(
         'silvershop/tests/fixtures/Orders.yml',
         'silvershop/tests/fixtures/ShopMembers.yml',
     );
-    /** @var Order $cart */
+    /**
+     * @var Order $cart 
+     */
     protected $cart;
-    /** @var Member $member */
+    /**
+     * @var Member $member 
+     */
     protected $member;
-    /** @var Address $address1 */
+    /**
+     * @var Address $address1 
+     */
     protected $address1;
-    /** @var Address $address2 */
+    /**
+     * @var Address $address2 
+     */
     protected $address2;
-    /** @var CheckoutComponentConfig $config */
+    /**
+     * @var CheckoutComponentConfig $config 
+     */
     protected $config;
     protected $fixtureNewAddress = array(
         'BillingAddressBookCheckoutComponent_BillingAddressID' => 'newaddress',
@@ -34,9 +59,9 @@ class AddressBookCheckoutComponentTest extends SapphireTest
         parent::setUp();
 
         $this->member = $this->objFromFixture("Member", "jeremyperemy");
-        $this->cart = $this->objFromFixture("Order", "cart1");
-        $this->address1 = $this->objFromFixture("Address", "address1");
-        $this->address2 = $this->objFromFixture("Address", "address2");
+        $this->cart = $this->objFromFixture(Order::class, "cart1");
+        $this->address1 = $this->objFromFixture(Address::class, "address1");
+        $this->address2 = $this->objFromFixture(Address::class, "address2");
         $this->config = new CheckoutComponentConfig($this->cart, true);
 
         $this->config->addComponent(new BillingAddressBookCheckoutComponent());

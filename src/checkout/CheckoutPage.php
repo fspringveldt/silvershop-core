@@ -1,11 +1,29 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Page;
+use Controller;
+use FieldList;
+use HtmlEditorField;
+use DB;
+use Page_Controller;
+use Injector;
+use FormAction;
+use GatewayErrorMessage;
+use SilverShop\Core\Checkout;
+use SilverShop\Core\PaymentForm;
+use SilverShop\Core\CheckoutComponentConfig;
+use SilverShop\Core\OnsitePaymentCheckoutComponent;
+
+
+
 /**
  * CheckoutPage is a CMS page-type that shows the order
  * details to the customer for their current shopping
  * cart on the site.
  *
- * @see     CheckoutPage_Controller->Order()
+ * @see CheckoutPage_Controller->Order()
  *
  * @package shop
  */
@@ -35,25 +53,27 @@ class CheckoutPage extends Page
 
     public function getCMSFields()
     {
-        $this->beforeUpdateCMSFields(function(FieldList $fields) {
-            $fields->addFieldsToTab(
-                'Root.Main',
-                array(
+        $this->beforeUpdateCMSFields(
+            function (FieldList $fields) {
+                $fields->addFieldsToTab(
+                    'Root.Main',
+                    array(
                     HtmlEditorField::create(
                         'PurchaseComplete',
-                        _t('CheckoutPage.db_PurchaseComplete', 'Purchase Complete'),
+                        _t('SilverShop\\Core\\CheckoutPage.db_PurchaseComplete', 'Purchase Complete'),
                         4
                     )
                         ->setDescription(
                             _t(
-                                'CheckoutPage.PurchaseCompleteDescription',
+                                'SilverShop\\Core\\CheckoutPage.PurchaseCompleteDescription',
                                 "This message is included in reciept email, after the customer submits the checkout"
                             )
                         ),
-                ),
-                'Metadata'
-            );
-        });
+                    ),
+                    'Metadata'
+                );
+            }
+        );
 
         return parent::getCMSFields();
     }
@@ -67,7 +87,7 @@ class CheckoutPage extends Page
         if (!self::get()->exists() && $this->config()->create_default_pages) {
             $page = self::create(
                 array(
-                    'Title'       => 'Checkout',
+                    'Title'       => Checkout::class,
                     'URLSegment'  => CheckoutPage_Controller::config()->url_segment,
                     'ShowInMenus' => 0,
                 )
@@ -98,7 +118,7 @@ class CheckoutPage_Controller extends Page_Controller
     private static $allowed_actions = array(
         'OrderForm',
         'payment',
-        'PaymentForm',
+        PaymentForm::class,
     );
 
     public function Title()
@@ -107,7 +127,7 @@ class CheckoutPage_Controller extends Page_Controller
             return $this->failover->Title;
         }
 
-        return _t('CheckoutPage.DefaultTitle', "Checkout");
+        return _t('SilverShop\\Core\\CheckoutPage.DefaultTitle', Checkout::class);
     }
 
     public function OrderForm()
@@ -116,18 +136,20 @@ class CheckoutPage_Controller extends Page_Controller
             return false;
         }
 
-        /** @var CheckoutComponentConfig $config */
-        $config = Injector::inst()->create("CheckoutComponentConfig", ShoppingCart::curr());
+        /**
+ * @var CheckoutComponentConfig $config 
+*/
+        $config = Injector::inst()->create(CheckoutComponentConfig::class, ShoppingCart::curr());
         $form = PaymentForm::create($this, 'OrderForm', $config);
 
         // Normally, the payment is on a second page, either offsite or through /checkout/payment
         // If the site has customised the checkout component config to include an onsite payment
         // component, we should honor that and change the button label. PaymentForm::checkoutSubmit
         // will also check this and process payment if needed.
-        if ($config->getComponentByType('OnsitePaymentCheckoutComponent')) {
+        if ($config->getComponentByType(OnsitePaymentCheckoutComponent::class)) {
             $form->setActions(
                 FieldList::create(
-                    FormAction::create('checkoutSubmit', _t('CheckoutPage.SubmitPayment', 'Submit Payment'))
+                    FormAction::create('checkoutSubmit', _t('SilverShop\\Core\\CheckoutPage.SubmitPayment', 'Submit Payment'))
                 )
             );
         }
@@ -162,11 +184,11 @@ class CheckoutPage_Controller extends Page_Controller
         $config = new CheckoutComponentConfig(ShoppingCart::curr(), false);
         $config->addComponent(OnsitePaymentCheckoutComponent::create());
 
-        $form = PaymentForm::create($this, "PaymentForm", $config);
+        $form = PaymentForm::create($this, PaymentForm::class, $config);
 
         $form->setActions(
             FieldList::create(
-                FormAction::create("submitpayment", _t('CheckoutPage.SubmitPayment', "Submit Payment"))
+                FormAction::create("submitpayment", _t('SilverShop\\Core\\CheckoutPage.SubmitPayment', "Submit Payment"))
             )
         );
 

@@ -1,5 +1,20 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+
+
+use Member;
+use SilverShop\Core\Order;
+use SilverShop\Core\Address;
+use SilverShop\Core\Checkout;
+use SilverShop\Core\ShopMemberFactory;
+use SilverShop\Core\CheckoutConfig;
+
+
+
 class CheckoutTest extends SapphireTest
 {
     protected static $fixture_file = array(
@@ -15,9 +30,9 @@ class CheckoutTest extends SapphireTest
     {
         parent::setUp();
         ShopTest::setConfiguration();
-        $this->cart = $this->objFromFixture("Order", "cart1");
-        $this->address1 = $this->objFromFixture("Address", "address1");
-        $this->address2 = $this->objFromFixture("Address", "address2");
+        $this->cart = $this->objFromFixture(Order::class, "cart1");
+        $this->address1 = $this->objFromFixture(Address::class, "address1");
+        $this->address2 = $this->objFromFixture(Address::class, "address2");
         $this->checkout = new Checkout($this->cart);
         $this->memberFactory = new ShopMemberFactory();
 

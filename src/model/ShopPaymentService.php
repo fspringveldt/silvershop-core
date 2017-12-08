@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Extension;
+
+
 /**
  */
 class ShopPaymentService extends Extension

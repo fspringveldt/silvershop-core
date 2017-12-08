@@ -1,5 +1,20 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Extension;
+use Object;
+use Controller;
+use SilverShop\Core\CheckoutStep_Membership;
+use SilverShop\Core\CheckoutStep_ContactDetails;
+use SilverShop\Core\CheckoutStep_Address;
+use SilverShop\Core\CheckoutStep_PaymentMethod;
+use SilverShop\Core\CheckoutStep_Summary;
+use SilverShop\Core\CheckoutPage_Controller;
+use SilverShop\Core\SteppedCheckout;
+
+
+
 /**
  * Stepped checkout provides multiple forms and actions for placing an order
  *
@@ -8,7 +23,9 @@
  */
 class SteppedCheckout extends Extension
 {
-    /** @var CheckoutPage_Controller */
+    /**
+     * @var CheckoutPage_Controller 
+     */
     protected $owner;
 
     /**
@@ -19,12 +36,12 @@ class SteppedCheckout extends Extension
         if (!is_array($steps)) {
             //default steps
             $steps = array(
-                'membership'      => 'CheckoutStep_Membership',
-                'contactdetails'  => 'CheckoutStep_ContactDetails',
-                'shippingaddress' => 'CheckoutStep_Address',
-                'billingaddress'  => 'CheckoutStep_Address',
-                'paymentmethod'   => 'CheckoutStep_PaymentMethod',
-                'summary'         => 'CheckoutStep_Summary',
+                'membership'      => CheckoutStep_Membership::class,
+                'contactdetails'  => CheckoutStep_ContactDetails::class,
+                'shippingaddress' => CheckoutStep_Address::class,
+                'billingaddress'  => CheckoutStep_Address::class,
+                'paymentmethod'   => CheckoutStep_PaymentMethod::class,
+                'summary'         => CheckoutStep_Summary::class,
             );
         }
 
@@ -35,9 +52,9 @@ class SteppedCheckout extends Extension
             CheckoutPage::config()->first_step = key($steps);
         }
         //initiate extensions
-        Object::add_extension("CheckoutPage_Controller", "SteppedCheckout");
+        Object::add_extension(CheckoutPage_Controller::class, SteppedCheckout::class);
         foreach ($steps as $action => $classname) {
-            Object::add_extension("CheckoutPage_Controller", $classname);
+            Object::add_extension(CheckoutPage_Controller::class, $classname);
         }
     }
 

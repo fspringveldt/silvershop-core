@@ -1,5 +1,15 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+use Config;
+
+use SilverShop\Core\Order;
+use SilverShop\Core\OrderEmailNotifier;
+
+
+
 /**
  * @date       12.01.2015
  * @package    shop
@@ -8,16 +18,20 @@
 class OrderNotificationTest extends SapphireTest
 {
     protected static $fixture_file = 'silvershop/tests/fixtures/shop.yml';
-    /** @var Order */
+    /**
+     * @var Order 
+     */
     protected $order;
-    /** @var OrderEmailNotifier */
+    /**
+     * @var OrderEmailNotifier 
+     */
     protected $notifier;
 
     public function setUp()
     {
         parent::setUp();
         Config::inst()->update('Email', 'admin_email', 'shop-admin@example.com');
-        $this->order = $this->objFromFixture('Order', 'paid');
+        $this->order = $this->objFromFixture(Order::class, 'paid');
         $this->notifier = OrderEmailNotifier::create($this->order);
     }
 

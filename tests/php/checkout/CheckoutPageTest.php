@@ -1,5 +1,17 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+
+use Director;
+use SilverShop\Core\Order;
+use SilverShop\Core\OrderManipulation;
+use SilverShop\Core\CheckoutPage;
+
+
+
 class CheckoutPageTest extends FunctionalTest
 {
     protected static $fixture_file   = array(
@@ -18,7 +30,7 @@ class CheckoutPageTest extends FunctionalTest
 
     public function testActionsForm()
     {
-        $order = $this->objFromFixture("Order", "unpaid");
+        $order = $this->objFromFixture(Order::class, "unpaid");
         OrderManipulation::add_session_order($order);
         $this->get("/checkout/order/" . $order->ID);
 
@@ -52,7 +64,7 @@ class CheckoutPageTest extends FunctionalTest
 
     public function testFindLink()
     {
-        $this->checkoutpage = $this->objFromFixture('CheckoutPage', 'checkout');
+        $this->checkoutpage = $this->objFromFixture(CheckoutPage::class, 'checkout');
         $this->checkoutpage->publish('Stage', 'Live');
         $link = CheckoutPage::find_link();
         $this->assertEquals(

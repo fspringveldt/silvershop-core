@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+
+use FieldList;
+use SiteConfig;
+use CheckboxField;
+
+
 class TermsCheckoutComponent extends CheckoutComponent
 {
     public function getFormFields(Order $order)
@@ -12,7 +19,7 @@ class TermsCheckoutComponent extends CheckoutComponent
                 CheckboxField::create(
                     'ReadTermsAndConditions',
                     _t(
-                        'Checkout.TermsAndConditionsLink',
+                        'SilverShop\\Core\\Checkout.TermsAndConditionsLink',
                         'I agree to the terms and conditions stated on the <a href="{TermsPageLink}" target="new" title="Read the shop terms and conditions for this site">{TermsPageTitle}</a> page',
                         '',
                         array('TermsPageLink' => $page->Link(), 'TermsPageTitle' => $page->Title)

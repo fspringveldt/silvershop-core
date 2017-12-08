@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverShop\Core;
+use SilverShop\Core\Order;
+use SilverShop\Core\OrderAttribute;
+use SilverShop\Core\OrderModifier;
+
+
+
+
+
 /**
  * Tax report
  *
@@ -13,7 +22,7 @@ class TaxReport extends ShopPeriodReport
 
     protected $description = "Report tax charged on orders. Only includes orders that have been paid.";
 
-    protected $dataClass   = "Order";
+    protected $dataClass   = Order::class;
 
     protected $periodfield = "\"Order\".\"Paid\"";
 
@@ -34,10 +43,10 @@ class TaxReport extends ShopPeriodReport
     {
         return parent::query($params)
             ->addInnerJoin(
-                "OrderAttribute",
+                OrderAttribute::class,
                 "OrderAttribute.OrderID = Order.ID AND OrderAttribute.ClassName like '%TaxModifier'"
             )
-            ->addInnerJoin("OrderModifier", "OrderModifier.ID = OrderAttribute.ID")
+            ->addInnerJoin(OrderModifier::class, "OrderModifier.ID = OrderAttribute.ID")
             ->selectField("Count(\"Order\".\"ID\")", "Count")
             ->selectField("Sum(\"OrderModifier\".\"Amount\")", "Tax")
             ->selectField("Sum(\"Order\".\"Total\")", "Sales");

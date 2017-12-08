@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core;
+
+use ErrorException;
+use Exception;
+use SS_Log;
+use ClassInfo;
+
+
 /**
  * Handles the calculation of order totals.
  *
@@ -32,9 +40,11 @@ class OrderTotalCalculator
             ShopTools::DBConn()->transactionStart();
         }
 
-        set_error_handler(function ($severity, $message, $file, $line) {
-            throw new ErrorException($message, 0, $severity, $file, $line);
-        }, E_ALL & ~(E_STRICT | E_NOTICE));
+        set_error_handler(
+            function ($severity, $message, $file, $line) {
+                throw new ErrorException($message, 0, $severity, $file, $line);
+            }, E_ALL & ~(E_STRICT | E_NOTICE)
+        );
 
         try {
             foreach ($modifierclasses as $ClassName) {

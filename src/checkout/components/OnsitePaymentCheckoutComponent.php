@@ -1,11 +1,17 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use Omnipay\Common\Helper;
 use SilverStripe\Omnipay\GatewayInfo;
 use SilverStripe\Omnipay\GatewayFieldsFactory;
+use LiteralField;
+use ValidationResult;
+use ValidationException;
+
 
 /**
- *
  * This component should only ever be used on SSL encrypted pages!
  */
 class OnsitePaymentCheckoutComponent extends CheckoutComponent
@@ -40,7 +46,7 @@ class OnsitePaymentCheckoutComponent extends CheckoutComponent
         $result = ValidationResult::create();
         //TODO: validate credit card data
         if (!Helper::validateLuhn($data['number'])) {
-            $result->error(_t('OnsitePaymentCheckoutComponent.InvalidCreditCard', 'Credit card is invalid'));
+            $result->error(_t('SilverShop\\Core\\OnsitePaymentCheckoutComponent.InvalidCreditCard', 'Credit card is invalid'));
             throw new ValidationException($result);
         }
     }

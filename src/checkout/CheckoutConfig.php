@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Object;
+
+
 class CheckoutConfig extends Object
 {
     private static $member_creation_enabled = true;

@@ -4,37 +4,36 @@ After:
   - 'framework/*'
   - 'cms/*'
 ---
-
 SiteConfig:
   extensions:
-    - ShopConfig
+    - SilverShop\Core\ShopConfig
 Page_Controller:
   extensions:
-    - ViewableCart
-ShoppingCart_Controller:
+    - SilverShop\Core\ViewableCart
+SilverShop\Core\ShoppingCart_Controller:
   extensions:
-    - ViewableCart
-CheckoutPage_Controller:
+    - SilverShop\Core\ViewableCart
+SilverShop\Core\CheckoutPage_Controller:
   extensions:
-    - OrderManipulation
-AccountPage_Controller:
+    - SilverShop\Core\OrderManipulation
+SilverShop\Core\AccountPage_Controller:
   extensions:
-    - OrderManipulation
+    - SilverShop\Core\OrderManipulation
 Member:
   extensions:
-    - ShopMember
+    - SilverShop\Core\ShopMember
 Image:
   extensions:
-    - Product_Image
-Product:
+    - SilverShop\Core\Product_Image
+SilverShop\Core\Product:
   extensions:
-    - ProductVariationsExtension
+    - SilverShop\Core\ProductVariationsExtension
 Payment:
   extensions:
-    - ShopPayment
-Order:
+    - SilverShop\Core\ShopPayment
+SilverShop\Core\Order:
   extensions:
     - Payable
 SilverStripe\Omnipay\Service\PaymentService:
   extensions:
-    - ShopPaymentService
+    - SilverShop\Core\ShopPaymentService

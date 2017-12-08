@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use SS_Datetime;
+
+
 /**
  * provides I18n formating
  *

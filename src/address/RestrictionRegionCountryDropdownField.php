@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DropdownField;
+use SiteConfig;
+
+
 class RestrictionRegionCountryDropdownField extends DropdownField
 {
     public static $defaultname = "-- International --";

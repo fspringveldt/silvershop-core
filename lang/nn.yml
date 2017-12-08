@@ -1,20 +1,101 @@
 nn:
-  OrdersAdmin:
-    MENUTITLE: Ordrar
-  ProductCatalogAdmin:
-    MENUTITLE: Katalog
-  ZoneAdmin:
-    MENUTITLE: Sonar
-  AbandonedCartReport:
+  AccountPage_AddressBook:
+    CreateNewTitle: 'Lag ei ny adresse'
+    DefaultBillingAddress: 'Standard fakturaadresse'
+    DefaultShippingAddress: 'Standard fraktadresse'
+    DeleteAddress: 'Slett adressa'
+    MakeDefaultBilling: 'Gjer denne til standard betaling'
+    MakeDefaultBillingTitle: 'Gjer denne til standard betalingadresse'
+    MakeDefaultShipping: 'Gjer den til standard frakt'
+    MakeDefaultShippingTitle: 'Gjer denne til standard fraktadresse'
+    NoAddress: 'Inga adresse blei funne'
+    Title: Standardadresse
+  AccountPage_EditProfile:
+    Title: 'Rediger profil'
+  CheckoutField:
+    AccountInfo: 'Ver venleg og vel eit passord, du kan seinare logge inn og sjå ordrehistorikken din'
+    MemberLoginInfo: 'Om allereie er medlem ver venleg og <a href="{LoginUrl}">logg inn</a>'
+    MembershipDetails: Medlemskapdetaljer
+    MustAgreeToTerms: 'Du må godta vilkåra'
+    Password: Passord
+    PaymentType: 'Betalingsmåte '
+  CreateAddressForm:
+    AddressSaved: 'Di adresse er blitt lagra'
+  MemberForm:
+    DetailsSaved: 'Din detaljer har blitt lagra'
+    Save: 'Lagre endringar'
+    SaveAndProceed: 'Lagre og fortset til kassa'
+  OrderAdmin:
+    ReceiptTitle: '{SiteTitle} Ordre {OrderNo}'
+  OrderForm:
+    CouldNotProcessPayment: 'Betaling kunne ikkje bli gjennomført'
+    OrderCancelled: 'Ordre er avbestilt'
+  Payment:
+    Note: Melding
+    PaymentsHeadline: Betaling(ar)
+  PaymentProcessor:
+    CantPay: 'Ordre kan ikkje betalast'
+    InvalidGateway: '`{gateway}`  er ikkje ein gyldig betalinggateway'
+  PriceTag:
+    SAVE: Lagre
+  ProductGroup:
+    Next: neste
+    Page: Side
+    Previous: forrige
+    ViewNext: 'Vis neste side'
+    ViewPage: 'Vis side {pageNum}'
+    ViewPrevious: 'Vis forrige side'
+  ProductMenu:
+    GotoPageTitle: 'Gå til {Title}'
+  Shop:
+    Change: Endre
+    Customer: Kunde
+    Date: Dato
+    DateFormatNice: '%m/%d/%G'
+    DateTimeFormatNice: '%m/%d/%G %I:%M%p'
+    DateTimeFormatNice24: 'd/m/Y H:i'
+    DevToolsTitle: 'Vis utviklingsverktøy'
+    Edit: Endre
+    Quantity: Antall
+    ReadMoreTitle: 'Klikk her for å lese meir om &quot;{Title}&quot;'
+    Remove: Fjern
+    View: vis
+  ShopDashboard:
+    NumberOfAccounts: 'Talet konti å vise'
+    NumberOfDays: 'Talet dagar å vise'
+    NumberOfOrders: 'Talet ordre'
+    RecentAccounts: 'Siste konti'
+    RecentAccountsDescription: 'Vis siste konti'
+    RecentOrders: 'Siste ordrar'
+    RecentOrdersChart: Ordrehistorie
+    RecentOrdersChartDescription: 'Vi siste ordrar som graf'
+    RecentOrdersDescription: 'Vis siste ordrar'
+  ShopEmail:
+    AdminNotificationSubject: 'Ordre #{OrderNo} beskjed'
+    AdminNotificationTitle: Butikkvittering
+    CancelSubject: 'Ordre #{OrderNo} kansellert av bruker'
+    ConfirmationSubject: 'Ordre #{OrderNo} bekreftelse'
+    ConfirmationTitle: Ordrebekreftelse
+    ReceiptSubject: 'Ordre #{OrderNo} kvittering'
+    ReceiptTitle: Kvittering
+    StatusChangeTitle: Statusendring
+    StatusChanged: 'Status for ordre #{OrderNo} er endra til "{OrderStatus}"'
+  ShopSideReport:
+    AllProducts: 'Alle produkt'
+    FeaturedProducts: 'Framheva produkt'
+    Heavy: 'Tunge produkt'
+    NoImage: 'Produkt uten bilete'
+    ShopGroup: SilverShop
+  SilverShop\Core\AbandonedCartReport:
     Description: 'Overvak isolerte handlekorger for ein bestemt periode. Grupper resultata for eit år, månad eller dag.'
     Title: 'Ufullstendige handlekorger'
-  AccountPage:
-    AddressBook: 'Adressebok'
+  SilverShop\Core\AccountPage:
+    AddressBook: Adressebok
     DESCRIPTION: 'Gi brukar tilgang til å sjå sine kontodetaljer og ordrar.'
     DefaultTitle: Konto
     EditProfile: 'Rediger profil'
     LogOut: 'Logg ut'
-    Login: "Du må vere logga inn for å få tilgang til kontoen. Om du ikkje er registrert vil du få tilbod om det når bestiller din første ordre."
+    Login: 'Du må vere logga inn for å få tilgang til kontoen. Om du ikkje er registrert vil du få tilbod om det når bestiller din første ordre.'
     LoginAgain: 'Du er blitt logga ut. Logg inn igjen om du vil!'
     MemberEmail: E-post
     MemberLastVisit: 'Siste besøk'
@@ -23,27 +104,14 @@ nn:
     NoPage: 'Inga kontoside blei funne. Venleg lag ei i adminpanelet.'
     NoPastOrders: 'Inga ordrar blei funne'
     NumberOfOrders: 'Mengde av ordrar'
-    PLURALNAME: 'Kontoside'
+    PLURALNAME: Kontoside
     PastOrders: 'Gamle ordrar'
-    SINGULARNAME: 'Kontoside'
+    SINGULARNAME: Kontoside
     Title: 'Min konto'
-  AccountPage_AddressBook:
-    CreateNewTitle: 'Lag ei ny adresse'
-    NoAddress: 'Inga adresse blei funne'
-    Title: 'Standardadresse'
-    DefaultShippingAddress: 'Standard fraktadresse'
-    DefaultBillingAddress: 'Standard fakturaadresse'
-    MakeDefaultShipping: 'Gjer den til standard frakt'
-    MakeDefaultShippingTitle: 'Gjer denne til standard fraktadresse'
-    MakeDefaultBilling: 'Gjer denne til standard betaling'
-    MakeDefaultBillingTitle: 'Gjer denne til standard betalingadresse'
-    DeleteAddress: 'Slett adressa'
-  AccountPage_EditProfile:
-    Title: 'Rediger profil'
-  Address:
+  SilverShop\Core\Address:
     AddressHint: 'gate / nummer, namn og type eller postboks '
     AddressLine2Hint: 'byggning, leilighet, etasje'
-    BillingAddress: 'Betalingsadresse'
+    BillingAddress: Betalingsadresse
     CityHint: 'sted, kommune'
     CreateNewAddress: 'Lag ny adresse'
     ExistingBillingAddress: 'Eksisterande betalingsadresse'
@@ -52,94 +120,81 @@ nn:
     SINGULARNAME: Adresse
     SaveDefaults: 'Lagre som standard'
     SaveNew: 'Lagre ny adresse'
-    ShippingAddress: 'Fraktadresse'
+    ShippingAddress: Fraktadresse
     StateHint: 'eller provins, område, øy'
     db_Address: Adresse
     db_AddressLine2: 'Adresse linje 2 (valfri) '
     db_City: By
     db_Company: Bedrift
     db_Country: Land
-    db_FirstName: 'Fornamn'
-    db_Phone: 'Telefonnummer'
-    db_PostalCode: 'Postnummer'
+    db_FirstName: Fornamn
+    db_Phone: Telefonnummer
+    db_PostalCode: Postnummer
     db_State: Fylke
     db_Surname: Etternamn
     has_one_Member: Medlem
-  CartForm:
+  SilverShop\Core\CartForm:
     REMOVED_ITEMS: 'Fjerna {count} produkt.'
     UPDATED_ITEMS: 'Oppdatert {count} produkt.'
     UpdateCart: 'Oppdater handlekorg'
-  CartPage:
+  SilverShop\Core\CartPage:
     DESCRIPTION: 'Ein side kor ein kunde kan sjå og redigere innhaldet i handlekorga sin.'
-    DefaultTitle: 'Handlekorg'
-    PLURALNAME: 'Handlekorgsider'
-    SINGULARNAME: 'Handlekorgside'
-    has_one_CheckoutPage: 'Kasseside'
-    has_one_ContinuePage: 'Forsettside'
-  Checkout:
+    DefaultTitle: Handlekorg
+    PLURALNAME: Handlekorgsider
+    SINGULARNAME: Handlekorgside
+    has_one_CheckoutPage: Kasseside
+    has_one_ContinuePage: Forsettside
+  SilverShop\Core\Checkout:
     IdFieldNotFound: 'Obligatorisk felt er ikkje funnet: {IdentifierField}'
     MemberExists: 'Et medlem finnes allereie med {Field} {Identifier}'
     MembershipIsNotAllowed: 'Det stengt for å lage ny konto'
     NoPaymentMethod: 'Det er nødvendig med eit passord'
     PasswordRequired: 'Eit passord er nødvendig'
     TermsAndConditionsLink: 'Eg godtar salvilkår <a href="{TermsPageLink}" target="new" title="Les salvilkår">{TermsPageTitle}</a> page'
-  CheckoutComponentValidator:
+  SilverShop\Core\CheckoutComponentValidator:
     InvalidDataMessage: 'Noko av dataen du har skrevet er feil, se under:'
-  CheckoutField:
-    AccountInfo: 'Ver venleg og vel eit passord, du kan seinare logge inn og sjå ordrehistorikken din'
-    MemberLoginInfo: 'Om allereie er medlem ver venleg og <a href="{LoginUrl}">logg inn</a>'
-    MembershipDetails: 'Medlemskapdetaljer'
-    MustAgreeToTerms: 'Du må godta vilkåra'
-    Password: Passord
-    PaymentType: 'Betalingsmåte '
-  CheckoutPage:
+  SilverShop\Core\CheckoutPage:
     DESCRIPTION: 'Side som handterar kassefunksjonen  '
     DefaultTitle: Kasse
-    PLURALNAME: 'Kassesider'
+    PLURALNAME: Kassesider
     PaymentErrorMessage: 'Ein feil skjedde ved betaling, error frå betaling gateway:'
     ProceedToPayment: 'Fortsett til betaling'
     PurchaseCompleteDescription: 'Denne beskjeden blir inkludert i kvittering som blir sendt på epost etter at ordren er betalt.'
-    SINGULARNAME: 'Kasseside'
+    SINGULARNAME: Kasseside
     SubmitPayment: 'Send betaling'
     db_PurchaseComplete: 'Ordre er betalt'
-  CheckoutStep:
+  SilverShop\Core\CheckoutStep:
     Continue: Fortsett
     Shipping: Frakt
     Summary: Oppsummering
-  CheckoutStep_Address:
+  SilverShop\Core\CheckoutStep_Address:
     BillTo: 'Send rekning til:'
     EnterShippingAddress: 'Ver venleg og skriv inn di fraktadresse'
     SeperateBilling: 'Send rekning til ei anna adresse'
     ShipTo: 'Send sending til:'
     SupplyContactInformation: 'Skriv inn din kontakt informasjon'
-  CheckoutStep_Membership:
+  SilverShop\Core\CheckoutStep_Membership:
     ContinueAsGuest: 'Hald fram som gjest'
     CreateAccount: 'Lag ein konto'
     CreateNewAccount: 'Lag ein ny konto'
-  CreateAddressForm:
-    AddressSaved: 'Di adresse er blitt lagra'
-  CustomerReport:
+  SilverShop\Core\CustomerReport:
     Description: 'Kunden sin rapport'
     Title: Kunden
-  FlatTaxModifier:
+  SilverShop\Core\FlatTaxModifier:
     PLURALNAME: Momsen
     SINGULARNAME: Moms
-  FreeShippingModifier:
+  SilverShop\Core\FreeShippingModifier:
     Free: Gratis
     PLURALNAME: 'Gratis fraktmodifikator'
     SINGULARNAME: Frakt
-  GlobalTaxModifier:
+  SilverShop\Core\GlobalTaxModifier:
     Included: '(ikkje inkluder i prisen ovanfor)'
     PLURALNAME: Momsen
     SINGULARNAME: Moms
     db_Country: Land
-  MemberForm:
-    DetailsSaved: 'Din detaljer har blitt lagra'
-    Save: 'Lagre endringar'
-    SaveAndProceed: 'Lagre og fortset til kassa'
-  OnsitePaymentCheckoutComponent:
+  SilverShop\Core\OnsitePaymentCheckoutComponent:
     InvalidCreditCard: 'Kredittkort er ugyldig'
-  Order:
+  SilverShop\Core\Order:
     BillTo: 'Send rekning til'
     Date: Dato
     DateFrom: 'Dato frå'
@@ -158,20 +213,20 @@ nn:
     STATUS_COMPLETE: Ferdig
     STATUS_MEMBERCANCELLED: 'Avlyst av kunde'
     STATUS_PAID: Betalt
-    STATUS_PROCESSING: Under behandling
+    STATUS_PROCESSING: 'Under behandling'
     STATUS_SENT: Sendt
     STATUS_UNPAID: Ubetalt
     ShipTo: 'Send sending til:'
-    SubTotal: Sum total
+    SubTotal: 'Sum total'
     Total: Total
     TotalOutstanding: 'Total uteståande'
     TotalPrice: 'Total pris'
     TotalPriceWithCurrency: 'Total pris ({Currency})'
     UnitPrice: 'Eining pris'
-    db_Dispatched: Sending sendt
+    db_Dispatched: 'Sending sendt'
     db_Email: E-post
-    db_FirstName: 'Fornamn'
-    db_IPAddress: 'IP-adresse'
+    db_FirstName: Fornamn
+    db_IPAddress: IP-adresse
     db_Notes: Beskjed
     db_Paid: Betalt
     db_Placed: Plassert
@@ -184,46 +239,41 @@ nn:
     db_Total: Total
     has_many_Items: Produkt
     has_many_Modifiers: Modifikatorar
-    has_many_OrderStatusLogs: 'Ordrestatuslogg'
+    has_many_OrderStatusLogs: Ordrestatuslogg
     has_many_Payments: Betalingar
-    has_one_BillingAddress: 'Betalingsadresse'
+    has_one_BillingAddress: Betalingsadresse
     has_one_Member: Medlem
-    has_one_ShippingAddress: 'Fraktadresse'
-  OrderActionsForm:
+    has_one_ShippingAddress: Fraktadresse
+  SilverShop\Core\OrderActionsForm:
     CancelOrder: 'Avbestill ordren'
-    MakePayment: 'Betal'
+    MakePayment: Betal
     ManualNotAllowed: 'Manuell betaling er ikkje tillate'
     PayOrder: 'Betal uteståande balanse'
-    PaymentMethod: 'Betalingsmåte'
-  OrderAdmin:
-    ReceiptTitle: '{SiteTitle} Ordre {OrderNo}'
-  OrderAttribute:
+    PaymentMethod: Betalingsmåte
+  SilverShop\Core\OrderAttribute:
     PLURALNAME: Atributter
     SINGULARNAME: Atribut
     db_CalculatedTotal: 'Kalkulert total'
     has_one_Order: 'Ordre '
-  OrderForm:
-    CouldNotProcessPayment: 'Betaling kunne ikkje bli gjennomført'
-    OrderCancelled: 'Ordre er avbestilt'
-  OrderItem:
+  SilverShop\Core\OrderItem:
     PLURALNAME: Produkt
     SINGULARNAME: Produkt
     db_Quantity: Mengde
     db_UnitPrice: 'Eining pris'
-  OrderModifier:
+  SilverShop\Core\OrderModifier:
     PLURALNAME: Modifikatorar
     SINGULARNAME: Modifikator
     db_Amount: Beløp
     db_Sort: Sortere
     db_Type: Type
-  OrderProcessor:
+  SilverShop\Core\OrderProcessor:
     NoItems: 'Ordre har ingen produkt'
     NoOrder: 'Ordre finnast ikkje.'
     NoOrderStarted: 'Den nye ordren har ikkje begynt ennå'
     NotCart: 'Ordre er ikkje ei handlekorg.'
-  OrderStatusLog:
-    PLURALNAME: 'Ordrestatuslogglinjer'
-    SINGULARNAME: 'Ordrelogglinje'
+  SilverShop\Core\OrderStatusLog:
+    PLURALNAME: Ordrestatuslogglinjer
+    SINGULARNAME: Ordrelogglinje
     db_DispatchTicket: 'Send billett'
     db_DispatchedBy: 'Sendt av'
     db_DispatchedOn: 'Sendt den'
@@ -234,38 +284,32 @@ nn:
     db_Title: Tittle
     has_one_Author: Forfattar
     has_one_Order: Ordre
-  Payment:
-    Note: Melding
-    PaymentsHeadline: Betaling(ar)
-  PaymentCheckoutComponent:
+  SilverShop\Core\OrdersAdmin:
+    MENUTITLE: Ordrar
+  SilverShop\Core\PaymentCheckoutComponent:
     NoPaymentMethod: 'Betalingsmåte er ikkje gitt'
     UnsupportedGateway: 'Gateway er ikkje støtta'
-  PaymentProcessor:
-    CantPay: "Ordre kan ikkje betalast"
-    InvalidGateway: "`{gateway}`  er ikkje ein gyldig betalinggateway"
-  PickupShippingModifier:
+  SilverShop\Core\PickupShippingModifier:
     PLURALNAME: Modifikatorar
     SINGULARNAME: 'Hent i butikk'
-  PriceTag:
-    SAVE: Lagre
-  Product:
+  SilverShop\Core\Product:
     AddToCart: 'Legg til handlekorg'
     AddToCartTitle: 'Legg til &quot;{Title}&quot; handlekorga'
     AdditionalCategories: 'Liknande kategoriar'
     AllowPurchase: 'Tillat at produkt kan kjøpast'
     Category: Kategori
     CategoryDescription: 'Dette er ei foreldreside eller standardkategori.'
-    Code: 'Produktkode'
+    Code: Produktkode
     CostPriceDescription: 'Rettleiande pris, leverandørpris eller pris før varen har blitt rabattert.'
     DESCRIPTION: 'Produktside i butikken'
     Featured: 'Framheva produkt'
-    Image: 'Produktbilete'
+    Image: Produktbilete
     ImageAltText: '{Title} bilete'
-    InternalItemID: 'Produktkode/SKU'
+    InternalItemID: Produktkode/SKU
     Model: Modell
     NoImage: 'ingen bilete'
     PLURALNAME: Produkt
-    PageTitle: 'Produkttittel'
+    PageTitle: Produkttittel
     Price: Pris
     PriceDesc: 'Prisen varen blir seld for (salspris).'
     ProductCodeShort: SKU
@@ -278,16 +322,16 @@ nn:
     db_Depth: 'Djupn '
     db_Featured: Fremheva
     db_Height: Høgde
-    db_InternalItemID: 'Intern-ID'
+    db_InternalItemID: Intern-ID
     db_Model: Modell
     db_Popularity: Popularitet
     db_Weight: Vekt
     db_Width: ' Breidde'
     has_many_Variations: Variasjon
     has_one_Image: Bilete
-    many_many_ProductCategories: 'Produktkategoriar'
-    many_many_VariationAttributeTypes: 'Variasjonattributttype'
-  ProductAttributeType:
+    many_many_ProductCategories: Produktkategoriar
+    many_many_VariationAttributeTypes: Variasjonattributttype
+  SilverShop\Core\ProductAttributeType:
     PLURALNAME: Atributter
     SINGULARNAME: Atribut
     SaveFirstInfo: 'Du må lagre først, så du kan legge til verdiar'
@@ -295,105 +339,75 @@ nn:
     db_Label: Merkjelapp
     db_Name: Namn
     has_many_Values: Verdiar
-  ProductAttributeValue:
+  SilverShop\Core\ProductAttributeValue:
     PLURALNAME: Verdiar
     SINGULARNAME: Verdi
-    belongs_many_many_ProductVariation: 'Produktvariasjon'
-    db_Sort: Om rokere
+    belongs_many_many_ProductVariation: Produktvariasjon
+    db_Sort: 'Om rokere'
     db_Value: Verdi
     has_one_Type: Type
-  ProductCategory:
+  SilverShop\Core\ProductCatalogAdmin:
+    MENUTITLE: Katalog
+  SilverShop\Core\ProductCategory:
     DESCRIPTION: 'Produktkategori i butikken'
     PLURALNAME: Kategoriar
     SINGULARNAME: Kategori
     belongs_many_many_Products: Produkt
-  ProductGroup:
-    Next: neste
-    Page: Side
-    Previous: forrige
-    ViewNext: 'Vis neste side'
-    ViewPage: 'Vis side {pageNum}'
-    ViewPrevious: 'Vis forrige side'
-  ProductMenu:
-    GotoPageTitle: 'Gå til {Title}'
-  ProductReport:
-    Description: "Forstå kva for eit produkt som gjer det bra og ikkje"
+  SilverShop\Core\ProductReport:
+    Description: 'Forstå kva for eit produkt som gjer det bra og ikkje'
     Title: Produkt
-  ProductVariation:
+  SilverShop\Core\ProductVariation:
     MustSaveFirstMessage: 'Du kan velje ein variant-attributt etter du har lagra for første gang, om det finnes ein. '
     NoAttributeValuesMessage: '{attribute} har ingen verdi. Du kan lage dem hos "Products" &#62; "Product Attribute Type" seksjonen i adminpanelet.'
     PLURALNAME: Variasjon
     SINGULARNAME: Variasjon
-    db_InternalItemID: 'Intern-ID'
+    db_InternalItemID: Intern-ID
     db_Price: Pris
     db_Version: Versjon
     has_one_Image: Bilete
     has_one_Product: Produkt
-    many_many_AttributeValues: 'Attributtverdi'
-  ProductVariation_OrderItem:
+    many_many_AttributeValues: Attributtverdi
+  SilverShop\Core\ProductVariation_OrderItem:
     PLURALNAME: Produkt
     SINGULARNAME: Produkt
-    db_ProductVariationVersion: 'Produktvariasjonversjon'
-    has_one_ProductVariation: 'Produktvariasjon'
-  ProductVariationsExtension:
+    db_ProductVariationVersion: Produktvariasjonversjon
+    has_one_ProductVariation: Produktvariasjon
+  SilverShop\Core\ProductVariationsExtension:
     Attributes: Attributt
     AttributesDescription: 'Disse feltane viser måten kvar variasjon varierer. Etter at ein av de er valen, kan man redigere kvar variasjon.'
     Variations: Variasjon
     VariationsInfo: 'Pris - Siden du har ein eller fleire variantar må prisen bli sette under "Variasjon" fanen. '
-  Product_OrderItem:
+  SilverShop\Core\Product_OrderItem:
     PLURALNAME: Produkt
     SINGULARNAME: Produkt
-    db_ProductVersion: 'Produktversjon'
+    db_ProductVersion: Produktversjon
     has_one_Product: Produkt
-  RegionRestriction:
+  SilverShop\Core\RegionRestriction:
     PLURALNAME: 'Regionale restriksjoner'
     SINGULARNAME: 'Regional restriksjon'
     db_City: By
     db_Country: Land
-    db_PostalCode: 'Postnummer'
+    db_PostalCode: Postnummer
     db_State: Fylke
-  SetLocationForm:
+  SilverShop\Core\SetLocationForm:
     ChooseCountry: 'Vel land...'
     Country: Land
-  ShippingModifier:
+  SilverShop\Core\ShippingModifier:
     PLURALNAME: Modifikatorar
     SINGULARNAME: Frakt
-  Shop:
-    Change: Endre
-    Customer: Kunde
-    Date: Dato
-    DateFormatNice: '%m/%d/%G'
-    DateTimeFormatNice: '%m/%d/%G %I:%M%p'
-    DateTimeFormatNice24: 'd/m/Y H:i'
-    DevToolsTitle: 'Vis utviklingsverktøy'
-    Edit: Endre
-    Quantity: Antall
-    ReadMoreTitle: 'Klikk her for å lese meir om &quot;{Title}&quot;'
-    Remove: Fjern
-    View: vis
-  ShopConfig:
+  SilverShop\Core\ShopConfig:
     AllowedCountries: 'Gi tilgang til sortering og fraktland.'
     AllowedCountriesTabTitle: 'Tillate land'
     CustomerGroup: 'Gruppe for å legge nye kundar i'
     DefaultImage: 'Standard produktbilete'
-    TermsPage: 'Vilkårside'
-  ShopCurrency:
+    TermsPage: Vilkårside
+  SilverShop\Core\ShopCurrency:
     Free: '<span class="free">Gratis</span>'
-  ShopDashboard:
-    NumberOfAccounts: 'Talet konti å vise'
-    NumberOfDays: 'Talet dagar å vise'
-    NumberOfOrders: 'Talet ordre'
-    RecentAccounts: 'Siste konti'
-    RecentAccountsDescription: 'Vis siste konti'
-    RecentOrders: 'Siste ordrar'
-    RecentOrdersChart: 'Ordrehistorie'
-    RecentOrdersChartDescription: 'Vi siste ordrar som graf'
-    RecentOrdersDescription: 'Vis siste ordrar'
-  ShopDevelopmentAdmin:
-    BuildTasks: 'Byggeoppgavar'
+  SilverShop\Core\ShopDevelopmentAdmin:
+    BuildTasks: Byggeoppgavar
     CartCleanup: 'Reingjør gamle handlekorger'
     CartCleanupDesc: 'Fjern forlatne handlekorger'
-    CartTasks: 'Handlekorgoppgåver'
+    CartTasks: Handlekorgoppgåver
     ClearCart: 'Fjern noverande handlekorg'
     DebugCart: 'Debug handlekorga'
     DeleteOrders: 'Slett alle ordrer'
@@ -407,37 +421,21 @@ nn:
     RecalculateOrdersDesc: 'Kalkuler alle ordreverdiar. Obs: dette vi skrive over alle verdiar og kan ikkje bli omgjort!!'
     RunAllTests: 'Kjør alle SilverShop unit tester'
     UnitTests: 'Unit Tests'
-  ShopEmail:
-    AdminNotificationSubject: 'Ordre #{OrderNo} beskjed'
-    AdminNotificationTitle: 'Butikkvittering'
-    CancelSubject: 'Ordre #{OrderNo} kansellert av bruker'
-    ConfirmationSubject: 'Ordre #{OrderNo} bekreftelse'
-    ConfirmationTitle: 'Ordrebekreftelse'
-    ReceiptSubject: 'Ordre #{OrderNo} kvittering'
-    ReceiptTitle: 'Kvittering'
-    StatusChangeTitle: 'Statusendring'
-    StatusChanged: 'Status for ordre #{OrderNo} er endra til "{OrderStatus}"'
-  ShopPeriodReport:
-    Description: 'Perioderapport'
-    Title: 'Perioderapport'
-  ShopQuantityField:
+  SilverShop\Core\ShopPeriodReport:
+    Description: Perioderapport
+    Title: Perioderapport
+  SilverShop\Core\ShopQuantityField:
     AddOne: 'Legg &quot;{ItemTitle}&quot; til handlekorga di'
     RemoveOne: 'Fjern &quot;{ItemTitle}&quot; fra handlekorga di'
-  ShopSalesReport:
+  SilverShop\Core\ShopSalesReport:
     Description: 'Fylg butikksal yting for ein periode. Filter resultatet på år, månad eller dag.'
-    Title: 'Sal'
-  ShopSideReport:
-    AllProducts: 'Alle produkt'
-    FeaturedProducts: 'Framheva produkt'
-    Heavy: 'Tunge produkt'
-    NoImage: 'Produkt uten bilete'
-    ShopGroup: SilverShop
-  ShoppingCart:
+    Title: Sal
+  SilverShop\Core\ShoppingCart:
     CannotPurchase: '{Title} er utilgjengelig for kjøp.'
     Checkout: Kasse
     Cleared: 'Handlekorg ble tømt.'
     ContinueShopping: 'Fortsett å handle'
-    Headline: 'Handlekorg'
+    Headline: Handlekorg
     InvalidSecurityToken: 'Feil sikkerhetstoken, eit mulig CSRF angrep.'
     ItemAdded: 'Produkt ble lagt til.'
     ItemNotFound: 'Finn ikkje produkt.'
@@ -454,39 +452,41 @@ nn:
     RemoveAllTitle: 'Fjern alle &quot;{Title}&quot; fra handlekorga'
     RemoveTitle: 'Fjern &quot;{Title}&quot; fra handlekorga'
     TableSummary: 'Di handlekorg inneheld'
-  SimpleShippingModifier:
+  SilverShop\Core\SimpleShippingModifier:
     PLURALNAME: 'Enkel fraktmodifikator.'
     SINGULARNAME: Frakt
     ShipToCountry: 'Send til (Land)'
     db_Country: Land
-  SubTotalModifier:
+  SilverShop\Core\SubTotalModifier:
     PLURALNAME: 'Sum total'
     SINGULARNAME: 'Sum total'
-  TaxModifier:
+  SilverShop\Core\TaxModifier:
     AtRate: '@ {Rate}%'
     PLURALNAME: Momsen
     SINGULARNAME: Moms
     db_Rate: Sats
-  TaxReport:
+  SilverShop\Core\TaxReport:
     Description: 'Momsrapport på belasta ordrar. Inkluderer bare ordre som har status betalt.'
     Title: Moms
-  Variation:
-    SINGULARNAME: Variasjon
-  VariationForm:
+  SilverShop\Core\VariationForm:
     ChooseAttribute: 'Vel {attribute} …'
     ProductNotAvailable: 'Dette produktet er ikkje tilgjengelig med dette valet.'
     VariationNotAvailable: 'Denne varianten er ikkje tilgjengelig.'
-  WeightShippingModifier:
+  SilverShop\Core\WeightShippingModifier:
     PLURALNAME: 'Vekt fraktmodifikator.'
     SINGULARNAME: Frakt
     TableTitle: 'Frakt ({Kilograms} kg)'
-  Zone:
+  SilverShop\Core\Zone:
     PLURALNAME: Sonar
     SINGULARNAME: Sonar
     db_Description: 'Beskriving '
     db_Name: Namn
     has_many_Regions: Region
-  ZoneRegion:
-    PLURALNAME: 'Soneregionar'
-    SINGULARNAME: 'Soneregion'
+  SilverShop\Core\ZoneAdmin:
+    MENUTITLE: Sonar
+  SilverShop\Core\ZoneRegion:
+    PLURALNAME: Soneregionar
+    SINGULARNAME: Soneregion
     has_one_Zone: Sonar
+  Variation:
+    SINGULARNAME: Variasjon

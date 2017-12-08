@@ -1,4 +1,11 @@
 <?php
+
+namespace SilverShop\Core;
+
+use DashboardPanel;
+use TextField;
+use Member;
+
 /**
  * Shows a table of recent signups
  *

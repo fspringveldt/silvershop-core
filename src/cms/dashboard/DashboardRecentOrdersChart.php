@@ -1,4 +1,15 @@
 <?php
+
+namespace SilverShop\Core;
+
+use DashboardPanel;
+use TextField;
+use DashboardChart;
+use DB;
+use Config;
+use SilverShop\Core\DashboardRecentOrdersPanel;
+
+
 /**
  * Shows a chart of recent orders
  *
@@ -44,7 +55,7 @@ if (class_exists('DashboardPanel')) {
 				WHERE \"Status\" not in ('" . implode(
                     "','",
                     Config::inst()
-                        ->get('DashboardRecentOrdersPanel', 'exclude_status')
+                        ->get(DashboardRecentOrdersPanel::class, 'exclude_status')
                 ) . "')
 					AND \"Placed\" > date_sub(now(), interval {$this->Days} day)
 				GROUP BY \"Date\", \"Placed\"

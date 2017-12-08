@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Session;
+use Convert;
+
+
 /**
  * Collects and stores data about the user. Keep this data in session.
  */

@@ -1,5 +1,15 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+use Image;
+use SiteConfig;
+use Filesystem;
+use SilverShop\Core\Product;
+
+
+
 /**
  * Tests for product image. These could be easily merged into the main
  * Product tests if desired, but those tests are currently non-functional.
@@ -23,7 +33,7 @@ class ProductImageTest extends SapphireTest
     function setUp()
     {
         parent::setUp();
-        $this->socks = $this->objFromFixture('Product', 'socks');
+        $this->socks = $this->objFromFixture(Product::class, 'socks');
         $this->img1 = new Image;
         $this->img1->Filename = 'assets/ProductImageTest1.png';
         $this->img1->write();

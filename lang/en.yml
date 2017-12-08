@@ -1,20 +1,108 @@
 en:
-  OrdersAdmin:
-    MENUTITLE: Orders
-  ProductCatalogAdmin:
-    MENUTITLE: Catalog
-  ZoneAdmin:
-    MENUTITLE: Zones
-  AbandonedCartReport:
+  AccountPage_AddressBook:
+    CreateNewTitle: 'Create new address'
+    DefaultBillingAddress: 'Default Billing Address'
+    DefaultShippingAddress: 'Default Shipping Address'
+    DeleteAddress: 'Delete this address'
+    MakeDefaultBilling: 'Make Default Billing'
+    MakeDefaultBillingTitle: 'Make this my default billing address'
+    MakeDefaultShipping: 'Make Default Shipping'
+    MakeDefaultShippingTitle: 'Make this my default shipping address'
+    NoAddress: 'No addresses found.'
+    Title: 'Default addresses'
+  AccountPage_EditProfile:
+    Title: 'Edit Profile'
+  CheckoutField:
+    AccountInfo: 'Please choose a password, so you can login and check your order history in the future'
+    MemberLoginInfo: 'If you are already a member please <a href="{LoginUrl}">log in</a>'
+    MembershipDetails: 'Membership Details'
+    MustAgreeToTerms: 'You must agree to the terms and conditions'
+    Password: Password
+    PaymentType: 'Payment Type'
+  CreateAddressForm:
+    AddressSaved: 'Your address has been saved'
+  MemberForm:
+    DetailsSaved: 'Your details have been saved'
+    Save: 'Save Changes'
+    SaveAndProceed: 'Save and proceed to checkout'
+  OrderAdmin:
+    ReceiptTitle: '{SiteTitle} Order {OrderNo}'
+  OrderForm:
+    CouldNotProcessPayment: 'Payment could not be processed.'
+    OrderCancelled: 'Order sucessfully cancelled'
+  Payment:
+    Note: Note
+    PaymentsHeadline: Payment(s)
+  PaymentProcessor:
+    CantPay: 'Order can''t be paid for.'
+    InvalidGateway: '`{gateway}` isn''t a valid payment gateway.'
+  PriceTag:
+    SAVE: Save
+  ProductGroup:
+    Next: next
+    Page: Page
+    Previous: previous
+    ViewNext: 'View the next page'
+    ViewPage: 'View page number {pageNum}'
+    ViewPrevious: 'View the previous page'
+  ProductMenu:
+    GotoPageTitle: 'Go to the {Title} page'
+  Shop:
+    Change: Change
+    Customer: Customer
+    Date: Date
+    DateFormatNice: '%m/%d/%G'
+    DateTimeFormatNice: '%m/%d/%G %I:%M%p'
+    DateTimeFormatNice24: 'd/m/Y H:i'
+    DevToolsTitle: 'Shop Development Tools'
+    Edit: Edit
+    Quantity: Quantity
+    ReadMoreTitle: 'Click here to read more on &quot;{Title}&quot;'
+    Remove: Remove
+    View: view
+  ShopDashboard:
+    NumberOfAccounts: 'Number of accounts to show'
+    NumberOfDays: 'Number of days to show'
+    NumberOfOrders: 'Number of orders to show'
+    RecentAccounts: 'Recent Accounts'
+    RecentAccountsDescription: 'Shows recent account signups'
+    RecentOrders: 'Recent Orders'
+    RecentOrdersChart: 'Order History Chart'
+    RecentOrdersChartDescription: 'Shows recent orders on a graph'
+    RecentOrdersDescription: 'Shows recent orders'
+  ShopEmail:
+    AdminNotificationSubject: 'Order #{OrderNo} notification'
+    AdminNotificationTitle: 'Shop Receipt'
+    CancelSubject: 'Order #{OrderNo} cancelled by member'
+    ConfirmationSubject: 'Order #{OrderNo} confirmation'
+    ConfirmationTitle: 'Order Confirmation'
+    PhoneNumber: 'Phone number'
+    ReceiptSubject: 'Order #{OrderNo} receipt'
+    ReceiptTitle: 'Shop Receipt'
+    Regards: 'Kind regards'
+    StatusChangeAdminCancelledNote: 'Your order has been cancelled by our staff.  Please contact us if you have any questions about this order.'
+    StatusChangeMemberCancelledNote: 'Your cancellation of the order has been noted.  Please contact us if you have any questions.'
+    StatusChangeProcessingNote: 'We have updated the status of your order to Processing.  Please contact us if you have any questions about this order.'
+    StatusChangeSentNote: 'Your order has been sent.  We aim to deliver promptly.  Please contact us if the products do not arrived within five days.'
+    StatusChangeSubject: 'Silvershop - '
+    StatusChangeTitle: 'Shop Status Change'
+    StatusChanged: 'Status for order #{OrderNo} changed to "{OrderStatus}"'
+  ShopSideReport:
+    AllProducts: 'All Products'
+    FeaturedProducts: 'Featured Products'
+    Heavy: 'Heavy Products'
+    NoImage: 'Products with no image'
+    ShopGroup: Shop
+  SilverShop\Core\AbandonedCartReport:
     Description: 'Monitor abandoned carts for a particular period. Group results by year, month, or day.'
     Title: 'Abandoned Carts'
-  AccountPage:
+  SilverShop\Core\AccountPage:
     AddressBook: 'Address Book'
     DESCRIPTION: 'Allows the user to view his account-details and past orders.'
     DefaultTitle: Account
     EditProfile: 'Edit Profile'
     LogOut: 'Log Out'
-    Login: "You'll need to login before you can access the account page. If you are not registered, you won't be able to access it until you make your first order, otherwise please enter your details below."
+    Login: 'You''ll need to login before you can access the account page. If you are not registered, you won''t be able to access it until you make your first order, otherwise please enter your details below.'
     LoginAgain: 'You have been logged out. If you would like to log in again, please do so below.'
     MemberEmail: Email
     MemberLastVisit: 'Last Visit'
@@ -27,20 +115,7 @@ en:
     PastOrders: 'Past Orders'
     SINGULARNAME: 'Account Page'
     Title: 'My Account'
-  AccountPage_AddressBook:
-    CreateNewTitle: 'Create new address'
-    NoAddress: 'No addresses found.'
-    Title: 'Default addresses'
-    DefaultShippingAddress: 'Default Shipping Address'
-    DefaultBillingAddress: 'Default Billing Address'
-    MakeDefaultShipping: 'Make Default Shipping'
-    MakeDefaultShippingTitle: 'Make this my default shipping address'
-    MakeDefaultBilling: 'Make Default Billing'
-    MakeDefaultBillingTitle: 'Make this my default billing address'
-    DeleteAddress: 'Delete this address'
-  AccountPage_EditProfile:
-    Title: 'Edit Profile'
-  Address:
+  SilverShop\Core\Address:
     AddressHint: 'street / thoroughfare number, name, and type or P.O. Box'
     AddressLine2Hint: 'premises, building, apartment, unit, floor'
     BillingAddress: 'Billing Address'
@@ -65,34 +140,27 @@ en:
     db_State: State
     db_Surname: Surname
     has_one_Member: Member
-  CartForm:
+  SilverShop\Core\CartForm:
     REMOVED_ITEMS: 'Removed {count} items.'
     UPDATED_ITEMS: 'Updated {count} items.'
     UpdateCart: 'Update Cart'
-  CartPage:
+  SilverShop\Core\CartPage:
     DESCRIPTION: 'A page where the user will be able to see and edit his shopping-cart contents.'
     DefaultTitle: 'Shopping Cart'
     PLURALNAME: 'Cart Pages'
     SINGULARNAME: 'Cart Page'
     has_one_CheckoutPage: 'Checkout Page'
     has_one_ContinuePage: 'Continue Page'
-  Checkout:
+  SilverShop\Core\Checkout:
     IdFieldNotFound: 'Required field not found: {IdentifierField}'
     MemberExists: 'A member already exists with the {Field} {Identifier}'
     MembershipIsNotAllowed: 'Creating new memberships is not allowed'
     NoPaymentMethod: 'Payment method does not exist'
     PasswordRequired: 'A password is required'
     TermsAndConditionsLink: 'I agree to the terms and conditions stated on the <a href="{TermsPageLink}" target="new" title="Read the shop terms and conditions for this site">{TermsPageTitle}</a> page'
-  CheckoutComponentValidator:
+  SilverShop\Core\CheckoutComponentValidator:
     InvalidDataMessage: 'There are problems with the data you entered. See below:'
-  CheckoutField:
-    AccountInfo: 'Please choose a password, so you can login and check your order history in the future'
-    MemberLoginInfo: 'If you are already a member please <a href="{LoginUrl}">log in</a>'
-    MembershipDetails: 'Membership Details'
-    MustAgreeToTerms: 'You must agree to the terms and conditions'
-    Password: Password
-    PaymentType: 'Payment Type'
-  CheckoutPage:
+  SilverShop\Core\CheckoutPage:
     DESCRIPTION: 'Page that handles the checkout-process.'
     DefaultTitle: Checkout
     PLURALNAME: 'Checkout Pages'
@@ -102,44 +170,38 @@ en:
     SINGULARNAME: 'Checkout Page'
     SubmitPayment: 'Submit Payment'
     db_PurchaseComplete: 'Purchase Complete'
-  CheckoutStep:
+  SilverShop\Core\CheckoutStep:
     Continue: Continue
     Shipping: Shipping
     Summary: Summary
-  CheckoutStep_Address:
+  SilverShop\Core\CheckoutStep_Address:
     BillTo: 'Bill To:'
     EnterShippingAddress: 'Please enter your shipping address details.'
     SeperateBilling: 'Bill to a different address from this'
     ShipTo: 'Ship To:'
     SupplyContactInformation: 'Supply your contact information'
-  CheckoutStep_Membership:
+  SilverShop\Core\CheckoutStep_Membership:
     ContinueAsGuest: 'Continue as Guest'
     CreateAccount: 'Create an Account'
     CreateNewAccount: 'Create New Account'
-  CreateAddressForm:
-    AddressSaved: 'Your address has been saved'
-  CustomerReport:
+  SilverShop\Core\CustomerReport:
     Description: 'Customers report'
     Title: Customers
-  FlatTaxModifier:
+  SilverShop\Core\FlatTaxModifier:
     PLURALNAME: Taxes
     SINGULARNAME: Tax
-  FreeShippingModifier:
+  SilverShop\Core\FreeShippingModifier:
     Free: FREE
     PLURALNAME: 'Free Shipping Modifiers'
     SINGULARNAME: Shipping
-  GlobalTaxModifier:
+  SilverShop\Core\GlobalTaxModifier:
     Included: ' (included in the above price)'
     PLURALNAME: Taxes
     SINGULARNAME: Tax
     db_Country: Country
-  MemberForm:
-    DetailsSaved: 'Your details have been saved'
-    Save: 'Save Changes'
-    SaveAndProceed: 'Save and proceed to checkout'
-  OnsitePaymentCheckoutComponent:
+  SilverShop\Core\OnsitePaymentCheckoutComponent:
     InvalidCreditCard: 'Credit card is invalid'
-  Order:
+  SilverShop\Core\Order:
     BillTo: 'Bill To'
     Date: Date
     DateFrom: 'Date from'
@@ -189,39 +251,34 @@ en:
     has_one_BillingAddress: 'Billing Address'
     has_one_Member: Member
     has_one_ShippingAddress: 'Shipping Address'
-  OrderActionsForm:
+  SilverShop\Core\OrderActionsForm:
     CancelOrder: 'Cancel this order'
     MakePayment: 'Make Payment'
     ManualNotAllowed: 'Manual payment not allowed'
     PayOrder: 'Pay outstanding balance'
     PaymentMethod: 'Payment Method'
-  OrderAdmin:
-    ReceiptTitle: '{SiteTitle} Order {OrderNo}'
-  OrderAttribute:
+  SilverShop\Core\OrderAttribute:
     PLURALNAME: Attributes
     SINGULARNAME: Attribute
     db_CalculatedTotal: 'Calculated Total'
     has_one_Order: Order
-  OrderForm:
-    CouldNotProcessPayment: 'Payment could not be processed.'
-    OrderCancelled: 'Order sucessfully cancelled'
-  OrderItem:
+  SilverShop\Core\OrderItem:
     PLURALNAME: Items
     SINGULARNAME: Item
     db_Quantity: Quantity
     db_UnitPrice: 'Unit Price'
-  OrderModifier:
+  SilverShop\Core\OrderModifier:
     PLURALNAME: Modifiers
     SINGULARNAME: Modifier
     db_Amount: Amount
     db_Sort: Sort
     db_Type: Type
-  OrderProcessor:
+  SilverShop\Core\OrderProcessor:
     NoItems: 'Order has no items.'
     NoOrder: 'Order does not exist.'
     NoOrderStarted: 'A new order has not yet been started.'
     NotCart: 'Order is not a cart.'
-  OrderStatusLog:
+  SilverShop\Core\OrderStatusLog:
     PLURALNAME: 'Order Status Log Entries'
     SINGULARNAME: 'Order Log Entry'
     db_DispatchTicket: 'Dispatch Ticket'
@@ -234,21 +291,15 @@ en:
     db_Title: Title
     has_one_Author: Author
     has_one_Order: Order
-  Payment:
-    Note: Note
-    PaymentsHeadline: Payment(s)
-  PaymentCheckoutComponent:
+  SilverShop\Core\OrdersAdmin:
+    MENUTITLE: Orders
+  SilverShop\Core\PaymentCheckoutComponent:
     NoPaymentMethod: 'Payment method not provided'
     UnsupportedGateway: 'Gateway not supported'
-  PaymentProcessor:
-    CantPay: "Order can't be paid for."
-    InvalidGateway: "`{gateway}` isn't a valid payment gateway."
-  PickupShippingModifier:
+  SilverShop\Core\PickupShippingModifier:
     PLURALNAME: Modifiers
     SINGULARNAME: 'Pick Up Shipping'
-  PriceTag:
-    SAVE: Save
-  Product:
+  SilverShop\Core\Product:
     AddToCart: 'Add to Cart'
     AddToCartTitle: 'Add &quot;{Title}&quot; to your cart'
     AdditionalCategories: 'Additional Categories'
@@ -264,8 +315,8 @@ en:
     InternalItemID: 'Product Code/SKU'
     Model: Model
     NoImage: 'no image'
-    NumItemsInCartSingular: 'You have this item in your cart'
     NumItemsInCartPlural: 'You have {Quantity} items in your cart'
+    NumItemsInCartSingular: 'You have this item in your cart'
     PLURALNAME: Products
     PageTitle: 'Product Title'
     Price: Price
@@ -289,7 +340,7 @@ en:
     has_one_Image: Image
     many_many_ProductCategories: 'Product Categories'
     many_many_VariationAttributeTypes: 'Variation Attribute Types'
-  ProductAttributeType:
+  SilverShop\Core\ProductAttributeType:
     PLURALNAME: Attributes
     SINGULARNAME: Attribute
     SaveFirstInfo: 'Save first, then you can add values.'
@@ -297,33 +348,26 @@ en:
     db_Label: Label
     db_Name: Name
     has_many_Values: Values
-  ProductAttributeValue:
+  SilverShop\Core\ProductAttributeValue:
     PLURALNAME: Values
     SINGULARNAME: Value
     belongs_many_many_ProductVariation: 'Product Variation'
     db_Sort: Sort
     db_Value: Value
     has_one_Type: Type
-  ProductCategory:
+  SilverShop\Core\ProductCatalogAdmin:
+    MENUTITLE: Catalog
+  SilverShop\Core\ProductCategory:
+    Alphabetical: Alphabetical
     DESCRIPTION: 'Product category in the shop'
     PLURALNAME: Categories
+    Price: Price
     SINGULARNAME: Category
     belongs_many_many_Products: Products
-    Alphabetical: Alphabetical
-    Price: Price
-  ProductGroup:
-    Next: next
-    Page: Page
-    Previous: previous
-    ViewNext: 'View the next page'
-    ViewPage: 'View page number {pageNum}'
-    ViewPrevious: 'View the previous page'
-  ProductMenu:
-    GotoPageTitle: 'Go to the {Title} page'
-  ProductReport:
-    Description: "Understand which products are performing, and which aren't."
+  SilverShop\Core\ProductReport:
+    Description: 'Understand which products are performing, and which aren''t.'
     Title: Products
-  ProductVariation:
+  SilverShop\Core\ProductVariation:
     MustSaveFirstMessage: 'You can choose variation attributes after saving for the first time, if they exist.'
     NoAttributeValuesMessage: '{attribute} has no values to choose from. You can create them in the "Products" &#62; "Product Attribute Type" section of the CMS.'
     PLURALNAME: Variations
@@ -334,66 +378,43 @@ en:
     has_one_Image: Image
     has_one_Product: Product
     many_many_AttributeValues: 'Attribute Values'
-  ProductVariation_OrderItem:
+  SilverShop\Core\ProductVariation_OrderItem:
     PLURALNAME: Items
     SINGULARNAME: Item
     db_ProductVariationVersion: 'Product Variation Version'
     has_one_ProductVariation: 'Product Variation'
-  ProductVariationsExtension:
+  SilverShop\Core\ProductVariationsExtension:
     Attributes: Attributes
     AttributesDescription: 'These are fields to indicate the way(s) each variation varies. Once selected, they can be edited on each variation.'
     Variations: Variations
     VariationsInfo: 'Price - Because you have one or more variations, the price can be set in the "Variations" tab.'
-  Product_OrderItem:
+  SilverShop\Core\Product_OrderItem:
     PLURALNAME: Items
     SINGULARNAME: Item
     db_ProductVersion: 'Product Version'
     has_one_Product: Product
-  RegionRestriction:
+  SilverShop\Core\RegionRestriction:
     PLURALNAME: 'Region Restrictions'
     SINGULARNAME: 'Region Restriction'
     db_City: City
     db_Country: Country
     db_PostalCode: 'Postal Code'
     db_State: State
-  SetLocationForm:
+  SilverShop\Core\SetLocationForm:
     ChooseCountry: 'Choose country...'
     Country: Country
-  ShippingModifier:
+  SilverShop\Core\ShippingModifier:
     PLURALNAME: Modifiers
     SINGULARNAME: Shipping
-  Shop:
-    Change: Change
-    Customer: Customer
-    Date: Date
-    DateFormatNice: '%m/%d/%G'
-    DateTimeFormatNice: '%m/%d/%G %I:%M%p'
-    DateTimeFormatNice24: 'd/m/Y H:i'
-    DevToolsTitle: 'Shop Development Tools'
-    Edit: Edit
-    Quantity: Quantity
-    ReadMoreTitle: 'Click here to read more on &quot;{Title}&quot;'
-    Remove: Remove
-    View: view
-  ShopConfig:
+  SilverShop\Core\ShopConfig:
     AllowedCountries: 'Allowed Ordering and Shipping Countries'
     AllowedCountriesTabTitle: 'Allowed Countries'
     CustomerGroup: 'Group to add new customers to'
     DefaultImage: 'Default Product Image'
     TermsPage: 'Terms and Conditions Page'
-  ShopCurrency:
+  SilverShop\Core\ShopCurrency:
     Free: '<span class="free">FREE</span>'
-  ShopDashboard:
-    NumberOfAccounts: 'Number of accounts to show'
-    NumberOfDays: 'Number of days to show'
-    NumberOfOrders: 'Number of orders to show'
-    RecentAccounts: 'Recent Accounts'
-    RecentAccountsDescription: 'Shows recent account signups'
-    RecentOrders: 'Recent Orders'
-    RecentOrdersChart: 'Order History Chart'
-    RecentOrdersChartDescription: 'Shows recent orders on a graph'
-    RecentOrdersDescription: 'Shows recent orders'
-  ShopDevelopmentAdmin:
+  SilverShop\Core\ShopDevelopmentAdmin:
     BuildTasks: 'Build Tasks'
     CartCleanup: 'Cleanup old carts'
     CartCleanupDesc: 'Remove abandoned carts.'
@@ -411,39 +432,16 @@ en:
     RecalculateOrdersDesc: 'Recalculate all order values. Warning: this will overwrite any historical values.'
     RunAllTests: 'Run all shop unit tests'
     UnitTests: 'Unit Tests'
-  ShopEmail:
-    AdminNotificationSubject: 'Order #{OrderNo} notification'
-    AdminNotificationTitle: 'Shop Receipt'
-    CancelSubject: 'Order #{OrderNo} cancelled by member'
-    ConfirmationSubject: 'Order #{OrderNo} confirmation'
-    ConfirmationTitle: 'Order Confirmation'
-    PhoneNumber: 'Phone number'
-    ReceiptSubject: 'Order #{OrderNo} receipt'
-    ReceiptTitle: 'Shop Receipt'
-    Regards: 'Kind regards'
-    StatusChangeSubject: 'Silvershop - '
-    StatusChangeTitle: 'Shop Status Change'
-    StatusChanged: 'Status for order #{OrderNo} changed to "{OrderStatus}"'
-    StatusChangeAdminCancelledNote: 'Your order has been cancelled by our staff.  Please contact us if you have any questions about this order.'
-    StatusChangeMemberCancelledNote: 'Your cancellation of the order has been noted.  Please contact us if you have any questions.'
-    StatusChangeProcessingNote: 'We have updated the status of your order to Processing.  Please contact us if you have any questions about this order.'
-    StatusChangeSentNote: 'Your order has been sent.  We aim to deliver promptly.  Please contact us if the products do not arrived within five days.'
-  ShopPeriodReport:
+  SilverShop\Core\ShopPeriodReport:
     Description: 'Shop Period Report'
     Title: 'Shop Period Report'
-  ShopQuantityField:
+  SilverShop\Core\ShopQuantityField:
     AddOne: 'Add one more of &quot;{ItemTitle}&quot; to your cart'
     RemoveOne: 'Remove one of &quot;{ItemTitle}&quot; from your cart'
-  ShopSalesReport:
+  SilverShop\Core\ShopSalesReport:
     Description: 'Monitor shop sales performance for a particular period. Group results by year, month, or day.'
     Title: 'Shop Sales'
-  ShopSideReport:
-    AllProducts: 'All Products'
-    FeaturedProducts: 'Featured Products'
-    Heavy: 'Heavy Products'
-    NoImage: 'Products with no image'
-    ShopGroup: Shop
-  ShoppingCart:
+  SilverShop\Core\ShoppingCart:
     CannotPurchase: 'This {Title} cannot be purchased.'
     Checkout: Checkout
     Cleared: 'Cart was successfully cleared.'
@@ -465,39 +463,41 @@ en:
     RemoveAllTitle: 'Remove all of &quot;{Title}&quot; from your cart'
     RemoveTitle: 'Remove &quot;{Title}&quot; from your cart.'
     TableSummary: 'Current contents of your cart.'
-  SimpleShippingModifier:
+  SilverShop\Core\SimpleShippingModifier:
     PLURALNAME: 'Simple Shipping Modifiers'
     SINGULARNAME: Shipping
     ShipToCountry: 'Ship to {Country}'
     db_Country: Country
-  SubTotalModifier:
+  SilverShop\Core\SubTotalModifier:
     PLURALNAME: 'Sub Totals'
     SINGULARNAME: 'Sub Total'
-  TaxModifier:
+  SilverShop\Core\TaxModifier:
     AtRate: '@ {Rate}%'
     PLURALNAME: Taxes
     SINGULARNAME: Tax
     db_Rate: Rate
-  TaxReport:
+  SilverShop\Core\TaxReport:
     Description: 'Report tax charged on orders. Only includes orders that have been paid.'
     Title: Tax
-  Variation:
-    SINGULARNAME: Variation
-  VariationForm:
+  SilverShop\Core\VariationForm:
     ChooseAttribute: 'Choose {attribute} …'
     ProductNotAvailable: 'This product is not available with the selected options.'
     VariationNotAvailable: 'That variation is not available, sorry.'
-  WeightShippingModifier:
+  SilverShop\Core\WeightShippingModifier:
     PLURALNAME: 'Weight Shipping Modifiers'
     SINGULARNAME: Shipping
     TableTitle: 'Shipping ({Kilograms} kg)'
-  Zone:
+  SilverShop\Core\Zone:
     PLURALNAME: Zones
     SINGULARNAME: Zone
     db_Description: Description
     db_Name: Name
     has_many_Regions: Regions
-  ZoneRegion:
+  SilverShop\Core\ZoneAdmin:
+    MENUTITLE: Zones
+  SilverShop\Core\ZoneRegion:
     PLURALNAME: 'Zone Regions'
     SINGULARNAME: 'Zone Region'
     has_one_Zone: Zone
+  Variation:
+    SINGULARNAME: Variation

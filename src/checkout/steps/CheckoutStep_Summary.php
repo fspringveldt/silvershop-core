@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+
+
+
 class CheckoutStep_Summary extends CheckoutStep
 {
     private static $allowed_actions = array(

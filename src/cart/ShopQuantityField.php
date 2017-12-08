@@ -1,5 +1,16 @@
 <?php
 
+namespace SilverShop\Core;
+
+use ViewableData;
+use NumericField;
+use FormField;
+use DropdownField;
+use SilverShop\Core\ShopQuantityField;
+use SilverShop\Core\DropdownShopQuantityField;
+
+
+
 class ShopQuantityField extends ViewableData
 {
     protected $item;
@@ -8,7 +19,7 @@ class ShopQuantityField extends ViewableData
 
     protected $classes  = array('ajaxQuantityField');
 
-    protected $template = 'ShopQuantityField';
+    protected $template = ShopQuantityField::class;
 
     protected $buyable;
 
@@ -67,7 +78,7 @@ class ShopQuantityField extends ViewableData
         return NumericField::create(
             $this->MainID() . '_Quantity',
             // this title currently doesn't show up in the front end, better assign a translation anyway.
-            _t('Order.Quantity', "Quantity"),
+            _t('SilverShop\\Core\\Order.Quantity', "Quantity"),
             $this->item->Quantity
         )->setAttribute('type', 'number');
     }
@@ -117,7 +128,7 @@ class ShopQuantityField extends ViewableData
  */
 class DropdownShopQuantityField extends ShopQuantityField
 {
-    protected $template = 'DropdownShopQuantityField';
+    protected $template = DropdownShopQuantityField::class;
 
     protected $max      = 100;
 
@@ -130,7 +141,7 @@ class DropdownShopQuantityField extends ShopQuantityField
         return DropdownField::create(
             $this->MainID() . '_Quantity',
             // this title currently doesn't show up in the front end, better assign a translation anyway.
-            _t('Order.Quantity', "Quantity"),
+            _t('SilverShop\\Core\\Order.Quantity', "Quantity"),
             $qtyArray,
             ($this->item->Quantity) ? $this->item->Quantity : ""
         );

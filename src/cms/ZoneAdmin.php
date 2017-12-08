@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+
+use ModelAdmin;
+use SilverShop\Core\Zone;
+
+
+
 class ZoneAdmin extends ModelAdmin
 {
     private static $menu_title     = "Zones";
@@ -11,6 +18,6 @@ class ZoneAdmin extends ModelAdmin
     private static $menu_priority  = 2;
 
     private static $managed_models = array(
-        'Zone',
+        Zone::class,
     );
 }

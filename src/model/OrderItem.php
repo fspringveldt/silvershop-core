@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Injector;
+use SilverShop\Core\Product;
+use SilverShop\Core\ShopQuantityField;
+
+
+
 /**
  * An order item is a product which has been added to an order,
  * ready for purchase. An order item is typically a product itself,
@@ -43,7 +51,7 @@ class OrderItem extends OrderAttribute
 
     private static $required_fields      = array();
 
-    private static $buyable_relationship = "Product";
+    private static $buyable_relationship = Product::class;
 
     private static $singular_name        = "Item";
 
@@ -188,7 +196,7 @@ class OrderItem extends OrderAttribute
      */
     public function QuantityField()
     {
-        return Injector::inst()->create('ShopQuantityField', $this);
+        return Injector::inst()->create(ShopQuantityField::class, $this);
     }
 
     /**

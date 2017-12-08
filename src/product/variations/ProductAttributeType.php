@@ -1,5 +1,20 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use FieldList;
+use TextField;
+use GridField;
+use GridFieldConfig_RecordEditor;
+use LiteralField;
+use ArrayList;
+use DropdownField;
+use SilverShop\Core\ProductAttributeValue;
+use SilverShop\Core\Product;
+
+
+
 /**
  * Producte Attribute Type
  * Types of product attributes.
@@ -15,11 +30,11 @@ class ProductAttributeType extends DataObject
     );
 
     private static $has_many          = array(
-        'Values' => 'ProductAttributeValue',
+        'Values' => ProductAttributeValue::class,
     );
 
     private static $belongs_many_many = array(
-        'Product' => 'Product',
+        'Product' => Product::class,
     );
 
     private static $summary_fields    = array(
@@ -39,9 +54,7 @@ class ProductAttributeType extends DataObject
 
     public static function find_or_make($name)
     {
-        if ($type = ProductAttributeType::get()
-            ->filter("Name:nocase", $name)
-            ->first()
+        if ($type = ProductAttributeType::get()->filter("Name:nocase", $name)->first()
         ) {
             return $type;
         }
@@ -56,14 +69,14 @@ class ProductAttributeType extends DataObject
     public function getCMSFields()
     {
         $fields = FieldList::create(
-            TextField::create("Name", _t('ProductAttributeType.db_Name', 'Name')),
-            TextField::create("Label", _t('ProductAttributeType.db_Label', 'Label'))
+            TextField::create("Name", _t('SilverShop\\Core\\ProductAttributeType.db_Name', 'Name')),
+            TextField::create("Label", _t('SilverShop\\Core\\ProductAttributeType.db_Label', 'Label'))
         );
         if ($this->isInDB()) {
             $fields->push(
                 GridField::create(
                     "Values",
-                    _t('ProductAttributeType.has_many_Values', "Values"),
+                    _t('SilverShop\\Core\\ProductAttributeType.has_many_Values', "Values"),
                     $this->Values(),
                     GridFieldConfig_RecordEditor::create()
                 )
@@ -73,7 +86,7 @@ class ProductAttributeType extends DataObject
                 LiteralField::create(
                     "Values",
                     '<p class="message warning">' .
-                    _t('ProductAttributeType.SaveFirstInfo', 'Save first, then you can add values.') .
+                    _t('SilverShop\\Core\\ProductAttributeType.SaveFirstInfo', 'Save first, then you can add values.') .
                     '</p>'
                 )
             );

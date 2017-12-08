@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+
+
+
 /**
  * Base class for creating tax modifiers with.
  */
@@ -22,11 +27,11 @@ class TaxModifier extends OrderModifier
         $title = parent::TableTitle();
         if ($this->Rate) {
             $title .= ' ' . _t(
-                    'TaxModifier.AtRate',
-                    '@ {Rate}%',
-                    '',
-                    array('Rate' => number_format($this->Rate * 100, 1))
-                );
+                'SilverShop\\Core\\TaxModifier.AtRate',
+                '@ {Rate}%',
+                '',
+                array('Rate' => number_format($this->Rate * 100, 1))
+            );
         }
         return $title;
     }

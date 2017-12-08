@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use SiteConfig;
+
+
 /**
  * Flat shipping to specific countries.
  *
@@ -28,7 +33,7 @@ class SimpleShippingModifier extends ShippingModifier
             $countryList = SiteConfig::current_site_config()->getCountriesList();
 
             return _t(
-                'SimpleShippingModifier.ShipToCountry',
+                'SilverShop\\Core\\SimpleShippingModifier.ShipToCountry',
                 'Ship to {Country}',
                 '',
                 array('Country' => $countryList[$country])

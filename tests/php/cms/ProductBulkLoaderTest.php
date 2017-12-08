@@ -1,5 +1,15 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+use DataObject;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductBulkLoader;
+
+
+
 class ProductBulkLoaderTest extends FunctionalTest
 {
     public static $fixture_file   = 'silvershop/tests/fixtures/shop.yml';
@@ -8,7 +18,7 @@ class ProductBulkLoaderTest extends FunctionalTest
 
     public function testLoad()
     {
-        $loader = new ProductBulkLoader('Product');
+        $loader = new ProductBulkLoader(Product::class);
 
         $ds = DIRECTORY_SEPARATOR;
         $filepath = realpath(__DIR__ . $ds . '..' . $ds . 'test_products.csv');
@@ -22,7 +32,7 @@ class ProductBulkLoaderTest extends FunctionalTest
         //$this->assertEquals(4, $results->Count(), 'Test correct count of imported data');
 
         // Test that columns were correctly imported
-        $obj = DataObject::get_one("Product", "\"Title\" = 'Socks'");
+        $obj = DataObject::get_one(Product::class, "\"Title\" = 'Socks'");
         $this->assertNotNull($obj, "New product exists");
         $this->assertEquals("<p>The comfiest pair of socks you'll ever own.</p>", $obj->Content, "Content matches");
         $this->assertEquals(12, $obj->BasePrice, "Checking price matches.");

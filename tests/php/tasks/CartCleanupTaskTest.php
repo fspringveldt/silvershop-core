@@ -1,5 +1,19 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+use Config;
+use SS_Datetime;
+
+use DB;
+use SS_HTTPRequest;
+
+use SilverShop\Core\CartCleanupTask;
+use SilverShop\Core\Order;
+
+
+
 /**
  * @package    shop
  * @subpackage tests
@@ -11,7 +25,7 @@ class CartCleanupTaskTest extends SapphireTest
         parent::setUp();
 
         Config::nest();
-        Config::inst()->update('CartCleanupTask', 'delete_after_mins', 120);
+        Config::inst()->update(CartCleanupTask::class, 'delete_after_mins', 120);
     }
 
     public function tearDown()
@@ -43,9 +57,9 @@ class CartCleanupTaskTest extends SapphireTest
         $task = new CartCleanupTaskTest_CartCleanupTaskFake();
         $response = $task->run(new SS_HTTPRequest('GET', '/'));
 
-        $this->assertInstanceOf('Order', Order::get()->byID($orderRunningRecentID));
+        $this->assertInstanceOf(Order::class, Order::get()->byID($orderRunningRecentID));
         $this->assertNull(Order::get()->byID($orderRunningOldID));
-        $this->assertInstanceOf('Order', Order::get()->byID($orderPaidOldID));
+        $this->assertInstanceOf(Order::class, Order::get()->byID($orderPaidOldID));
 
         $this->assertEquals('1 old carts removed.', $task->log[count($task->log) - 1]);
 

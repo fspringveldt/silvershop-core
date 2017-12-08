@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use SilverShop\Core\Address;
+use SilverShop\Core\Zone;
+
+
+
 class ZoneTest extends SapphireTest
 {
     public static $fixture_file = array(
@@ -9,12 +18,12 @@ class ZoneTest extends SapphireTest
 
     public function testMatchingZones()
     {
-        $this->assertZoneMatch($this->objFromFixture("Address", "wnz6012"), "TransTasman");
-        $this->assertZoneMatch($this->objFromFixture("Address", "wnz6012"), "Local");
-        $this->assertZoneMatch($this->objFromFixture("Address", "sau5024"), "TransTasman");
-        $this->assertZoneMatch($this->objFromFixture("Address", "sau5024"), "Special");
-        $this->assertZoneMatch($this->objFromFixture("Address", "scn266033"), "Asia");
-        $this->assertNoZoneMatch($this->objFromFixture("Address", "zch1234"));
+        $this->assertZoneMatch($this->objFromFixture(Address::class, "wnz6012"), "TransTasman");
+        $this->assertZoneMatch($this->objFromFixture(Address::class, "wnz6012"), "Local");
+        $this->assertZoneMatch($this->objFromFixture(Address::class, "sau5024"), "TransTasman");
+        $this->assertZoneMatch($this->objFromFixture(Address::class, "sau5024"), "Special");
+        $this->assertZoneMatch($this->objFromFixture(Address::class, "scn266033"), "Asia");
+        $this->assertNoZoneMatch($this->objFromFixture(Address::class, "zch1234"));
 
         $this->markTestIncomplete(
             'test match specificity, ie state matches should come before country matches, but not postcode matches'

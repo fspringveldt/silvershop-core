@@ -1,5 +1,26 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Page;
+use FieldList;
+use TextField;
+use DropdownField;
+use ListBoxField;
+use CheckboxField;
+use UploadField;
+use SiteConfig;
+use Director;
+use Page_Controller;
+use Versioned;
+use SilverShop\Core\ProductCategory;
+use SilverShop\Core\Product;
+use SilverShop\Core\Product_OrderItem;
+use SilverShop\Core\ProductVariationsExtension;
+use SilverShop\Core\AddProductForm;
+
+
+
 /**
  * This is a standard Product page-type with fields like
  * Price, Weight, Model and basic management of
@@ -39,7 +60,7 @@ class Product extends Page implements Buyable
     );
 
     private static $many_many              = array(
-        'ProductCategories' => 'ProductCategory',
+        'ProductCategories' => ProductCategory::class,
     );
 
     private static $defaults               = array(
@@ -72,13 +93,13 @@ class Product extends Page implements Buyable
         'canPurchase'           => 'Purchasable',
     );
 
-    private static $singular_name          = "Product";
+    private static $singular_name          = Product::class;
 
     private static $plural_name            = "Products";
 
     private static $icon                   = 'silvershop/images/icons/package';
 
-    private static $default_parent         = 'ProductCategory';
+    private static $default_parent         = ProductCategory::class;
 
     private static $default_sort           = '"Title" ASC';
 
@@ -86,7 +107,7 @@ class Product extends Page implements Buyable
 
     private static $allow_zero_price       = false;
 
-    private static $order_item             = "Product_OrderItem";
+    private static $order_item             = Product_OrderItem::class;
 
     private static $min_opengraph_img_size = 0;
 
@@ -110,73 +131,83 @@ class Product extends Page implements Buyable
     {
         $self = $this;
 
-        $this->beforeUpdateCMSFields(function(FieldList $fields) use ($self) {
-            $fields->fieldByName('Root.Main.Title')
-                ->setTitle(_t('Product.PageTitle', 'Product Title'));
+        $this->beforeUpdateCMSFields(
+            function (FieldList $fields) use ($self) {
+                $fields->fieldByName('Root.Main.Title')
+                    ->setTitle(_t('SilverShop\\Core\\Product.PageTitle', 'Product Title'));
 
-            $fields->addFieldsToTab('Root.Main', [
-                TextField::create('InternalItemID', _t('Product.InternalItemID', 'Product Code/SKU'), '', 30),
-                DropdownField::create('ParentID', _t("Product.Category", "Category"), $self->getCategoryOptions())
-                    ->setDescription(_t("Product.CategoryDescription", "This is the parent page or default category.")),
-                ListBoxField::create(
-                    'ProductCategories',
-                    _t("Product.AdditionalCategories", "Additional Categories"),
-                    $self->getCategoryOptionsNoParent()
-                )->setMultiple(true),
-                TextField::create('Model', _t('Product.Model', 'Model'), '', 30),
-                CheckboxField::create('Featured', _t('Product.Featured', 'Featured Product')),
-                CheckboxField::create('AllowPurchase', _t('Product.AllowPurchase', 'Allow product to be purchased'), 1),
-            ]);
-
-            $fields->addFieldsToTab('Root.Pricing', [
-                TextField::create('BasePrice', _t('Product.db_BasePrice', 'Price'))
-                    ->setDescription(_t('Product.PriceDesc', "Base price to sell this product at."))
-                    ->setMaxLength(12),
-                TextField::create('CostPrice', _t('Product.db_CostPrice', 'Cost Price'))
-                    ->setDescription(_t('Product.CostPriceDescription', 'Wholesale price before markup.'))
-                    ->setMaxLength(12),
-            ]);
-
-            $fieldSubstitutes = [
-                'LengthUnit' => $self::config()->length_unit
-            ];
-
-            $fields->addFieldsToTab('Root.Shipping', [
-                TextField::create(
-                    'Weight',
-                    _t('Product.WeightWithUnit', 'Weight ({WeightUnit})', '', array(
-                        'WeightUnit' => self::config()->weight_unit
-                    )),
-                    '',
-                    12
-                ),
-                TextField::create(
-                    'Height',
-                    _t('Product.HeightWithUnit', 'Height ({LengthUnit})', '', $fieldSubstitutes),
-                    '',
-                    12
-                ),
-                TextField::create(
-                    'Width',
-                    _t('Product.WidthWithUnit', 'Width ({LengthUnit})', '', $fieldSubstitutes),
-                    '',
-                    12
-                ),
-                TextField::create(
-                    'Depth',
-                    _t('Product.DepthWithUnit', 'Depth ({LengthUnit})', '', $fieldSubstitutes),
-                    '',
-                    12
-                ),
-            ]);
-
-            if (!$fields->dataFieldByName('Image')) {
-                $fields->addFieldToTab(
-                    'Root.Images',
-                    UploadField::create('Image', _t('Product.Image', 'Product Image'))
+                $fields->addFieldsToTab(
+                    'Root.Main', [
+                    TextField::create('InternalItemID', _t('SilverShop\\Core\\Product.InternalItemID', 'Product Code/SKU'), '', 30),
+                    DropdownField::create('ParentID', _t("SilverShop\\Core\\Product.Category", "Category"), $self->getCategoryOptions())
+                    ->setDescription(_t("SilverShop\\Core\\Product.CategoryDescription", "This is the parent page or default category.")),
+                    ListBoxField::create(
+                        'ProductCategories',
+                        _t("SilverShop\\Core\\Product.AdditionalCategories", "Additional Categories"),
+                        $self->getCategoryOptionsNoParent()
+                    )->setMultiple(true),
+                    TextField::create('Model', _t('SilverShop\\Core\\Product.Model', 'Model'), '', 30),
+                    CheckboxField::create('Featured', _t('SilverShop\\Core\\Product.Featured', 'Featured Product')),
+                    CheckboxField::create('AllowPurchase', _t('SilverShop\\Core\\Product.AllowPurchase', 'Allow product to be purchased'), 1),
+                    ]
                 );
+
+                $fields->addFieldsToTab(
+                    'Root.Pricing', [
+                    TextField::create('BasePrice', _t('SilverShop\\Core\\Product.db_BasePrice', 'Price'))
+                    ->setDescription(_t('SilverShop\\Core\\Product.PriceDesc', "Base price to sell this product at."))
+                    ->setMaxLength(12),
+                    TextField::create('CostPrice', _t('SilverShop\\Core\\Product.db_CostPrice', 'Cost Price'))
+                    ->setDescription(_t('SilverShop\\Core\\Product.CostPriceDescription', 'Wholesale price before markup.'))
+                    ->setMaxLength(12),
+                    ]
+                );
+
+                $fieldSubstitutes = [
+                'LengthUnit' => $self::config()->length_unit
+                ];
+
+                $fields->addFieldsToTab(
+                    'Root.Shipping', [
+                    TextField::create(
+                        'Weight',
+                        _t(
+                            'SilverShop\\Core\\Product.WeightWithUnit', 'Weight ({WeightUnit})', '', array(
+                            'WeightUnit' => self::config()->weight_unit
+                            )
+                        ),
+                        '',
+                        12
+                    ),
+                    TextField::create(
+                        'Height',
+                        _t('SilverShop\\Core\\Product.HeightWithUnit', 'Height ({LengthUnit})', '', $fieldSubstitutes),
+                        '',
+                        12
+                    ),
+                    TextField::create(
+                        'Width',
+                        _t('SilverShop\\Core\\Product.WidthWithUnit', 'Width ({LengthUnit})', '', $fieldSubstitutes),
+                        '',
+                        12
+                    ),
+                    TextField::create(
+                        'Depth',
+                        _t('SilverShop\\Core\\Product.DepthWithUnit', 'Depth ({LengthUnit})', '', $fieldSubstitutes),
+                        '',
+                        12
+                    ),
+                    ]
+                );
+
+                if (!$fields->dataFieldByName('Image')) {
+                    $fields->addFieldToTab(
+                        'Root.Images',
+                        UploadField::create('Image', _t('SilverShop\\Core\\Product.Image', 'Product Image'))
+                    );
+                }
             }
-        });
+        );
 
         return parent::getCMSFields();
     }
@@ -275,7 +306,7 @@ class Product extends Page implements Buyable
             return false;
         }
         $allowpurchase = false;
-        $extension = self::has_extension("ProductVariationsExtension");
+        $extension = self::has_extension(ProductVariationsExtension::class);
         if ($extension && ProductVariation::get()->filter("ProductID", $this->ID)->first()) {
             foreach ($this->Variations() as $variation) {
                 if ($variation->canPurchase($member, $quantity)) {
@@ -307,7 +338,7 @@ class Product extends Page implements Buyable
     /**
      * Returns the order item which contains the product
      *
-     * @return  OrderItem
+     * @return OrderItem
      */
     public function Item()
     {
@@ -413,7 +444,7 @@ class Product extends Page implements Buyable
     /**
      * Integration with opengraph module
      *
-     * @see https://github.com/tractorcow/silverstripe-opengraph
+     * @see    https://github.com/tractorcow/silverstripe-opengraph
      * @return string opengraph type
      */
     public function getOGType()
@@ -471,10 +502,10 @@ class Product_Controller extends Page_Controller
 {
     private static $allowed_actions = array(
         'Form',
-        'AddProductForm',
+        AddProductForm::class,
     );
 
-    public         $formclass       = "AddProductForm"; //allow overriding the type of form used
+    public         $formclass       = AddProductForm::class; //allow overriding the type of form used
 
     public function Form()
     {
@@ -492,13 +523,13 @@ class Product_OrderItem extends OrderItem
     );
 
     private static $has_one = array(
-        'Product' => 'Product',
+        'Product' => Product::class,
     );
 
     /**
      * the has_one join field to identify the buyable
      */
-    private static $buyable_relationship = "Product";
+    private static $buyable_relationship = Product::class;
 
     /**
      * Get related product
@@ -514,11 +545,10 @@ class Product_OrderItem extends OrderItem
         //TODO: this might need some unit testing to make sure it compliles with comment description
         //ie use live if in cart (however I see no logic for checking cart status)
         if ($this->ProductID && $this->ProductVersion && !$forcecurrent) {
-            return Versioned::get_version('Product', $this->ProductID, $this->ProductVersion);
-        } elseif (
-            $this->ProductID
+            return Versioned::get_version(Product::class, $this->ProductID, $this->ProductVersion);
+        } elseif ($this->ProductID
             && $product = Versioned::get_one_by_stage(
-                "Product",
+                Product::class,
                 "Live",
                 "\"Product\".\"ID\"  = " . $this->ProductID
             )

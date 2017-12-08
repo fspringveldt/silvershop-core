@@ -1,17 +1,22 @@
 <?php
 
+namespace SilverShop\Core;
+
+use BuildTask;
+use Director;
+
+
 /**
  * ShopEmailPreviewTask
  *
- * @author Anselm Christophersen <ac@anselm.dk>
- * @date   September 2016
+ * @author     Anselm Christophersen <ac@anselm.dk>
+ * @date       September 2016
  * @package    shop
  * @subpackage tasks
  */
 
 /**
  * ShopEmailPreviewTask
- *
  */
 class ShopEmailPreviewTask extends BuildTask
 {
@@ -42,7 +47,7 @@ class ShopEmailPreviewTask extends BuildTask
         }
         echo '</ul><hr>';
 
-        if ($email && in_array($email,$this->previewableEmails)) {
+        if ($email && in_array($email, $this->previewableEmails)) {
             $order = Order::get()->first();
             $notifier = OrderEmailNotifier::create($order)
                 ->setDebugMode(true);

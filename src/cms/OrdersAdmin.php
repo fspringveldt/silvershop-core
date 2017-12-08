@@ -1,5 +1,19 @@
 <?php
 
+namespace SilverShop\Core;
+
+use ModelAdmin;
+use GridFieldDetailForm_ItemRequest;
+use LiteralField;
+use Requirements;
+use i18n;
+use SiteConfig;
+use SilverShop\Core\OrderStatusLog;
+use SilverShop\Core\Order;
+use SilverShop\Core\OrderGridFieldDetailForm_ItemRequest;
+
+
+
 /**
  * Order administration interface, based on ModelAdmin
  *
@@ -20,7 +34,7 @@ class OrdersAdmin extends ModelAdmin
         'Order' => array(
             'title' => 'Orders',
         ),
-        'OrderStatusLog'
+        OrderStatusLog::class
     );
 
     private static $model_importers = array();
@@ -30,7 +44,7 @@ class OrdersAdmin extends ModelAdmin
      */
     public function getList()
     {
-        if ($this->modelClass == "Order") {
+        if ($this->modelClass == Order::class) {
             $context = $this->getSearchContext();
             $params = $this->request->requestVar('q');
             //TODO update params DateTo, to include the day, ie 23:59:59
@@ -50,14 +64,14 @@ class OrdersAdmin extends ModelAdmin
     function getEditForm($id = null, $fields = null)
     {
         $form = parent::getEditForm($id, $fields);
-        if ($this->modelClass == "Order") {
-            $form->Fields()->fieldByName("Order")->getConfig()
+        if ($this->modelClass == Order::class) {
+            $form->Fields()->fieldByName(Order::class)->getConfig()
                 ->getComponentByType('GridFieldDetailForm')
-                ->setItemRequestClass('OrderGridFieldDetailForm_ItemRequest'); //see below
+                ->setItemRequestClass(OrderGridFieldDetailForm_ItemRequest::class); //see below
         }
-        if ($this->modelClass == "OrderStatusLog") {
+        if ($this->modelClass == OrderStatusLog::class) {
             // Remove add new button
-            $config = $form->Fields()->fieldByName("OrderStatusLog")->getConfig();
+            $config = $form->Fields()->fieldByName(OrderStatusLog::class)->getConfig();
             $config->removeComponentsByType($config->getComponentByType('GridFieldAddNewButton'));
         }
 
@@ -108,7 +122,7 @@ JS;
             LiteralField::create(
                 "PrintOrder",
                 "<button class=\"no-ajax grid-print-button\" data-icon=\"grid_print\" onclick=\"javascript:$printwindowjs\">"
-                . _t("Order.Print", "Print") . "</button>"
+                . _t("SilverShop\\Core\\Order.Print", "Print") . "</button>"
             )
         );
 
@@ -125,7 +139,7 @@ JS;
         if (isset($_REQUEST['print']) && $_REQUEST['print']) {
             Requirements::customScript("if(document.location.href.indexOf('print=1') > 0) {window.print();}");
         }
-        $title = i18n::_t("Order.Invoice", "Invoice");
+        $title = i18n::_t("SilverShop\\Core\\Order.Invoice", "Invoice");
         if ($id = $this->popupController->getRequest()->param('ID')) {
             $title .= " #$id";
         }

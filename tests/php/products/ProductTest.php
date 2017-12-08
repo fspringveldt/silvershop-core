@@ -1,5 +1,24 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+
+use DataObject;
+use Config;
+use Director;
+use DataExtension;
+use TestOnly;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Product;
+use SilverShop\Core\Product_OrderItem;
+use SilverShop\Core\Tests\ProductTest_FractionalDiscountExtension;
+use SilverShop\Core\Order;
+use SilverShop\Core\ProductCategory;
+
+
+
 /**
  * Test {@link Product}
  *
@@ -21,11 +40,11 @@ class ProductTest extends FunctionalTest
     function setUp()
     {
         parent::setUp();
-        $this->tshirt = $this->objFromFixture('Product', 'tshirt');
-        $this->socks = $this->objFromFixture('Product', 'socks');
-        $this->beachball = $this->objFromFixture('Product', 'beachball');
-        $this->pdfbrochure = $this->objFromFixture('Product', 'pdfbrochure');
-        $this->mp3player = $this->objFromFixture("Product", "mp3player");
+        $this->tshirt = $this->objFromFixture(Product::class, 'tshirt');
+        $this->socks = $this->objFromFixture(Product::class, 'socks');
+        $this->beachball = $this->objFromFixture(Product::class, 'beachball');
+        $this->pdfbrochure = $this->objFromFixture(Product::class, 'pdfbrochure');
+        $this->mp3player = $this->objFromFixture(Product::class, "mp3player");
     }
 
     public function testCMSFields()
@@ -66,7 +85,7 @@ class ProductTest extends FunctionalTest
         $item = $this->tshirt->createItem(6);
         $this->assertEquals($this->tshirt->ID, $item->ProductID);
         $this->assertEquals(6, $item->Quantity);
-        $this->assertEquals("Product_OrderItem", get_class($item));
+        $this->assertEquals(Product_OrderItem::class, get_class($item));
     }
 
     public function testItem()
@@ -90,14 +109,14 @@ class ProductTest extends FunctionalTest
         // This extension adds a fractional discount, which could cause
         // the displayed unit price not to match the charged price at
         // large quantities.
-        Product::add_extension('ProductTest_FractionalDiscountExtension');
+        Product::add_extension(ProductTest_FractionalDiscountExtension::class);
         DataObject::flush_and_destroy_cache();
         $tshirt = Product::get()->byID($this->tshirt->ID);
-        Config::inst()->update('Order', 'rounding_precision', 2);
+        Config::inst()->update(Order::class, 'rounding_precision', 2);
         $this->assertEquals(24.99, $tshirt->sellingPrice());
-        Config::inst()->update('Order', 'rounding_precision', 3);
+        Config::inst()->update(Order::class, 'rounding_precision', 3);
         $this->assertEquals(24.985, $tshirt->sellingPrice());
-        Product::remove_extension('ProductTest_FractionalDiscountExtension');
+        Product::remove_extension(ProductTest_FractionalDiscountExtension::class);
     }
 
     public function testCanViewProductPage()
@@ -109,17 +128,17 @@ class ProductTest extends FunctionalTest
     public function testCategories()
     {
         $expectedids = array(
-            $this->objFromFixture("ProductCategory", "products")->ID,
+            $this->objFromFixture(ProductCategory::class, "products")->ID,
         );
         $this->assertEquals(
             array_combine($expectedids, $expectedids),
             $this->beachball->getCategoryIDs()
         );
         $expectedids = array(
-            $this->objFromFixture("ProductCategory", "products")->ID,
-            $this->objFromFixture("ProductCategory", "electronics")->ID,
-            $this->objFromFixture("ProductCategory", "musicplayers")->ID,
-            $this->objFromFixture("ProductCategory", "clearance")->ID,
+            $this->objFromFixture(ProductCategory::class, "products")->ID,
+            $this->objFromFixture(ProductCategory::class, "electronics")->ID,
+            $this->objFromFixture(ProductCategory::class, "musicplayers")->ID,
+            $this->objFromFixture(ProductCategory::class, "clearance")->ID,
         );
         $this->assertEquals(
             array_combine($expectedids, $expectedids),

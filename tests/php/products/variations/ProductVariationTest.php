@@ -1,5 +1,18 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductVariation;
+use SilverShop\Core\ProductAttributeValue;
+use SilverShop\Core\ProductAttributeType;
+
+
+
 /**
  * Test product variation capabilities.
  *
@@ -24,9 +37,9 @@ class ProductVariationTest extends SapphireTest
     public function setUp()
     {
         parent::setUp();
-        $this->ball = $this->objFromFixture("Product", "ball");
-        $this->mp3player = $this->objFromFixture("Product", "mp3player");
-        $this->redlarge = $this->objFromFixture("ProductVariation", "redlarge");
+        $this->ball = $this->objFromFixture(Product::class, "ball");
+        $this->mp3player = $this->objFromFixture(Product::class, "mp3player");
+        $this->redlarge = $this->objFromFixture(ProductVariation::class, "redlarge");
     }
 
     public function testVariationOrderItem()
@@ -51,8 +64,8 @@ class ProductVariationTest extends SapphireTest
 
     public function testGetVariation()
     {
-        $colorred = $this->objFromFixture("ProductAttributeValue", "color_red");
-        $sizelarge = $this->objFromFixture("ProductAttributeValue", "size_large");
+        $colorred = $this->objFromFixture(ProductAttributeValue::class, "color_red");
+        $sizelarge = $this->objFromFixture(ProductAttributeValue::class, "size_large");
         $attributes = array($colorred->ID, $sizelarge->ID);
         $variation = $this->ball->getVariationByAttributes($attributes);
         $this->assertTrue((bool)$variation, "Variation exists");
@@ -65,11 +78,11 @@ class ProductVariationTest extends SapphireTest
 
     public function testGenerateVariations()
     {
-        $color = $this->objFromFixture("ProductAttributeType", "color");
+        $color = $this->objFromFixture(ProductAttributeType::class, "color");
         $values = array('Black', 'Blue'); //Note: black doesn't exist in the yaml
         $this->mp3player->generateVariationsFromAttributes($color, $values);
 
-        $capacity = $this->objFromFixture("ProductAttributeType", "capacity");
+        $capacity = $this->objFromFixture(ProductAttributeType::class, "capacity");
         $values = array("120GB", "300GB"); //Note: 300GB doesn't exist in the yaml
         $this->mp3player->generateVariationsFromAttributes($capacity, $values);
 

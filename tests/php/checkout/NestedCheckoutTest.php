@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+use Director;
+
+use SilverShop\Core\CheckoutPage;
+
+
+
 class NestedCheckoutTest extends SapphireTest
 {
     public static $fixture_file = 'silvershop/tests/fixtures/pages/NestedCheckout.yml';
@@ -7,7 +16,7 @@ class NestedCheckoutTest extends SapphireTest
     public function setUp()
     {
         parent::setUp();
-        $this->checkoutpage = $this->objFromFixture('CheckoutPage', 'checkout');
+        $this->checkoutpage = $this->objFromFixture(CheckoutPage::class, 'checkout');
     }
 
     public function testNestedCheckoutForm()

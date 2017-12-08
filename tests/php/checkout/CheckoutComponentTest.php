@@ -1,5 +1,26 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+
+
+use SiteConfig;
+use SilverShop\Core\Order;
+use SilverShop\Core\Address;
+use SilverShop\Core\CheckoutConfig;
+use SilverShop\Core\SinglePageCheckoutComponentConfig;
+use SilverShop\Core\CustomerDetailsCheckoutComponent;
+use SilverShop\Core\ShippingAddressCheckoutComponent;
+use SilverShop\Core\BillingAddressCheckoutComponent;
+use SilverShop\Core\PaymentCheckoutComponent;
+use SilverShop\Core\NotesCheckoutComponent;
+use SilverShop\Core\TermsCheckoutComponent;
+use SilverShop\Core\CheckoutComponent_Namespaced;
+
+
+
 class CheckoutComponentTest extends SapphireTest
 {
     protected static $fixture_file = array(
@@ -13,10 +34,10 @@ class CheckoutComponentTest extends SapphireTest
     {
         parent::setUp();
         ShopTest::setConfiguration();
-        $this->cart = $this->objFromFixture("Order", "cart1");
-        $this->address1 = $this->objFromFixture("Address", "address1");
-        $this->address2 = $this->objFromFixture("Address", "address2");
-        $this->addressNoCountry = $this->objFromFixture("Address", "pukekohe");
+        $this->cart = $this->objFromFixture(Order::class, "cart1");
+        $this->address1 = $this->objFromFixture(Address::class, "address1");
+        $this->address2 = $this->objFromFixture(Address::class, "address2");
+        $this->addressNoCountry = $this->objFromFixture(Address::class, "pukekohe");
         CheckoutConfig::config()->member_creation_enabled = true;
         CheckoutConfig::config()->membership_required = false;
     }
@@ -27,7 +48,7 @@ class CheckoutComponentTest extends SapphireTest
         $order->write();
         $config = new SinglePageCheckoutComponentConfig($order);
 
-        $customerdetailscomponent = $config->getComponentByType("CustomerDetailsCheckoutComponent");
+        $customerdetailscomponent = $config->getComponentByType(CustomerDetailsCheckoutComponent::class);
         $customerdetailscomponent->setData(
             $order,
             array(
@@ -37,13 +58,13 @@ class CheckoutComponentTest extends SapphireTest
             )
         );
 
-        $shippingaddresscomponent = $config->getComponentByType("ShippingAddressCheckoutComponent");
+        $shippingaddresscomponent = $config->getComponentByType(ShippingAddressCheckoutComponent::class);
         $shippingaddresscomponent->setData($order, $this->address1->toMap());
 
-        $billingaddresscomponent = $config->getComponentByType("BillingAddressCheckoutComponent");
+        $billingaddresscomponent = $config->getComponentByType(BillingAddressCheckoutComponent::class);
         $billingaddresscomponent->setData($order, $this->address2->toMap());
 
-        $paymentcomponent = $config->getComponentByType("PaymentCheckoutComponent");
+        $paymentcomponent = $config->getComponentByType(PaymentCheckoutComponent::class);
         $paymentcomponent->setData(
             $order,
             array(
@@ -51,7 +72,7 @@ class CheckoutComponentTest extends SapphireTest
             )
         );
 
-        $notescomponent = $config->getComponentByType("NotesCheckoutComponent");
+        $notescomponent = $config->getComponentByType(NotesCheckoutComponent::class);
         $notescomponent->setData(
             $order,
             array(
@@ -59,7 +80,7 @@ class CheckoutComponentTest extends SapphireTest
             )
         );
 
-        $termscomponent = $config->getComponentByType("TermsCheckoutComponent");
+        $termscomponent = $config->getComponentByType(TermsCheckoutComponent::class);
         $termscomponent->setData(
             $order,
             array(
@@ -69,16 +90,16 @@ class CheckoutComponentTest extends SapphireTest
 
         $components = $config->getComponents();
         $this->assertContainsOnlyInstancesOf(
-            "CheckoutComponent_Namespaced",
+            CheckoutComponent_Namespaced::class,
             $components,
             "Name of ArrayList is CheckoutComponent_Namespaced"
         );
-        $this->assertContains("CustomerDetailsCheckoutComponent", print_r($components, true));
-        $this->assertContains("ShippingAddressCheckoutComponent", print_r($components, true));
-        $this->assertContains("BillingAddressCheckoutComponent", print_r($components, true));
-        $this->assertContains("PaymentCheckoutComponent", print_r($components, true));
-        $this->assertContains("NotesCheckoutComponent", print_r($components, true));
-        $this->assertContains("TermsCheckoutComponent", print_r($components, true));
+        $this->assertContains(CustomerDetailsCheckoutComponent::class, print_r($components, true));
+        $this->assertContains(ShippingAddressCheckoutComponent::class, print_r($components, true));
+        $this->assertContains(BillingAddressCheckoutComponent::class, print_r($components, true));
+        $this->assertContains(PaymentCheckoutComponent::class, print_r($components, true));
+        $this->assertContains(NotesCheckoutComponent::class, print_r($components, true));
+        $this->assertContains(TermsCheckoutComponent::class, print_r($components, true));
 
         $fields = $config->getFormFields();
 
@@ -211,7 +232,7 @@ class CheckoutComponentTest extends SapphireTest
         $order->write();
         $config = new SinglePageCheckoutComponentConfig($order);
 
-        $customerdetailscomponent = $config->getComponentByType("CustomerDetailsCheckoutComponent");
+        $customerdetailscomponent = $config->getComponentByType(CustomerDetailsCheckoutComponent::class);
         $customerdetailscomponent->setData(
             $order,
             array(
@@ -221,13 +242,13 @@ class CheckoutComponentTest extends SapphireTest
             )
         );
 
-        $shippingaddresscomponent = $config->getComponentByType("ShippingAddressCheckoutComponent");
+        $shippingaddresscomponent = $config->getComponentByType(ShippingAddressCheckoutComponent::class);
         $shippingaddresscomponent->setData($order, $this->addressNoCountry->toMap());
 
-        $billingaddresscomponent = $config->getComponentByType("BillingAddressCheckoutComponent");
+        $billingaddresscomponent = $config->getComponentByType(BillingAddressCheckoutComponent::class);
         $billingaddresscomponent->setData($order, $this->addressNoCountry->toMap());
 
-        $paymentcomponent = $config->getComponentByType("PaymentCheckoutComponent");
+        $paymentcomponent = $config->getComponentByType(PaymentCheckoutComponent::class);
         $paymentcomponent->setData(
             $order,
             array(

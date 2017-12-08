@@ -1,8 +1,22 @@
 <?php
 
+namespace SilverShop\Core;
+
+use i18nEntityProvider;
+use Requirements;
+use FieldList;
+use CompositeField;
+use Config;
+use Member;
+use ValidationResult;
+use ValidationException;
+use SilverShop\Core\AddressBookCheckoutComponent;
+use SilverShop\Core\Address;
+
+
+
 /**
  * Adds the ability to use the member's address book for choosing addresses
- *
  */
 abstract class AddressBookCheckoutComponent extends AddressCheckoutComponent implements i18nEntityProvider
 {
@@ -30,7 +44,7 @@ abstract class AddressBookCheckoutComponent extends AddressCheckoutComponent imp
                 CompositeField::create($existingaddressfields)
                     ->addExtraClass('hasExistingValues')
                     ->setLegend($label)
-                    ->setTag(Config::inst()->get('AddressBookCheckoutComponent', 'composite_field_tag'))
+                    ->setTag(Config::inst()->get(AddressBookCheckoutComponent::class, 'composite_field_tag'))
             );
         }
 
@@ -47,7 +61,7 @@ abstract class AddressBookCheckoutComponent extends AddressCheckoutComponent imp
         $member = Member::currentUser();
         if ($member && $member->AddressBook()->exists()) {
             $addressoptions = $member->AddressBook()->sort('Created', 'DESC')->map('ID', 'toString')->toArray();
-            $addressoptions['newaddress'] = _t("Address.CreateNewAddress", "Create new address");
+            $addressoptions['newaddress'] = _t("SilverShop\\Core\\Address.CreateNewAddress", "Create new address");
             $fieldtype = count($addressoptions) > 3 ? 'DropdownField' : 'OptionsetField';
 
             $label = _t("Address.Existing{$this->addresstype}Address", "Existing {$this->addresstype} Address");
@@ -98,7 +112,7 @@ abstract class AddressBookCheckoutComponent extends AddressCheckoutComponent imp
         } else {
             // Otherwise, require the normal address fields
             $required = parent::getRequiredFields($order);
-            $addressLabels = singleton('Address')->fieldLabels(false);
+            $addressLabels = singleton(Address::class)->fieldLabels(false);
 
             foreach ($required as $fieldName) {
                 if (empty($data[$fieldName])) {
@@ -131,7 +145,7 @@ abstract class AddressBookCheckoutComponent extends AddressCheckoutComponent imp
         if ($existingID > 0) {
             $order->{$this->addresstype . "AddressID"} = $existingID;
             $order->write();
-            $order->extend('onSet' . $this->addresstype . 'Address', $address);
+            $order->extend('onSet' . $this->addresstype . Address::class, $address);
         } else {
             parent::setData($order, $data);
         }

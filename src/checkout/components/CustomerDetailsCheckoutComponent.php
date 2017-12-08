@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core;
+
+use FieldList;
+use TextField;
+use EmailField;
+use Member;
+
+
 class CustomerDetailsCheckoutComponent extends CheckoutComponent
 {
     protected $requiredfields = array(
@@ -11,9 +19,9 @@ class CustomerDetailsCheckoutComponent extends CheckoutComponent
     public function getFormFields(Order $order)
     {
         $fields = FieldList::create(
-            $firstname = TextField::create('FirstName', _t('Order.db_FirstName', 'First Name')),
-            $surname = TextField::create('Surname', _t('Order.db_Surname', 'Surname')),
-            $email = EmailField::create('Email', _t('Order.db_Email', 'Email'))
+            $firstname = TextField::create('FirstName', _t('SilverShop\\Core\\Order.db_FirstName', 'First Name')),
+            $surname = TextField::create('Surname', _t('SilverShop\\Core\\Order.db_Surname', 'Surname')),
+            $email = EmailField::create('Email', _t('SilverShop\\Core\\Order.db_Email', 'Email'))
         );
 
         return $fields;

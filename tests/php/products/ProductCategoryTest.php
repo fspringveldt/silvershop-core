@@ -1,32 +1,62 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+use Versioned;
+use Director;
+use Config;
+
+use SilverShop\Core\ProductCategory;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductVariation;
+
+
+
 class ProductCategoryTest extends FunctionalTest
 {
     public static $fixture_file  = 'silvershop/tests/fixtures/shop.yml';
     public static $disable_theme = true;
 
-    /** @var ProductCategory */
+    /**
+     * @var ProductCategory 
+     */
     protected $products;
 
-    /** @var ProductCategory */
+    /**
+     * @var ProductCategory 
+     */
     protected $clothing;
 
-    /** @var ProductCategory */
+    /**
+     * @var ProductCategory 
+     */
     protected $electronics;
 
-    /** @var Product */
+    /**
+     * @var Product 
+     */
     protected $socks;
 
-    /** @var Product */
+    /**
+     * @var Product 
+     */
     protected $tshirt;
 
-    /** @var Product */
+    /**
+     * @var Product 
+     */
     protected $hdtv;
 
-    /** @var Product */
+    /**
+     * @var Product 
+     */
     protected $beachball;
 
-    /** @var Product */
+    /**
+     * @var Product 
+     */
     protected $mp3player;
 
     public function setUp()
@@ -34,22 +64,22 @@ class ProductCategoryTest extends FunctionalTest
         parent::setUp();
         ProductCategory::config()->must_have_price = false;
 
-        $this->products = $this->objFromFixture('ProductCategory', 'products');
+        $this->products = $this->objFromFixture(ProductCategory::class, 'products');
         $this->products->publish('Stage', 'Live');
-        $this->clothing = $this->objFromFixture('ProductCategory', 'clothing');
+        $this->clothing = $this->objFromFixture(ProductCategory::class, 'clothing');
         $this->clothing->publish('Stage', 'Live');
-        $this->electronics = $this->objFromFixture('ProductCategory', 'electronics');
+        $this->electronics = $this->objFromFixture(ProductCategory::class, 'electronics');
         $this->electronics->publish('Stage', 'Live');
 
-        $this->socks = $this->objFromFixture('Product', 'socks');
+        $this->socks = $this->objFromFixture(Product::class, 'socks');
         $this->socks->publish('Stage', 'Live');
-        $this->tshirt = $this->objFromFixture('Product', 'tshirt');
+        $this->tshirt = $this->objFromFixture(Product::class, 'tshirt');
         $this->tshirt->publish('Stage', 'Live');
-        $this->hdtv = $this->objFromFixture('Product', 'hdtv');
+        $this->hdtv = $this->objFromFixture(Product::class, 'hdtv');
         $this->hdtv->publish('Stage', 'Live');
-        $this->beachball = $this->objFromFixture('Product', 'beachball');
+        $this->beachball = $this->objFromFixture(Product::class, 'beachball');
         $this->beachball->publish('Stage', 'Live');
-        $this->mp3player = $this->objFromFixture('Product', 'mp3player');
+        $this->mp3player = $this->objFromFixture(Product::class, 'mp3player');
         $this->mp3player->publish('Stage', 'Live');
 
         Versioned::reading_stage('Live');
@@ -57,7 +87,7 @@ class ProductCategoryTest extends FunctionalTest
 
     public function testCanViewProductCategoryPage()
     {
-        $products = $this->objFromFixture('ProductCategory', 'products');
+        $products = $this->objFromFixture(ProductCategory::class, 'products');
         $this->get(Director::makeRelative($products->Link()));
     }
 
@@ -103,7 +133,7 @@ class ProductCategoryTest extends FunctionalTest
 
     public function testZeroPrice()
     {
-        Config::inst()->update('ProductCategory', 'must_have_price', true);
+        Config::inst()->update(ProductCategory::class, 'must_have_price', true);
 
         $products = $this->products->ProductsShowable();
         $this->assertNotNull($products, "Products exist in category");
@@ -132,17 +162,19 @@ class ProductCategoryTest extends FunctionalTest
 
     public function testZeroPriceWithVariations()
     {
-        Config::inst()->update('ProductCategory', 'must_have_price', true);
+        Config::inst()->update(ProductCategory::class, 'must_have_price', true);
 
         $products = $this->electronics->ProductsShowable();
         $this->assertEquals(0, $products->count(), 'No product should be returned as there\'s no price set');
 
         // Create a variation for HDTV
-        ProductVariation::create(array(
+        ProductVariation::create(
+            array(
             'InternalItemID' => '50-Inch',
             'Price'          => 1200,
             'ProductID'      => $this->hdtv->ID
-        ))->write();
+            )
+        )->write();
 
         $products = $this->electronics->ProductsShowable();
 

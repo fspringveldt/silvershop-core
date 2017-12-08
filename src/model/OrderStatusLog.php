@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use Member;
+use SilverShop\Core\Order;
+
+
+
 /**
  * Data class that keeps a log of a single
  * status of an order.
@@ -21,7 +29,7 @@ class OrderStatusLog extends DataObject
 
     private static $has_one           = array(
         'Author' => 'Member',
-        'Order'  => 'Order',
+        'Order'  => Order::class,
     );
 
     private static $searchable_fields = array(
@@ -94,8 +102,7 @@ class OrderStatusLog extends DataObject
     protected function updateWithLastInfo()
     {
         if ($this->OrderID) {
-            if (
-                $latestLog = OrderStatusLog::get()->filter('OrderID', $this->OrderID)->sort('Created', 'DESC')->first()
+            if ($latestLog = OrderStatusLog::get()->filter('OrderID', $this->OrderID)->sort('Created', 'DESC')->first()
             ) {
                 $this->DispatchedBy = $latestLog->DispatchedBy;
                 $this->DispatchedOn = $latestLog->DispatchedOn;

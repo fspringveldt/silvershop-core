@@ -1,5 +1,24 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+use Config;
+use Injector;
+use ModelAsController;
+use Director;
+
+
+use Form;
+use SilverShop\Core\Order;
+use SilverShop\Core\OrderManipulation;
+use SilverShop\Core\CheckoutPage;
+use SilverShop\Core\OrderActionsForm_Validator;
+use SilverShop\Core\OrderActionsForm;
+
+
+
 class OrderActionsFormTest extends FunctionalTest
 {
     protected static $fixture_file = array(
@@ -16,13 +35,13 @@ class OrderActionsFormTest extends FunctionalTest
         ShopTest::setConfiguration();
 
         // create order from fixture and persist to DB
-        $this->order = $this->objFromFixture("Order", "unpaid");
+        $this->order = $this->objFromFixture(Order::class, "unpaid");
         $this->order->write();
 
         OrderManipulation::add_session_order($this->order);
 
         // create checkoug page from fixture and publish it
-        $this->checkoutPage = $this->objFromFixture("CheckoutPage", "checkout");
+        $this->checkoutPage = $this->objFromFixture(CheckoutPage::class, "checkout");
         $this->checkoutPage->publish('Stage', 'Live');
 
         Config::inst()->update('Payment', 'allowed_gateways', array('Dummy'));
@@ -36,11 +55,13 @@ class OrderActionsFormTest extends FunctionalTest
 
         $ctrl = ModelAsController::controller_for($this->checkoutPage);
 
-        $response = Director::test($ctrl->Link('ActionsForm'), array(
+        $response = Director::test(
+            $ctrl->Link('ActionsForm'), array(
             'action_dopayment' => true,
             'OrderID'       => $this->order->ID,
             'PaymentMethod' => 'Dummy'
-        ), $this->session());
+            ), $this->session()
+        );
 
         // There should be a new payment
         $this->assertEquals(1, $this->order->Payments()->count());
@@ -58,7 +79,8 @@ class OrderActionsFormTest extends FunctionalTest
 
         $ctrl = ModelAsController::controller_for($this->checkoutPage);
 
-        $response = Director::test($ctrl->Link('ActionsForm'), array(
+        $response = Director::test(
+            $ctrl->Link('ActionsForm'), array(
             'action_dopayment' => true,
             'OrderID'       => $this->order->ID,
             'PaymentMethod' => 'Dummy',
@@ -68,7 +90,8 @@ class OrderActionsFormTest extends FunctionalTest
             'expiryMonth' => 10,
             'expiryYear' => date('Y') + 1,
             'cvv' => 123
-        ), $this->session());
+            ), $this->session()
+        );
 
         // There should be a new payment
         $this->assertEquals(1, $this->order->Payments()->count());
@@ -88,17 +111,19 @@ class OrderActionsFormTest extends FunctionalTest
         );
         $validator->setForm($form);
         Form::set_current_action('dopayment');
-        $validator->php(array(
+        $validator->php(
+            array(
             'OrderID'       => $this->order->ID,
             'PaymentMethod' => 'Dummy',
             'type' => 'visa',
             'name' => 'Tester Mc. Testerson',
             'number' => '4242424242424242'
-        ));
+            )
+        );
 
         $requiredCount = 0;
         foreach ($validator->getErrors() as $error){
-            if($error['messageType'] == 'required'){
+            if($error['messageType'] == 'required') {
                 $requiredCount++;
             }
         }
@@ -131,9 +156,11 @@ class OrderActionsFormTest extends FunctionalTest
             ->method('isRedirect')->will($this->returnValue($isRedirect));
 
         $mockResponse->expects($this->any())
-            ->method('getRedirectResponse')->will($this->returnValue(
-                new \Symfony\Component\HttpFoundation\RedirectResponse('http://paymentprovider/test/offsiteform')
-            ));
+            ->method('getRedirectResponse')->will(
+                $this->returnValue(
+                    new \Symfony\Component\HttpFoundation\RedirectResponse('http://paymentprovider/test/offsiteform')
+                )
+            );
 
         $mockResponse->expects($this->any())
             ->method('getTransactionReference')->will($this->returnValue($transactionReference));

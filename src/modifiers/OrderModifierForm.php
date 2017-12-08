@@ -1,10 +1,17 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Form;
+use Director;
+use Controller;
+
+
 /**
  * Base class for modifier forms.
  * Provides a redirect back to the checkout page.
  *
- * @see        OrderModifier
+ * @see OrderModifier
  *
  * @package    shop
  * @subpackage forms

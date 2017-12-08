@@ -1,5 +1,18 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Member;
+use Controller;
+use FieldList;
+use FormAction;
+use Form;
+use MemberLoginForm;
+use SS_HTTPRequest;
+use SilverShop\Core\CheckoutPage;
+
+
+
 /**
  * Login, sign-up, or proceed as guest
  */
@@ -34,7 +47,7 @@ class CheckoutStep_Membership extends CheckoutStep
                 'GuestLink' => $this->NextStepLink(),
             )
         )->renderWith(
-            array("CheckoutPage_membership", "CheckoutPage", "Page")
+            array("CheckoutPage_membership", CheckoutPage::class, "Page")
         ); //needed to make rendering work on index
     }
 
@@ -45,12 +58,12 @@ class CheckoutStep_Membership extends CheckoutStep
             FormAction::create(
                 "createaccount",
                 _t(
-                    'CheckoutStep_Membership.CreateAccount',
+                    'SilverShop\\Core\\CheckoutStep_Membership.CreateAccount',
                     "Create an Account",
                     'This is an option presented to the user'
                 )
             ),
-            FormAction::create("guestcontinue", _t('CheckoutStep_Membership.ContinueAsGuest', "Continue as Guest"))
+            FormAction::create("guestcontinue", _t('SilverShop\\Core\\CheckoutStep_Membership.ContinueAsGuest', "Continue as Guest"))
         );
         $form = Form::create($this->owner, 'MembershipForm', $fields, $actions);
         $this->owner->extend('updateMembershipForm', $form);
@@ -108,7 +121,7 @@ class CheckoutStep_Membership extends CheckoutStep
                 FormAction::create(
                     'docreateaccount',
                     _t(
-                        'CheckoutStep_Membership.CreateNewAccount',
+                        'SilverShop\\Core\\CheckoutStep_Membership.CreateNewAccount',
                         'Create New Account',
                         'This is an action (Button label)'
                     )

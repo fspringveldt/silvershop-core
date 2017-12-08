@@ -1,5 +1,15 @@
 <?php
 
+namespace SilverShop\Core;
+
+use MigrationTask;
+use DB;
+use DataObject;
+use SilverShop\Core\Product;
+use SilverShop\Core\Address;
+
+
+
 /**
  * Updates database to work with latest version of the code.
  */
@@ -63,7 +73,7 @@ class ShopMigrationTask extends MigrationTask
     {
         $db = DB::getConn();
         //if BasePrice has no values, but Price does, then copy from Price
-        if ($db->hasTable("Product") && !DataObject::get_one("Product", "\"BasePrice\" > 0")) {
+        if ($db->hasTable(Product::class) && !DataObject::get_one(Product::class, "\"BasePrice\" > 0")) {
             //TODO: warn against lost data
             DB::query("UPDATE \"Product\" SET \"BasePrice\" = \"Price\";");
             DB::query("UPDATE \"Product_Live\" SET \"BasePrice\" = \"Price\";");
@@ -94,7 +104,7 @@ class ShopMigrationTask extends MigrationTask
                 'FirstName',
                 'Surname',
                 'Email',
-                'Address',
+                Address::class,
                 'AddressLine2',
                 'City',
                 'Country',
@@ -116,12 +126,12 @@ class ShopMigrationTask extends MigrationTask
     public function migrateStatuses($order)
     {
         switch ($order->Status) {
-            case "Cancelled": //Pre version 0.5
-                $order->Status = 'AdminCancelled';
-                break;
-            case "":
-                $order->Status = 'Cart';
-                break;
+        case "Cancelled": //Pre version 0.5
+            $order->Status = 'AdminCancelled';
+            break;
+        case "":
+            $order->Status = 'Cart';
+            break;
         }
     }
 

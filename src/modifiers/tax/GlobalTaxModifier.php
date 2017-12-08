@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+
+
+
 /**
  * Handles calculation of sales tax on Orders on
  * a per-country basis.
@@ -28,7 +33,7 @@ class GlobalTaxModifier extends TaxModifier
     public function Rate()
     {
         // If the order is no longer in cart, rely on the saved data
-        if ($this->OrderID && !$this->Order()->IsCart()){
+        if ($this->OrderID && !$this->Order()->IsCart()) {
             return $this->getField('Rate');
         }
 
@@ -45,7 +50,7 @@ class GlobalTaxModifier extends TaxModifier
     {
         $country = $this->Country() ? ' (' . $this->Country() . ') ' : '';
         return parent::TableTitle() . $country .
-            ($this->Type == "Chargable" ? '' : _t("GlobalTaxModifier.Included", ' (included in the above price)'));
+            ($this->Type == "Chargable" ? '' : _t("SilverShop\\Core\\GlobalTaxModifier.Included", ' (included in the above price)'));
     }
 
     public function Country()
@@ -61,7 +66,7 @@ class GlobalTaxModifier extends TaxModifier
     {
         parent::onBeforeWrite();
         // While the order is still in "Cart" status, persist country code to DB
-        if ($this->OrderID && $this->Order()->IsCart()){
+        if ($this->OrderID && $this->Order()->IsCart()) {
             $this->setField('Country', $this->Country());
         }
     }

@@ -1,5 +1,17 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+use Member;
+
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\ShopMember;
+use SilverShop\Core\Order;
+
+
+
 /**
  * Test member functionality added via ShopMember extension
  */
@@ -42,7 +54,7 @@ class ShopMemberTest extends FunctionalTest
     public function testLoginJoinsCart()
     {
         Member::config()->login_joins_cart = true;
-        $order = $this->objFromFixture("Order", "cart");
+        $order = $this->objFromFixture(Order::class, "cart");
         ShoppingCart::singleton()->setCurrent($order);
         $member = $this->objFromFixture("Member", "jeremyperemy");
         $member->logIn();
@@ -56,7 +68,7 @@ class ShopMemberTest extends FunctionalTest
     public function testLoginDoesntJoinCart()
     {
         Member::config()->login_joins_cart = false;
-        $order = $this->objFromFixture("Order", "cart");
+        $order = $this->objFromFixture(Order::class, "cart");
         ShoppingCart::singleton()->setCurrent($order);
         $member = $this->objFromFixture("Member", "jeremyperemy");
         $member->logIn();

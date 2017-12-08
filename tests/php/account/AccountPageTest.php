@@ -1,5 +1,22 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+use Controller;
+
+use Director;
+
+
+use DataObject;
+use SiteConfig;
+use SilverShop\Core\Tests\ShopTestControllerExtension;
+use SilverShop\Core\AccountPage;
+use SilverShop\Core\AccountPage_Controller;
+use SilverShop\Core\Address;
+
+
+
 class AccountPageTest extends FunctionalTest
 {
     protected static $fixture_file   = array(
@@ -12,8 +29,8 @@ class AccountPageTest extends FunctionalTest
     public function setUp()
     {
         parent::setUp();
-        Controller::add_extension('ShopTestControllerExtension');
-        $this->accountpage = $this->objFromFixture("AccountPage", "accountpage");
+        Controller::add_extension(ShopTestControllerExtension::class);
+        $this->accountpage = $this->objFromFixture(AccountPage::class, "accountpage");
         $this->controller = new AccountPage_Controller($this->accountpage);
         $this->controller->init();
     }
@@ -40,7 +57,7 @@ class AccountPageTest extends FunctionalTest
         $page = $this->get("account/");  // try accessing the account page again
         $this->assertEquals(200, $page->getStatusCode(), "a page should load");
 
-        $this->assertEquals('AccountPage', $page->getHeader('X-TestPageClass'), "Account Page should open");
+        $this->assertEquals(AccountPage::class, $page->getHeader('X-TestPageClass'), "Account Page should open");
     }
 
     public function testGlobals()
@@ -57,7 +74,7 @@ class AccountPageTest extends FunctionalTest
 
         $this->controller->init(); //reinit to connect up member
 
-        $address = $this->objFromFixture("Address", "foobar");
+        $address = $this->objFromFixture(Address::class, "foobar");
         $address->MemberID = $member->ID;
         $address->write();
 
@@ -84,7 +101,7 @@ class AccountPageTest extends FunctionalTest
         // Open Address Book page
         $page = $this->get("account/addressbook/"); // goto address book page
         $this->assertEquals(200, $page->getStatusCode(), "a page should load");
-        $this->assertEquals('AccountPage', $page->getHeader('X-TestPageClass'), "Account page should open");
+        $this->assertEquals(AccountPage::class, $page->getHeader('X-TestPageClass'), "Account page should open");
         $this->assertEquals('addressbook', $page->getHeader('X-TestPageAction'), "Account addressbook should open");
 
         // Create an address

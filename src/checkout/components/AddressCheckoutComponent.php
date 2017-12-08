@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Member;
+use SiteConfig;
+use SilverShop\Core\Address;
+
+
+
 abstract class AddressCheckoutComponent extends CheckoutComponent
 {
     protected $formfielddescriptions = true;
@@ -44,7 +52,7 @@ abstract class AddressCheckoutComponent extends CheckoutComponent
         if(!$order->{$this->addresstype . "AddressID"}) {
             $data = array_merge(
                 ShopUserInfo::singleton()->getLocation(),
-                $member ? $member->{"Default" . $this->addresstype . "Address"}()->toMap() : array(),
+                $member ? $member->{"Default" . $this->addresstype . Address::class}()->toMap() : array(),
                 array(
                     $this->addresstype . "AddressID" => $order->{$this->addresstype . "AddressID"},
                 )
@@ -105,7 +113,7 @@ abstract class AddressCheckoutComponent extends CheckoutComponent
         }
         //associate member to address
         if ($member = Member::currentUser()) {
-            $default = $member->{"Default" . $this->addresstype . "Address"}();
+            $default = $member->{"Default" . $this->addresstype . Address::class}();
             //set default address
             if (!$default->exists()) {
                 $member->{"Default" . $this->addresstype . "AddressID"} = $address->ID;
@@ -116,7 +124,7 @@ abstract class AddressCheckoutComponent extends CheckoutComponent
             }
         }
         //extension hooks
-        $order->extend('onSet' . $this->addresstype . 'Address', $address);
+        $order->extend('onSet' . $this->addresstype . Address::class, $address);
     }
 
     /**
@@ -137,7 +145,7 @@ abstract class AddressCheckoutComponent extends CheckoutComponent
 
     public function getAddress(Order $order)
     {
-        return $order->{$this->addresstype . "Address"}();
+        return $order->{$this->addresstype . Address::class}();
     }
 }
 

@@ -1,5 +1,16 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+
+use SilverShop\Core\Product;
+use SilverShop\Core\Product_Controller;
+use SilverShop\Core\AddProductForm;
+
+
+
 class AddProductFormTest extends SapphireTest
 {
     public static $fixture_file = "silvershop/tests/fixtures/shop.yml";
@@ -7,7 +18,7 @@ class AddProductFormTest extends SapphireTest
     public function testForm()
     {
 
-        $controller = new Product_Controller($this->objFromFixture("Product", "socks"));
+        $controller = new Product_Controller($this->objFromFixture(Product::class, "socks"));
         $form = new AddProductForm($controller);
         $form->setMaximumQuantity(10);
 

@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use SS_Report;
+
+
 /**
  * Shop Side Report classes are to allow quick reports that can be accessed
  * on the Reports tab to the left inside the SilverStripe CMS.

@@ -1,5 +1,15 @@
 <?php
 
+namespace SilverShop\Core;
+
+use BuildTask;
+use DB;
+use SilverShop\Core\Product;
+use SilverShop\Core\Product_OrderItem;
+use SilverShop\Core\OrderItem;
+
+
+
 class CalculateProductPopularity extends BuildTask
 {
     protected      $title                        = "Calculate Product Sales Popularity";
@@ -48,7 +58,7 @@ SQL;
     //legacy function  for working out popularity
     public function viaphp()
     {
-        $ps = singleton('Product');
+        $ps = singleton(Product::class);
         $q = $ps->buildSQL("\"Product\".\"AllowPurchase\" = 1");
         $select = $q->select;
         $select['NewPopularity'] =
@@ -56,10 +66,10 @@ SQL;
         $q->select($select);
         $q->groupby("\"Product\".\"ID\"");
         $q->orderby("\"NewPopularity\" DESC");
-        $q->leftJoin('Product_OrderItem', '"Product"."ID" = "Product_OrderItem"."ProductID"');
-        $q->leftJoin('OrderItem', '"Product_OrderItem"."ID" = "OrderItem"."ID"');
+        $q->leftJoin(Product_OrderItem::class, '"Product"."ID" = "Product_OrderItem"."ProductID"');
+        $q->leftJoin(OrderItem::class, '"Product_OrderItem"."ID" = "OrderItem"."ID"');
         $records = $q->execute();
-        $productssold = $ps->buildDataObjectSet($records, "DataObjectSet", $q, 'Product');
+        $productssold = $ps->buildDataObjectSet($records, "DataObjectSet", $q, Product::class);
         //TODO: this could be done faster with an UPDATE query (SQLQuery doesn't support this yet @11/06/2010)
         foreach ($productssold as $product) {
             if ($product->NewPopularity != $product->Popularity) {

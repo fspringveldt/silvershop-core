@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use Extension;
+use ContentController;
+
+
 /**
  * Test Extension that can be applied to controllers to test if a requested page returns the desired page-class.
  */

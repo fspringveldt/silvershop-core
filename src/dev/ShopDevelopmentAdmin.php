@@ -1,5 +1,15 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Controller;
+use SapphireTest;
+use Director;
+use Security;
+use Permission;
+use Object;
+
+
 /**
  * Provides a list of development tasks to perform.
  *

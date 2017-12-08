@@ -1,5 +1,22 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+use DataObject;
+
+use TestOnly;
+
+use SilverShop\Core\Tests\CustomProduct;
+use SilverShop\Core\Tests\CustomProduct_OrderItem;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Buyable;
+use SilverShop\Core\Product;
+use SilverShop\Core\OrderItem;
+
+
+
 /**
  * @package    shop
  * @subpackage tests
@@ -7,8 +24,8 @@
 class CustomProductTest extends FunctionalTest
 {
     protected $extraDataObjects = array(
-        "CustomProduct",
-        "CustomProduct_OrderItem",
+        CustomProduct::class,
+        CustomProduct_OrderItem::class,
     );
 
     public function setUpOnce()
@@ -96,7 +113,7 @@ class CustomProduct extends DataObject implements Buyable, TestOnly
         'Title' => 'Varchar',
         'Price' => 'Currency',
     );
-    private static $order_item = 'CustomProduct_OrderItem';
+    private static $order_item = CustomProduct_OrderItem::class;
 
     public function createItem($quantity = 1, $filter = array())
     {
@@ -136,10 +153,10 @@ class CustomProduct_OrderItem extends OrderItem implements TestOnly
         'Premium' => false,
     );
     private static $has_one = array(
-        'Product'   => 'CustomProduct',
+        'Product'   => CustomProduct::class,
         'Recipient' => 'Member',
     );
-    private static $buyable_relationship = "Product";
+    private static $buyable_relationship = Product::class;
     private static $required_fields = array(
         'Color',
         'Size',

@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use SilverShop\Core\ShopCurrency;
+
+
+
 class ShopCurrencyTest extends SapphireTest
 {
     public function testField()

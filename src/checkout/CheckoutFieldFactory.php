@@ -1,6 +1,24 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use SilverStripe\Omnipay\GatewayInfo;
+use FieldList;
+use TextField;
+use EmailField;
+use Member;
+use HeaderField;
+use LiteralField;
+use OptionsetField;
+use ConfirmedPasswordField;
+use PasswordField;
+use TextareaField;
+use SiteConfig;
+use CheckboxField;
+use SilverShop\Core\Address;
+
+
 
 /**
  * Factory for generating checkout fields
@@ -28,9 +46,9 @@ class CheckoutFieldFactory
     {
         return $this->getSubset(
             FieldList::create(
-                TextField::create('FirstName', _t('Order.db_FirstName', 'First Name')),
-                TextField::create('Surname', _t('Order.db_Surname', 'Surname')),
-                EmailField::create('Email', _t('Order.db_Email', 'Email'))
+                TextField::create('FirstName', _t('SilverShop\\Core\\Order.db_FirstName', 'First Name')),
+                TextField::create('Surname', _t('SilverShop\\Core\\Order.db_Surname', 'Surname')),
+                EmailField::create('Email', _t('SilverShop\\Core\\Order.db_Email', 'Email'))
             ),
             $subset
         );
@@ -38,7 +56,7 @@ class CheckoutFieldFactory
 
     public function getAddressFields($type = "shipping", $subset = array())
     {
-        $address = singleton('Address');
+        $address = singleton(Address::class);
         $fields = $address->getFormFields($type);
         return $this->getSubset($fields, $subset);
     }
@@ -106,7 +124,7 @@ class CheckoutFieldFactory
 
     public function getNotesField()
     {
-        return TextareaField::create("Notes", _t("Order.db_Notes", "Message"));
+        return TextareaField::create("Notes", _t("SilverShop\\Core\\Order.db_Notes", "Message"));
     }
 
     public function getTermsConditionsField()
@@ -119,7 +137,7 @@ class CheckoutFieldFactory
             $field = CheckboxField::create(
                 'ReadTermsAndConditions',
                 _t(
-                    'Checkout.TermsAndConditionsLink',
+                    'SilverShop\\Core\\Checkout.TermsAndConditionsLink',
                     'I agree to the terms and conditions stated on the <a href="{TermsPageLink}" target="new" title="Read the shop terms and conditions for this site">{TermsPageTitle}</a> page',
                     '',
                     array('TermsPageLink' => $termsPage->Link(), 'TermsPageTitle' => $termsPage->Title)
@@ -134,8 +152,8 @@ class CheckoutFieldFactory
      * Helper function for reducing a field set to a given subset,
      * in the given order.
      *
-     * @param  FieldList $fields form fields to take a subset from.
-     * @param  array     $subset list of field names to return as subset
+     * @param FieldList $fields form fields to take a subset from.
+     * @param array     $subset list of field names to return as subset
      *
      * @return FieldList subset of form fields
      */

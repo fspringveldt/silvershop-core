@@ -1,5 +1,20 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Form;
+use Convert;
+use DataObject;
+use FieldList;
+use DropdownField;
+use NumericField;
+use FormAction;
+use RequiredFields;
+use SilverShop\Core\AddProductForm;
+use SilverShop\Core\Product;
+
+
+
 /**
  * @package shop
  */
@@ -19,7 +34,7 @@ class AddProductForm extends Form
      */
     protected $saveablefields = array();
 
-    public function __construct($controller, $name = "AddProductForm")
+    public function __construct($controller, $name = AddProductForm::class)
     {
 
         parent::__construct(
@@ -83,7 +98,7 @@ class AddProductForm extends Form
         if ($this->controller->dataRecord instanceof Buyable) {
             return $this->controller->dataRecord;
         }
-        return DataObject::get_by_id('Product', (int)$this->request->postVar("BuyableID")); //TODO: get buyable
+        return DataObject::get_by_id(Product::class, (int)$this->request->postVar("BuyableID")); //TODO: get buyable
     }
 
     /**
@@ -121,7 +136,7 @@ class AddProductForm extends Form
     protected function getFormActions()
     {
         return FieldList::create(
-            FormAction::create('addtocart', _t("Product.AddToCart", 'Add to Cart'))
+            FormAction::create('addtocart', _t("SilverShop\\Core\\Product.AddToCart", 'Add to Cart'))
         );
     }
 

@@ -1,5 +1,29 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use FieldList;
+use TabSet;
+use Tab;
+use DropdownField;
+use LiteralField;
+use ListboxField;
+use DateField;
+use GreaterThanFilter;
+use LessThanFilter;
+use Member;
+use Controller;
+use SS_Datetime;
+use Debug;
+use SilverShop\Core\Address;
+use SilverShop\Core\OrderItem;
+use SilverShop\Core\OrderModifier;
+use SilverShop\Core\OrderStatusLog;
+use SilverShop\Core\Order;
+
+
+
 /**
  * The order class is a databound object for handling Orders
  * within SilverStripe.
@@ -22,12 +46,12 @@
  * @property string|int MemberID
  * @property string|int ShippingAddressID
  * @property string|int BillingAddressID
- * @method Member|ShopMember Member
- * @method Address BillingAddress
- * @method Address ShippingAddress
- * @method OrderItem[]|HasManyList Items
- * @method OrderModifier[]|HasManyList Modifiers
- * @method OrderStatusLog[]|HasManyList OrderStatusLogs
+ * @method   Member|ShopMember Member
+ * @method   Address BillingAddress
+ * @method   Address ShippingAddress
+ * @method   OrderItem[]|HasManyList Items
+ * @method   OrderModifier[]|HasManyList Modifiers
+ * @method   OrderStatusLog[]|HasManyList OrderStatusLogs
  *
  * @package shop
  */
@@ -69,14 +93,14 @@ class Order extends DataObject
 
     private static $has_one           = array(
         'Member'          => 'Member',
-        'ShippingAddress' => 'Address',
-        'BillingAddress'  => 'Address',
+        'ShippingAddress' => Address::class,
+        'BillingAddress'  => Address::class,
     );
 
     private static $has_many          = array(
-        'Items'           => 'OrderItem',
-        'Modifiers'       => 'OrderModifier',
-        'OrderStatusLogs' => 'OrderStatusLog',
+        'Items'           => OrderItem::class,
+        'Modifiers'       => OrderModifier::class,
+        'OrderStatusLogs' => OrderStatusLog::class,
     );
 
     private static $defaults          = array(
@@ -116,7 +140,7 @@ class Order extends DataObject
         ),
     );
 
-    private static $singular_name     = "Order";
+    private static $singular_name     = Order::class;
 
     private static $plural_name       = "Orders";
 
@@ -153,6 +177,7 @@ class Order extends DataObject
 
     /**
      * Status for logging changes
+     *
      * @var array
      */
     private static $log_status = array();
@@ -197,6 +222,7 @@ class Order extends DataObject
 
     /**
      * A flag indicating that an order-status-log entry should be written
+     *
      * @var bool
      */
     protected $flagOrderStatusWrite = false;
@@ -204,8 +230,8 @@ class Order extends DataObject
     public static function get_order_status_options()
     {
         $values = array();
-        foreach (singleton('Order')->dbObject('Status')->enumValues(false) as $value) {
-            $values[$value] = _t('Order.STATUS_' . strtoupper($value), $value);
+        foreach (singleton(Order::class)->dbObject('Status')->enumValues(false) as $value) {
+            $values[$value] = _t('SilverShop\\Core\\Order.STATUS_' . strtoupper($value), $value);
         }
         return $values;
     }
@@ -219,7 +245,7 @@ class Order extends DataObject
         $fs = "<div class=\"field\">";
         $fe = "</div>";
         $parts = array(
-            DropdownField::create("Status", _t('Order.db_Status', "Status"), self::get_order_status_options()),
+            DropdownField::create("Status", _t('SilverShop\\Core\\Order.db_Status', "Status"), self::get_order_status_options()),
             LiteralField::create('Customer', $fs . $this->renderWith("OrderAdmin_Customer") . $fe),
             LiteralField::create('Addresses', $fs . $this->renderWith("OrderAdmin_Addresses") . $fe),
             LiteralField::create('Content', $fs . $this->renderWith("OrderAdmin_Content") . $fe),
@@ -248,7 +274,7 @@ class Order extends DataObject
         $context = parent::getDefaultSearchContext();
         $fields = $context->getFields();
         $fields->push(
-            ListboxField::create("Status", _t('Order.db_Status', "Status"))
+            ListboxField::create("Status", _t('SilverShop\\Core\\Order.db_Status', "Status"))
                 ->setSource(
                     array_combine(
                         self::config()->placed_status,
@@ -260,12 +286,12 @@ class Order extends DataObject
 
         // add date range filtering
         $fields->insertBefore(
-            DateField::create("DateFrom", _t('Order.DateFrom', "Date from"))
+            DateField::create("DateFrom", _t('SilverShop\\Core\\Order.DateFrom', "Date from"))
                 ->setConfig('showcalendar', true),
             'Status'
         );
         $fields->insertBefore(
-            DateField::create("DateTo", _t('Order.DateTo', "Date to"))
+            DateField::create("DateTo", _t('SilverShop\\Core\\Order.DateTo', "Date to"))
                 ->setConfig('showcalendar', true),
             'Status'
         );
@@ -304,7 +330,7 @@ class Order extends DataObject
         $components = parent::getComponents($componentName, $filter = "", $sort = "", $join = "", $limit = null);
         if ($componentName === "Items" && get_class($components) !== "UnsavedRelationList") {
             $query = $components->dataQuery();
-            $components = OrderItemList::create("OrderItem", "OrderID");
+            $components = OrderItemList::create(OrderItem::class, "OrderID");
             if ($this->model) {
                 $components->setDataModel($this->model);
             }
@@ -384,7 +410,7 @@ class Order extends DataObject
      * useful to determine the status of the Order. Order status should only change to 'Paid' when all
      * payments are 'Captured'.
      *
-     * @param bool $includeAuthorized whether or not to include authorized payments (excluding manual payments)
+     * @param  bool $includeAuthorized whether or not to include authorized payments (excluding manual payments)
      * @return float
      */
     public function TotalOutstanding($includeAuthorized = true)
@@ -402,7 +428,7 @@ class Order extends DataObject
      */
     public function getStatusI18N()
     {
-        return _t('Order.STATUS_' . strtoupper($this->Status), $this->Status);
+        return _t('SilverShop\\Core\\Order.STATUS_' . strtoupper($this->Status), $this->Status);
     }
 
     /**
@@ -430,15 +456,15 @@ class Order extends DataObject
         }
 
         switch ($this->Status) {
-            case 'Unpaid' :
-                return self::config()->cancel_before_payment;
-            case 'Paid' :
-                return self::config()->cancel_before_processing;
-            case 'Processing' :
-                return self::config()->cancel_before_sending;
-            case 'Sent' :
-            case 'Complete' :
-                return self::config()->cancel_after_sending;
+        case 'Unpaid' :
+            return self::config()->cancel_before_payment;
+        case 'Paid' :
+            return self::config()->cancel_before_processing;
+        case 'Processing' :
+            return self::config()->cancel_before_sending;
+        case 'Sent' :
+        case 'Complete' :
+            return self::config()->cancel_after_sending;
         }
         return false;
     }
@@ -588,7 +614,7 @@ class Order extends DataObject
      */
     protected function getAddress($type)
     {
-        $address = $this->getComponent($type . 'Address');
+        $address = $this->getComponent($type . Address::class);
 
         if (!$address || !$address->exists() && $this->Member()) {
             $address = $this->Member()->{"Default${type}Address"}();
@@ -668,7 +694,7 @@ class Order extends DataObject
         $candidate = $reference;
         //prevent generating references that are the same
         $count = 0;
-        while (DataObject::get_one('Order', "\"Reference\" = '$candidate'")) {
+        while (DataObject::get_one(Order::class, "\"Reference\" = '$candidate'")) {
             $count++;
             $candidate = $reference . "" . $count;
         }
@@ -710,8 +736,9 @@ class Order extends DataObject
 
     /**
      * Called from @see onBeforeWrite whenever status changes
+     *
      * @param string $fromStatus status to transition away from
-     * @param string $toStatus target status
+     * @param string $toStatus   target status
      */
     protected function statusTransition($fromStatus, $toStatus)
     {

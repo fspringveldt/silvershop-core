@@ -1,6 +1,24 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+
 use SilverStripe\Omnipay\Service\PaymentService;
+use FunctionalTest;
+
+use Payment;
+
+use TestSession;
+
+use Session;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Product;
+use SilverShop\Core\CheckoutPage;
+use SilverShop\Core\CartPage;
+use SilverShop\Core\Order;
+use SilverShop\Core\OrderProcessor;
+
+
 
 class ShopPaymentTest extends FunctionalTest
 {
@@ -34,9 +52,9 @@ class ShopPaymentTest extends FunctionalTest
         PaymentService::setHttpRequest($this->getHttpRequest());
 
         //publish products
-        $this->objFromFixture("Product", "socks")->publish('Stage', 'Live');
-        $this->objFromFixture("CheckoutPage", "checkout")->publish('Stage', 'Live');
-        $this->objFromFixture("CartPage", "cart")->publish('Stage', 'Live');
+        $this->objFromFixture(Product::class, "socks")->publish('Stage', 'Live');
+        $this->objFromFixture(CheckoutPage::class, "checkout")->publish('Stage', 'Live');
+        $this->objFromFixture(CartPage::class, "cart")->publish('Stage', 'Live');
     }
 
     public function testManualPayment()
@@ -58,7 +76,7 @@ class ShopPaymentTest extends FunctionalTest
     {
         //set up cart
         $cart = ShoppingCart::singleton()
-            ->setCurrent($this->objFromFixture("Order", "cart"))
+            ->setCurrent($this->objFromFixture(Order::class, "cart"))
             ->current();
         //collect checkout details
         $cart->update(

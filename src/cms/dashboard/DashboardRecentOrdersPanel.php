@@ -1,4 +1,13 @@
 <?php
+
+namespace SilverShop\Core;
+
+use DashboardPanel;
+use TextField;
+use Config;
+use SilverShop\Core\DashboardRecentOrdersPanel;
+
+
 /**
  * Shows a table of recent orders
  *
@@ -39,7 +48,7 @@ if (class_exists('DashboardPanel')) {
             }
             $orders = Order::get()
                 ->sort("Placed", "DESC")
-                ->exclude('Status', Config::inst()->get('DashboardRecentOrdersPanel', 'exclude_status'))
+                ->exclude('Status', Config::inst()->get(DashboardRecentOrdersPanel::class, 'exclude_status'))
                 ->limit($this->Count);
             return $orders;
         }

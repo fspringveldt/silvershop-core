@@ -1,5 +1,17 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+
+use SecurityToken;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Product;
+use SilverShop\Core\Product_OrderItem;
+
+
+
 /**
  * @package    shop
  * @subpackage tests
@@ -25,10 +37,10 @@ class ProductOrderItemTest extends FunctionalTest
         parent::setUp();
         ShopTest::setConfiguration();
 
-        $this->mp3player = $this->objFromFixture('Product', 'mp3player');
-        $this->socks = $this->objFromFixture('Product', 'socks');
-        $this->beachball = $this->objFromFixture('Product', 'beachball');
-        $this->hdtv = $this->objFromFixture('Product', 'hdtv');
+        $this->mp3player = $this->objFromFixture(Product::class, 'mp3player');
+        $this->socks = $this->objFromFixture(Product::class, 'socks');
+        $this->beachball = $this->objFromFixture(Product::class, 'beachball');
+        $this->hdtv = $this->objFromFixture(Product::class, 'hdtv');
 
         $this->mp3player->publish('Stage', 'Live');
         $this->socks->publish('Stage', 'Live');

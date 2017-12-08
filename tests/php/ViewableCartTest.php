@@ -1,5 +1,16 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use Page_Controller;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Product;
+use SilverShop\Core\Order;
+
+
+
 class ViewableCartTest extends SapphireTest
 {
     public static $fixture_file  = 'silvershop/tests/fixtures/shop.yml';
@@ -16,12 +27,12 @@ class ViewableCartTest extends SapphireTest
     {
         parent::setUp();
         ShopTest::setConfiguration();
-        $this->objFromFixture("Product", "socks")->publish("Stage", "Live");
+        $this->objFromFixture(Product::class, "socks")->publish("Stage", "Live");
     }
 
     function testCart()
     {
-        $cart = $this->objFromFixture("Order", "cart");
+        $cart = $this->objFromFixture(Order::class, "cart");
         ShoppingCart::singleton()->setCurrent($cart);
         $page = new Page_Controller();
         $this->assertEquals("$8.00", (string)$page->renderWith("CartTestTemplate"));

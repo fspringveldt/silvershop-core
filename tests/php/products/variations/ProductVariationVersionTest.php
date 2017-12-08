@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductVariation;
+use SilverShop\Core\ProductAttributeType;
+
+
+
 /**
  * Test product variation capabilities.
  *
@@ -17,14 +26,14 @@ class ProductVariationVersionTest extends SapphireTest
     public function setUp()
     {
         parent::setUp();
-        $this->ball = $this->objFromFixture("Product", "ball");
-        $this->mp3player = $this->objFromFixture("Product", "mp3player");
-        $this->redlarge = $this->objFromFixture("ProductVariation", "redlarge");
+        $this->ball = $this->objFromFixture(Product::class, "ball");
+        $this->mp3player = $this->objFromFixture(Product::class, "mp3player");
+        $this->redlarge = $this->objFromFixture(ProductVariation::class, "redlarge");
     }
 
     public function testVariationsPersistOnUnpublish()
     {
-        $color = $this->objFromFixture("ProductAttributeType", "color");
+        $color = $this->objFromFixture(ProductAttributeType::class, "color");
         $values = array('Black', 'Blue');
         $this->mp3player->generateVariationsFromAttributes($color, $values);
         $this->mp3player->publish('Stage', 'Live');

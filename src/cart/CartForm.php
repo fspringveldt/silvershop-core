@@ -1,5 +1,16 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Form;
+use FieldList;
+use FormAction;
+use NumericField;
+use Convert;
+use SilverShop\Core\CartForm;
+
+
+
 /**
  * Renders the cart inside a form, so that it is editable.
  *
@@ -9,7 +20,7 @@ class CartForm extends Form
 {
     protected $cart;
 
-    public function __construct($controller, $name = "CartForm", $cart = null, $template = "Cart")
+    public function __construct($controller, $name = CartForm::class, $cart = null, $template = "Cart")
     {
         $this->cart = $cart;
         $fields = FieldList::create(
@@ -17,7 +28,7 @@ class CartForm extends Form
                 ->setTemplate($template)
         );
         $actions = FieldList::create(
-            FormAction::create("updatecart", _t('CartForm.UpdateCart', "Update Cart"))
+            FormAction::create("updatecart", _t('SilverShop\\Core\\CartForm.UpdateCart', "Update Cart"))
         );
 
         parent::__construct($controller, $name, $fields, $actions);
@@ -81,7 +92,7 @@ class CartForm extends Form
         }
         if ($removecount) {
             $messages['remove'] = _t(
-                'CartForm.REMOVED_ITEMS',
+                'SilverShop\\Core\\CartForm.REMOVED_ITEMS',
                 "Removed {count} items.",
                 "count is the amount that was removed",
                 array('count' => $removecount)
@@ -89,7 +100,7 @@ class CartForm extends Form
         }
         if ($updatecount) {
             $messages['updatecount'] = _t(
-                'CartForm.UPDATED_ITEMS',
+                'SilverShop\\Core\\CartForm.UPDATED_ITEMS',
                 "Updated {count} items.",
                 "count is the amount that was updated",
                 array('count' => $updatecount)

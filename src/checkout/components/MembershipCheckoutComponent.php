@@ -1,11 +1,25 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Member;
+use PasswordValidator;
+use Form;
+use FieldList;
+use TextField;
+use ConfirmedPasswordField;
+use PasswordField;
+use ValidationResult;
+use ValidationException;
+use SilverShop\Core\CustomerDetailsCheckoutComponent;
+
+
+
 /**
  * Provides:
  *    - member identifier, and password fields.
  *    - required membership fields
  *    - validating data
- *
  */
 class MembershipCheckoutComponent extends CheckoutComponent
 {
@@ -14,7 +28,7 @@ class MembershipCheckoutComponent extends CheckoutComponent
     protected $passwordvalidator;
 
     protected $dependson = array(
-        'CustomerDetailsCheckoutComponent',
+        CustomerDetailsCheckoutComponent::class,
     );
 
     public function __construct($confirmed = true, $validator = null)
@@ -86,7 +100,7 @@ class MembershipCheckoutComponent extends CheckoutComponent
                 $fieldLabel = isset($fieldLabels[$idfield]) ? $fieldLabels[$idfield] : $idfield;
                 $result->error(
                     _t(
-                        'Checkout.MemberExists',
+                        'SilverShop\\Core\\Checkout.MemberExists',
                         'A member already exists with the {Field} {Identifier}',
                         '',
                         array('Field' => $fieldLabel, 'Identifier' => $idval)

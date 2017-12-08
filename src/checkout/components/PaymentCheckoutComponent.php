@@ -1,6 +1,15 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use SilverStripe\Omnipay\GatewayInfo;
+use FieldList;
+use OptionsetField;
+use HiddenField;
+use ValidationResult;
+use ValidationException;
+
 
 class PaymentCheckoutComponent extends CheckoutComponent
 {
@@ -41,14 +50,14 @@ class PaymentCheckoutComponent extends CheckoutComponent
         $result = ValidationResult::create();
         if (!isset($data['PaymentMethod'])) {
             $result->error(
-                _t('PaymentCheckoutComponent.NoPaymentMethod', "Payment method not provided"),
+                _t('SilverShop\\Core\\PaymentCheckoutComponent.NoPaymentMethod', "Payment method not provided"),
                 "PaymentMethod"
             );
             throw new ValidationException($result);
         }
         $methods = GatewayInfo::getSupportedGateways();
         if (!isset($methods[$data['PaymentMethod']])) {
-            $result->error(_t('PaymentCheckoutComponent.UnsupportedGateway', "Gateway not supported"), "PaymentMethod");
+            $result->error(_t('SilverShop\\Core\\PaymentCheckoutComponent.UnsupportedGateway', "Gateway not supported"), "PaymentMethod");
             throw new ValidationException($result);
         }
     }

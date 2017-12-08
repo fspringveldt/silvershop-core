@@ -1,5 +1,19 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Page;
+use Controller;
+use FieldList;
+use DropdownField;
+use TreeDropdownField;
+use DB;
+use Page_Controller;
+use SilverShop\Core\CheckoutPage;
+use SilverShop\Core\CartForm;
+
+
+
 /**
  * View and edit the cart in a full page.
  * Visitor can continue shopping, or proceed to checkout.
@@ -7,7 +21,7 @@
 class CartPage extends Page
 {
     private static $has_one = array(
-        'CheckoutPage' => 'CheckoutPage',
+        'CheckoutPage' => CheckoutPage::class,
         'ContinuePage' => 'SiteTree',
     );
 
@@ -31,27 +45,29 @@ class CartPage extends Page
 
     public function getCMSFields()
     {
-        $this->beforeUpdateCMSFields(function(FieldList $fields) {
-            if ($checkouts = CheckoutPage::get()) {
+        $this->beforeUpdateCMSFields(
+            function (FieldList $fields) {
+                if ($checkouts = CheckoutPage::get()) {
+                    $fields->addFieldToTab(
+                        'Root.Links',
+                        DropdownField::create(
+                            'CheckoutPageID',
+                            _t('SilverShop\\Core\\CartPage.has_one_CheckoutPage', 'Checkout Page'),
+                            $checkouts->map("ID", "Title")
+                        )
+                    );
+                }
+
                 $fields->addFieldToTab(
                     'Root.Links',
-                    DropdownField::create(
-                        'CheckoutPageID',
-                        _t('CartPage.has_one_CheckoutPage', 'Checkout Page'),
-                        $checkouts->map("ID", "Title")
+                    TreeDropdownField::create(
+                        'ContinuePageID',
+                        _t('SilverShop\\Core\\CartPage.has_one_ContinuePage', 'Continue Shopping Page'),
+                        'SiteTree'
                     )
                 );
             }
-
-            $fields->addFieldToTab(
-                'Root.Links',
-                TreeDropdownField::create(
-                    'ContinuePageID',
-                    _t('CartPage.has_one_ContinuePage', 'Continue Shopping Page'),
-                    'SiteTree'
-                )
-            );
-        });
+        );
 
         return parent::getCMSFields();
     }
@@ -83,7 +99,7 @@ class CartPage_Controller extends Page_Controller
     private static $url_segment     = 'cart';
 
     private static $allowed_actions = array(
-        "CartForm",
+        CartForm::class,
         "updatecart",
     );
 
@@ -95,7 +111,7 @@ class CartPage_Controller extends Page_Controller
         if ($this->Title) {
             return $this->Title;
         }
-        return _t('CartPage.DefaultTitle', "Shopping Cart");
+        return _t('SilverShop\\Core\\CartPage.DefaultTitle', "Shopping Cart");
     }
 
     /**
@@ -107,7 +123,7 @@ class CartPage_Controller extends Page_Controller
         if (!$cart) {
             return false;
         }
-        $form = CartForm::create($this, "CartForm", $cart);
+        $form = CartForm::create($this, CartForm::class, $cart);
 
         $this->extend('updateCartForm', $form);
 

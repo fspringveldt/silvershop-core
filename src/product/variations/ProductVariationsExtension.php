@@ -1,5 +1,21 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataExtension;
+use FieldList;
+use ListboxField;
+use GridField;
+use GridFieldConfig_RecordEditor;
+use LabelField;
+use ArrayData;
+use Versioned;
+use SilverShop\Core\ProductVariation;
+use SilverShop\Core\ProductAttributeType;
+use SilverShop\Core\VariationForm;
+
+
+
 /**
  * Adds extra fields and relationships to Products for variations support.
  *
@@ -9,11 +25,11 @@
 class ProductVariationsExtension extends DataExtension
 {
     private static $has_many  = array(
-        'Variations' => 'ProductVariation',
+        'Variations' => ProductVariation::class,
     );
 
     private static $many_many = array(
-        'VariationAttributeTypes' => 'ProductAttributeType',
+        'VariationAttributeTypes' => ProductAttributeType::class,
     );
 
     /**
@@ -26,18 +42,18 @@ class ProductVariationsExtension extends DataExtension
             array(
                 ListboxField::create(
                     "VariationAttributeTypes",
-                    _t('ProductVariationsExtension.Attributes', "Attributes"),
+                    _t('SilverShop\\Core\\ProductVariationsExtension.Attributes', "Attributes"),
                     ProductAttributeType::get()->map("ID", "Title")->toArray()
                 )->setMultiple(true)
                     ->setDescription(
                         _t(
-                            'ProductVariationsExtension.AttributesDescription',
+                            'SilverShop\\Core\\ProductVariationsExtension.AttributesDescription',
                             "These are fields to indicate the way(s) each variation varies. Once selected, they can be edited on each variation."
                         )
                     ),
                 GridField::create(
                     "Variations",
-                    _t('ProductVariationsExtension.Variations', "Variations"),
+                    _t('SilverShop\\Core\\ProductVariationsExtension.Variations', "Variations"),
                     $this->owner->Variations(),
                     GridFieldConfig_RecordEditor::create()
                 ),
@@ -49,7 +65,7 @@ class ProductVariationsExtension extends DataExtension
                 LabelField::create(
                     'variationspriceinstructinos',
                     _t(
-                        'ProductVariationsExtension.VariationsInfo',
+                        'SilverShop\\Core\\ProductVariationsExtension.VariationsInfo',
                         "Price - Because you have one or more variations, the price can be set in the \"Variations\" tab."
                     )
                 )
@@ -194,7 +210,7 @@ class ProductVariationsExtension extends DataExtension
                 "ProductVariation_AttributeValues",
                 "\"ProductAttributeValue\".\"ID\" = \"ProductVariation_AttributeValues\".\"ProductAttributeValueID\""
             )->innerJoin(
-                "ProductVariation",
+                ProductVariation::class,
                 "\"ProductVariation_AttributeValues\".\"ProductVariationID\" = \"ProductVariation\".\"ID\""
             )->where("TypeID = $type AND \"ProductVariation\".\"ProductID\" = " . $this->owner->ID);
 
@@ -233,7 +249,7 @@ class ProductVariationsExtension extends DataExtension
     public function contentcontrollerInit($controller)
     {
         if ($this->owner->Variations()->exists()) {
-            $controller->formclass = 'VariationForm';
+            $controller->formclass = VariationForm::class;
         }
     }
 }

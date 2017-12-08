@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Currency;
+
+
 /**
  * Improvements to Currency for presenting in templates.
  *
@@ -19,11 +24,11 @@ class ShopCurrency extends Currency
     {
         $symbol = $this->config()->currency_symbol;
         $val = number_format(
-                abs($this->value),
-                2,
-                self::config()->decimal_delimiter,
-                self::config()->thousand_delimiter
-            );
+            abs($this->value),
+            2,
+            self::config()->decimal_delimiter,
+            self::config()->thousand_delimiter
+        );
         if ($this->config()->append_symbol) {
             $val = $val . ' ' . $symbol;
         } else {

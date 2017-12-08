@@ -1,8 +1,22 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use SilverStripe\Omnipay\GatewayInfo;
 use SilverStripe\Omnipay\Service\ServiceFactory;
 use SilverStripe\Omnipay\Service\ServiceResponse;
+use Injector;
+use Payment;
+use Member;
+use SS_Datetime;
+use Controller;
+use ErrorException;
+use Exception;
+use Config_ForClass;
+use SilverShop\Core\OrderProcessor;
+
+
 
 /**
  * Handles tasks to be performed on orders, particularly placing and processing/fulfilment.
@@ -35,7 +49,7 @@ class OrderProcessor
      */
     public static function create(Order $order)
     {
-        return Injector::inst()->create('OrderProcessor', $order);
+        return Injector::inst()->create(OrderProcessor::class, $order);
     }
 
     /**
@@ -64,11 +78,12 @@ class OrderProcessor
      * Create a payment model, and provide link to redirect to external gateway,
      * or redirect to order link.
      *
-     * @param string $gateway the gateway to use
-     * @param array $gatewaydata the data that should be passed to the gateway
-     * @param string $successUrl (optional) return URL for successful payments.
-     *  If left blank, the default return URL will be used @see getReturnUrl
-     * @param string $cancelUrl (optional) return URL for cancelled/failed payments
+     * @param string $gateway     the gateway to use
+     * @param array  $gatewaydata the data that should be passed to the gateway
+     * @param string $successUrl  (optional) return URL for successful payments.
+     *                            If left blank, the default return URL will be
+     *                            used @see getReturnUrl
+     * @param string $cancelUrl   (optional) return URL for cancelled/failed payments
      *
      * @return ServiceResponse|null
      */
@@ -91,7 +106,9 @@ class OrderProcessor
         // Create a payment service, by using the Service Factory. This will automatically choose an
         // AuthorizeService or PurchaseService, depending on Gateway configuration.
         // Set the user-facing success URL for redirects
-        /** @var ServiceFactory $factory */
+        /**
+ * @var ServiceFactory $factory 
+*/
         $factory = ServiceFactory::create();
         $service = $factory->getService($payment, ServiceFactory::INTENT_PAYMENT);
 
@@ -211,9 +228,7 @@ class OrderProcessor
                 }
             }
 
-            if (
-                // Standard order. Only change to 'Paid' once all payments are captured
-                ($this->order->GrandTotal() > 0 && $this->order->TotalOutstanding(false) <= 0)
+            if (($this->order->GrandTotal() > 0 && $this->order->TotalOutstanding(false) <= 0)
                 // Zero-dollar order (e.g. paid with loyalty points)
                 || ($this->order->GrandTotal() == 0 && Order::config()->allow_zero_order_total)
             ) {
@@ -232,17 +247,17 @@ class OrderProcessor
     public function canPlace(Order $order)
     {
         if (!$order) {
-            $this->error(_t("OrderProcessor.NoOrder", "Order does not exist."));
+            $this->error(_t("SilverShop\\Core\\OrderProcessor.NoOrder", "Order does not exist."));
             return false;
         }
         //order status is applicable
         if (!$order->IsCart()) {
-            $this->error(_t("OrderProcessor.NotCart", "Order is not a cart."));
+            $this->error(_t("SilverShop\\Core\\OrderProcessor.NotCart", "Order is not a cart."));
             return false;
         }
         //order has products
         if ($order->Items()->Count() <= 0) {
-            $this->error(_t("OrderProcessor.NoItems", "Order has no items."));
+            $this->error(_t("SilverShop\\Core\\OrderProcessor.NoItems", "Order has no items."));
             return false;
         }
 
@@ -259,7 +274,7 @@ class OrderProcessor
     public function placeOrder()
     {
         if (!$this->order) {
-            $this->error(_t("OrderProcessor.NoOrderStarted", "A new order has not yet been started."));
+            $this->error(_t("SilverShop\\Core\\OrderProcessor.NoOrderStarted", "A new order has not yet been started."));
             return false;
         }
         if (!$this->canPlace($this->order)) { //final cart validation
@@ -293,9 +308,11 @@ class OrderProcessor
 
         // Add an error handler that throws an exception upon error, so that we can catch errors as exceptions
         // in the following block.
-        set_error_handler(function ($severity, $message, $file, $line) {
-            throw new ErrorException($message, 0, $severity, $file, $line);
-        }, E_ALL & ~(E_STRICT | E_NOTICE));
+        set_error_handler(
+            function ($severity, $message, $file, $line) {
+                throw new ErrorException($message, 0, $severity, $file, $line);
+            }, E_ALL & ~(E_STRICT | E_NOTICE)
+        );
 
         try {
             //re-write all attributes and modifiers to make sure they are up-to-date before they can't be changed again
@@ -350,8 +367,7 @@ class OrderProcessor
         }
 
         //send confirmation if configured and receipt hasn't been sent
-        if (
-            self::config()->send_confirmation
+        if (self::config()->send_confirmation
             && !$this->order->ReceiptSent
         ) {
             $this->notifier->sendConfirmation();
@@ -388,6 +404,6 @@ class OrderProcessor
 
     public static function config()
     {
-        return new Config_ForClass("OrderProcessor");
+        return new Config_ForClass(OrderProcessor::class);
     }
 }

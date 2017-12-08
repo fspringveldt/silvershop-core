@@ -1,5 +1,26 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Page;
+use DataObject;
+use DB;
+use Page_Controller;
+use Member;
+use Security;
+use FieldList;
+use DropdownField;
+use FormAction;
+use Form;
+use RequiredFields;
+use SiteConfig;
+use ChangePasswordForm;
+use HiddenField;
+use SilverShop\Core\AccountPage;
+use SilverShop\Core\Address;
+
+
+
 /**
  * Account page shows order history and a form to allow
  * the member to edit his/her details.
@@ -47,10 +68,10 @@ class AccountPage extends Page
      */
     protected static function get_if_account_page_exists()
     {
-        if ($page = DataObject::get_one('AccountPage')) {
+        if ($page = DataObject::get_one(AccountPage::class)) {
             return $page;
         }
-        user_error(_t('AccountPage.NoPage', 'No AccountPage was found. Please create one in the CMS!'), E_USER_ERROR);
+        user_error(_t('SilverShop\\Core\\AccountPage.NoPage', 'No AccountPage was found. Please create one in the CMS!'), E_USER_ERROR);
         return null; // just to keep static analysis happy
     }
 
@@ -61,7 +82,9 @@ class AccountPage extends Page
     {
         parent::requireDefaultRecords();
         if (!self::get()->exists() && $this->config()->create_default_pages) {
-            /** @var AccountPage $page */
+            /**
+ * @var AccountPage $page 
+*/
             $page = self::create(
                 array(
                     'Title'       => 'Account',
@@ -94,7 +117,9 @@ class AccountPage_Controller extends Page_Controller
         'setdefaultshipping',
     );
 
-    /** @var Member|ShopMember */
+    /**
+     * @var Member|ShopMember 
+     */
     protected $member;
 
     public function init()
@@ -103,13 +128,13 @@ class AccountPage_Controller extends Page_Controller
         if (!Member::currentUserID()) {
             $messages = array(
                 'default'    => _t(
-                    'AccountPage.Login',
+                    'SilverShop\\Core\\AccountPage.Login',
                     'You\'ll need to login before you can access the account page.
 					If you are not registered, you won\'t be able to access it until
 					you make your first order, otherwise please enter your details below.'
                 ),
                 'logInAgain' => _t(
-                    'AccountPage.LoginAgain',
+                    'SilverShop\\Core\\AccountPage.LoginAgain',
                     'You have been logged out. If you would like to log in again,
 					please do so below.'
                 ),
@@ -125,7 +150,7 @@ class AccountPage_Controller extends Page_Controller
         if ($this->dataRecord && $title = $this->dataRecord->Title) {
             return $title;
         }
-        return _t('AccountPage.DefaultTitle', "Account");
+        return _t('SilverShop\\Core\\AccountPage.DefaultTitle', "Account");
     }
 
     public function getMember()
@@ -148,17 +173,17 @@ class AccountPage_Controller extends Page_Controller
             $fields = FieldList::create(
                 DropdownField::create(
                     "DefaultShippingAddressID",
-                    _t("Address.ShippingAddress", "Shipping Address"),
+                    _t("SilverShop\\Core\\Address.ShippingAddress", "Shipping Address"),
                     $addresses->map('ID', 'toString')->toArray()
                 ),
                 DropdownField::create(
                     "DefaultBillingAddressID",
-                    _t("Address.BillingAddress", "Billing Address"),
+                    _t("SilverShop\\Core\\Address.BillingAddress", "Billing Address"),
                     $addresses->map('ID', 'toString')->toArray()
                 )
             );
             $actions = FieldList::create(
-                FormAction::create("savedefaultaddresses", _t("Address.SaveDefaults", "Save Defaults"))
+                FormAction::create("savedefaultaddresses", _t("SilverShop\\Core\\Address.SaveDefaults", "Save Defaults"))
             );
             $form = Form::create($this, "DefaultAddressForm", $fields, $actions);
             $form->loadDataFrom($this->member);
@@ -183,10 +208,10 @@ class AccountPage_Controller extends Page_Controller
 
     public function CreateAddressForm()
     {
-        $singletonaddress = singleton('Address');
+        $singletonaddress = singleton(Address::class);
         $fields = $singletonaddress->getFrontEndFields();
         $actions = FieldList::create(
-            FormAction::create("saveaddress", _t("Address.SaveNew", "Save New Address"))
+            FormAction::create("saveaddress", _t("SilverShop\\Core\\Address.SaveNew", "Save New Address"))
         );
         $validator = RequiredFields::create($singletonaddress->getRequiredFields());
         $form = Form::create($this, "CreateAddressForm", $fields, $actions, $validator);
@@ -281,7 +306,9 @@ class AccountPage_Controller extends Page_Controller
 
     public function ChangePasswordForm()
     {
-        /** @var ChangePasswordForm $form */
+        /**
+ * @var ChangePasswordForm $form 
+*/
         $form = ChangePasswordForm::create($this, "ChangePasswordForm");
 
         // The default form tries to redirect to /account/login which doesn't exist

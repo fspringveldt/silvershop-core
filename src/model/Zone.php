@@ -1,5 +1,17 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use Session;
+use GridField;
+use GridFieldConfig_RelationEditor;
+use SilverShop\Core\ZoneRegion;
+use SilverShop\Core\RegionRestriction;
+use SilverShop\Core\Zone;
+
+
+
 /*
  * A zone is a collection of regions. Zones can cross over each other.
  * Zone matching is prioritised by specificity. For example, a matching post code
@@ -14,7 +26,7 @@ class Zone extends DataObject
     );
 
     private static $has_many       = array(
-        'Regions' => 'ZoneRegion',
+        'Regions' => ZoneRegion::class,
     );
 
     private static $summary_fields = array(
@@ -30,8 +42,8 @@ class Zone extends DataObject
         $where = RegionRestriction::address_filter($address);
         return self::get()->where($where)
             ->sort('PostalCode DESC, City DESC, State DESC, Country DESC')
-            ->innerJoin("ZoneRegion", "\"Zone\".\"ID\" = \"ZoneRegion\".\"ZoneID\"")
-            ->innerJoin("RegionRestriction", "\"ZoneRegion\".\"ID\" = \"RegionRestriction\".\"ID\"");
+            ->innerJoin(ZoneRegion::class, "\"Zone\".\"ID\" = \"ZoneRegion\".\"ZoneID\"")
+            ->innerJoin(RegionRestriction::class, "\"ZoneRegion\".\"ID\" = \"RegionRestriction\".\"ID\"");
     }
 
     /*
@@ -67,7 +79,7 @@ class Zone extends DataObject
         if ($this->isInDB()) {
             $regionsTable = GridField::create(
                 "Regions",
-                _t('Zone.has_many_Regions', "Regions"),
+                _t('SilverShop\\Core\\Zone.has_many_Regions', "Regions"),
                 $this->Regions(),
                 GridFieldConfig_RelationEditor::create()
             );
@@ -80,6 +92,6 @@ class Zone extends DataObject
 class ZoneRegion extends RegionRestriction
 {
     private static $has_one = array(
-        'Zone' => 'Zone',
+        'Zone' => Zone::class,
     );
 }

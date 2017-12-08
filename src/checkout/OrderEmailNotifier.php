@@ -1,5 +1,18 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Injector;
+use Email;
+use Director;
+use Config;
+use Config_ForClass;
+use SilverShop\Core\OrderEmailNotifier;
+use SilverShop\Core\Order;
+use SilverShop\Core\OrderProcessor;
+
+
+
 /**
  * Handles email notifications to customers and / or admins.
  *
@@ -24,7 +37,7 @@ class OrderEmailNotifier
      */
     public static function create(Order $order)
     {
-        return Injector::inst()->create('OrderEmailNotifier', $order);
+        return Injector::inst()->create(OrderEmailNotifier::class, $order);
     }
 
     /**
@@ -60,7 +73,9 @@ class OrderEmailNotifier
         $checkoutpage = CheckoutPage::get()->first();
         $completemessage = $checkoutpage ? $checkoutpage->PurchaseComplete : '';
 
-        /** @var Email $email */
+        /**
+ * @var Email $email 
+*/
         $email = Injector::inst()->create('ShopEmail');
         $email->setTemplate($template);
         $email->setFrom($from);
@@ -82,7 +97,7 @@ class OrderEmailNotifier
      *
      * @param string $template    - the class name of the email you wish to send
      * @param string $subject     - subject of the email
-     * @param bool $copyToAdmin - true by default, whether it should send a copy to the admin
+     * @param bool   $copyToAdmin - true by default, whether it should send a copy to the admin
      *
      * @return bool
      */
@@ -102,6 +117,7 @@ class OrderEmailNotifier
 
     /**
      * Send customer a confirmation that the order has been received
+     *
      * @return bool
      */
     public function sendConfirmation()
@@ -176,7 +192,7 @@ class OrderEmailNotifier
                 '',
                 array('OrderNo' => $this->order->Reference)
             ),
-            $this->order->renderWith('Order')
+            $this->order->renderWith(Order::class)
         );
         $email->send();
     }
@@ -185,7 +201,7 @@ class OrderEmailNotifier
      * Send an email to the customer containing the latest note of {@link OrderStatusLog} and the current status.
      *
      * @param string $title Subject for email
-     * @param string $note Optional note-content (instead of using the OrderStatusLog)
+     * @param string $note  Optional note-content (instead of using the OrderStatusLog)
      */
     public function sendStatusChange($title, $note = null)
     {
@@ -201,8 +217,8 @@ class OrderEmailNotifier
             }
         }
 
-        if (Config::inst()->get('OrderProcessor', 'receipt_email')) {
-            $adminEmail = Config::inst()->get('OrderProcessor', 'receipt_email');
+        if (Config::inst()->get(OrderProcessor::class, 'receipt_email')) {
+            $adminEmail = Config::inst()->get(OrderProcessor::class, 'receipt_email');
         } else {
             $adminEmail = Email::config()->admin_email;
         }
@@ -223,6 +239,6 @@ class OrderEmailNotifier
 
     public static function config()
     {
-        return new Config_ForClass("OrderEmailNotifier");
+        return new Config_ForClass(OrderEmailNotifier::class);
     }
 }

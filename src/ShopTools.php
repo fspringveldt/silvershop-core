@@ -1,5 +1,17 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DB;
+use Money;
+use Translatable;
+use Fluent;
+use i18n;
+use Zend_Locale_Format;
+
+
+
+
 /**
  * Globally useful tools
  */
@@ -7,7 +19,8 @@ class ShopTools
 {
     /**
      * Get the DB connection in a SS 3.1 and 3.2+ compatible way
-     * @param string $name
+     *
+     * @param  string $name
      * @return SS_Database
      */
     public static function DBConn($name = 'default')
@@ -20,7 +33,8 @@ class ShopTools
 
     /**
      * Convert a numeric price to the shop currency
-     * @param mixed $price the price to convert
+     *
+     * @param  mixed $price the price to convert
      * @return Money the price wrapped in a Money DBField to be used for templates or similar
      */
     public static function price_for_display($price)
@@ -35,6 +49,7 @@ class ShopTools
     /**
      * Get the current locale.
      * Tries to get the locale from Translatable, Fluent or the default i18n (depending on what is installed)
+     *
      * @return string the locale in use
      */
     public static function get_current_locale()
@@ -53,7 +68,8 @@ class ShopTools
     /**
      * Set/Install the given locale.
      * This does set the i18n locale as well as the Translatable or Fluent locale (if any of these modules is installed)
-     * @param string $locale the locale to install
+     *
+     * @param  string $locale the locale to install
      * @throws Zend_Locale_Exception @see Zend_Locale_Format::getDateFormat and @see Zend_Locale_Format::getTimeFormat
      */
     public static function install_locale($locale)
@@ -79,7 +95,7 @@ class ShopTools
             setlocale($category, "{$locale}.UTF-8", $locale);
         }
         // Get date/time formats from Zend
-        require_once 'Zend/Date.php';
+        include_once 'Zend/Date.php';
         i18n::config()->date_format = Zend_Locale_Format::getDateFormat($locale);
         i18n::config()->time_format = Zend_Locale_Format::getTimeFormat($locale);
     }

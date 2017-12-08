@@ -1,5 +1,28 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+
+
+use SS_HTTPRequest;
+use DataModel;
+
+
+
+use Director;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\SteppedCheckout;
+use SilverShop\Core\Product;
+use SilverShop\Core\CheckoutPage;
+use SilverShop\Core\CheckoutPage_Controller;
+use SilverShop\Core\Order;
+use SilverShop\Core\ShopMember;
+use SilverShop\Core\Checkout;
+
+
+
 class SteppedCheckoutTest extends FunctionalTest
 {
     protected static $fixture_file = array(
@@ -8,9 +31,13 @@ class SteppedCheckoutTest extends FunctionalTest
     );
     protected static $use_draft_site = true; //so we don't need to publish
     protected $autoFollowRedirection = false;
-    /** @var CheckoutPage_Controller */
+    /**
+     * @var CheckoutPage_Controller 
+     */
     protected $checkout;
-    /** @var Product */
+    /**
+     * @var Product 
+     */
     protected $socks;
 
     public function setUpOnce()
@@ -27,15 +54,15 @@ class SteppedCheckoutTest extends FunctionalTest
         //set up steps
         SteppedCheckout::setupSteps(); //use default steps
 
-        $this->socks = $this->objFromFixture("Product", "socks");
+        $this->socks = $this->objFromFixture(Product::class, "socks");
         $this->socks->publish('Stage', 'Live');
 
-        $checkoutpage = $this->objFromFixture("CheckoutPage", "checkout");
+        $checkoutpage = $this->objFromFixture(CheckoutPage::class, "checkout");
         $checkoutpage->publish('Stage', 'Live');
         $this->checkout = new CheckoutPage_Controller();
         $this->checkout->handleRequest(new SS_HTTPRequest("GET", "checkout"), DataModel::inst());
 
-        $this->cart = $this->objFromFixture("Order", "cart");
+        $this->cart = $this->objFromFixture(Order::class, "cart");
         ShoppingCart::singleton()->setCurrent($this->cart);
     }
 

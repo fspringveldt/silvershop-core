@@ -1,10 +1,17 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use SilverShop\Core\Order;
+
+
+
 /**
  * A single line in an order. This could be an item, or a subtotal line.
  *
- * @see     OrderItem
- * @see     OrderModifier
+ * @see OrderItem
+ * @see OrderModifier
  *
  * @package shop
  */
@@ -19,7 +26,7 @@ class OrderAttribute extends DataObject
     );
 
     private static $has_one       = array(
-        'Order' => 'Order',
+        'Order' => Order::class,
     );
 
     private static $casting       = array(

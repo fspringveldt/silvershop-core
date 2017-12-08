@@ -15,7 +15,6 @@ Customer fields are saved to both Members and Orders.
 In [mysite]/code/ExtendedCustomer.php
 
 ```php
-<?php
 class ExtendedCustomer extends DataExtension
 {
 	private static $db = array(
@@ -44,7 +43,6 @@ various forms.
 In [mysite]/code/ExtendedOrderForm.php
 
 ```php
-<?php
 class ExtendedOrderForm extends Extension
 {
 	function updateForm($form){

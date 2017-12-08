@@ -1,5 +1,17 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Page;
+use i18nEntityProvider;
+use Page_Controller;
+use PaginatedList;
+use ListSorter;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductVariationsExtension;
+
+
+
 /**
  * Product Category provides a way to hierartically categorise products.
  *
@@ -10,7 +22,7 @@
 class ProductCategory extends Page implements i18nEntityProvider
 {
     private static $belongs_many_many    = array(
-        'Products' => 'Product',
+        'Products' => Product::class,
     );
 
     private static $singular_name        = "Category";
@@ -19,7 +31,7 @@ class ProductCategory extends Page implements i18nEntityProvider
 
     private static $icon                 = 'cms/images/treeicons/folder';
 
-    private static $default_child        = 'Product';
+    private static $default_child        = Product::class;
 
     private static $include_child_groups = true;
 
@@ -56,11 +68,13 @@ class ProductCategory extends Page implements i18nEntityProvider
                 )
             );
         if (self::config()->must_have_price) {
-            if (Product::has_extension('ProductVariationsExtension')) {
-                $products = $products->filterAny(array(
+            if (Product::has_extension(ProductVariationsExtension::class)) {
+                $products = $products->filterAny(
+                    array(
                     "BasePrice:GreaterThan" => 0,
                     "Variations.Price:GreaterThan" => 0
-                ));
+                    )
+                );
             } else {
                 $products = $products->filter("BasePrice:GreaterThan", 0);
             }

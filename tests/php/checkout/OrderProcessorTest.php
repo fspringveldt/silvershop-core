@@ -1,5 +1,34 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+
+
+
+
+use Config;
+use Member;
+
+use Payment;
+
+use TestOnly;
+use DataExtension;
+use SilverShop\Core\Tests\OrderProcessorTest_CustomOrderItem;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Product;
+use SilverShop\Core\Order;
+use SilverShop\Core\OrderProcessor;
+use SilverShop\Core\ShopMemberFactory;
+use SilverShop\Core\ShopTools;
+use SilverShop\Core\Tests\OrderProcessorTest_PlaceFailExtension;
+use SilverShop\Core\Product_OrderItem;
+use SilverShop\Core\ShopConfig;
+use SilverShop\Core\Address;
+
+
+
 /**
  * Test OrderProcessor
  *
@@ -12,7 +41,7 @@ class OrderProcessorTest extends SapphireTest
     protected static $disable_theme  = true;
     protected static $use_draft_site = true;
     protected $processor;
-    protected $extraDataObjects = array('OrderProcessorTest_CustomOrderItem');
+    protected $extraDataObjects = array(OrderProcessorTest_CustomOrderItem::class);
 
     public function setUpOnce()
     {
@@ -26,10 +55,10 @@ class OrderProcessorTest extends SapphireTest
         parent::setUp();
         ShopTest::setConfiguration();
 
-        $this->mp3player = $this->objFromFixture('Product', 'mp3player');
-        $this->socks = $this->objFromFixture('Product', 'socks');
-        $this->beachball = $this->objFromFixture('Product', 'beachball');
-        $this->hdtv = $this->objFromFixture('Product', 'hdtv');
+        $this->mp3player = $this->objFromFixture(Product::class, 'mp3player');
+        $this->socks = $this->objFromFixture(Product::class, 'socks');
+        $this->beachball = $this->objFromFixture(Product::class, 'beachball');
+        $this->hdtv = $this->objFromFixture(Product::class, 'hdtv');
 
         $this->mp3player->publish('Stage', 'Live');
         $this->socks->publish('Stage', 'Live');
@@ -41,7 +70,7 @@ class OrderProcessorTest extends SapphireTest
 
     public function testCreatePayment()
     {
-        $order = $this->objFromFixture("Order", "unpaid");
+        $order = $this->objFromFixture(Order::class, "unpaid");
         $processor = OrderProcessor::create($order);
         $payment = $processor->createPayment('Dummy');
         $this->assertTrue((boolean)$payment);
@@ -137,9 +166,9 @@ class OrderProcessorTest extends SapphireTest
         }
 
         // Add the erroneous extension
-        Order::add_extension('OrderProcessorTest_PlaceFailExtension');
+        Order::add_extension(OrderProcessorTest_PlaceFailExtension::class);
 
-        Config::inst()->update('Product', 'order_item', 'OrderProcessorTest_CustomOrderItem');
+        Config::inst()->update(Product::class, 'order_item', OrderProcessorTest_CustomOrderItem::class);
 
         //log out the admin user
         Member::currentUser()->logOut();
@@ -151,16 +180,18 @@ class OrderProcessorTest extends SapphireTest
         $cart = ShoppingCart::curr();
         $cart->calculate();
 
-        $this->assertDOSContains(array(
-            array('ClassName' => 'OrderProcessorTest_CustomOrderItem')
-        ), $cart->Items());
+        $this->assertDOSContains(
+            array(
+            array('ClassName' => OrderProcessorTest_CustomOrderItem::class)
+            ), $cart->Items()
+        );
 
         $versions = Product_OrderItem::get()->filter('OrderID', $cart->ID)->column('ProductVersion');
 
         // The Product_OrderItem should not reference a product version while the order is not placed
         $this->assertEquals(array(0), $versions);
 
-        $this->assertTrue($cart->has_extension('OrderProcessorTest_PlaceFailExtension'));
+        $this->assertTrue($cart->has_extension(OrderProcessorTest_PlaceFailExtension::class));
 
         // Placing the order will fail.
         $this->assertFalse(
@@ -200,7 +231,7 @@ class OrderProcessorTest extends SapphireTest
             OrderProcessorTest_CustomOrderItem::get()->filter('OrderID', $cart->ID)->first()->IsPlaced
         );
 
-        Order::remove_extension('OrderProcessorTest_PlaceFailExtension');
+        Order::remove_extension(OrderProcessorTest_PlaceFailExtension::class);
         $this->shoppingcart->clear(false);
     }
 
@@ -299,7 +330,7 @@ class OrderProcessorTest extends SapphireTest
 
     public function testPlaceOrderMarksAsPaidWithNoOutstandingAmount()
     {
-        Config::inst()->update('ShopConfig', 'email_from', 'shopadmin@example.com');
+        Config::inst()->update(ShopConfig::class, 'email_from', 'shopadmin@example.com');
 
         // Create a new order
         $this->shoppingcart->add($this->socks);
@@ -416,7 +447,7 @@ class OrderProcessorTest_PlaceFailExtension extends DataExtension implements Tes
     public function onAfterWrite()
     {
         // fail after writing, so that we can test if DB rollback works as intended
-        if($this->willFail){
+        if($this->willFail) {
             user_error('Order failed');
         }
     }

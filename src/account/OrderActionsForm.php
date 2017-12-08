@@ -1,7 +1,23 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use SilverStripe\Omnipay\GatewayInfo;
 use SilverStripe\Omnipay\GatewayFieldsFactory;
+use Form;
+use FieldList;
+use HiddenField;
+use HeaderField;
+use Currency;
+use LiteralField;
+use OptionsetField;
+use Requirements;
+use FormAction;
+use Member;
+use CompositeField;
+use RequiredFields;
+
 
 /**
  * Perform actions on placed orders
@@ -47,7 +63,7 @@ class OrderActionsForm extends Form
                 $fields->push(
                     HeaderField::create(
                         "MakePaymentHeader",
-                        _t("OrderActionsForm.MakePayment", "Make Payment")
+                        _t("SilverShop\\Core\\OrderActionsForm.MakePayment", "Make Payment")
                     )
                 );
                 $outstandingfield = Currency::create();
@@ -56,7 +72,7 @@ class OrderActionsForm extends Form
                     LiteralField::create(
                         "Outstanding",
                         _t(
-                            'Order.OutstandingWithAmount',
+                            'SilverShop\\Core\\Order.OutstandingWithAmount',
                             'Outstanding: {Amount}',
                             '',
                             array('Amount' => $outstandingfield->Nice())
@@ -66,7 +82,7 @@ class OrderActionsForm extends Form
                 $fields->push(
                     OptionsetField::create(
                         'PaymentMethod',
-                        _t("OrderActionsForm.PaymentMethod", "Payment Method"),
+                        _t("SilverShop\\Core\\OrderActionsForm.PaymentMethod", "Payment Method"),
                         $gateways,
                         key($gateways)
                     )
@@ -74,7 +90,7 @@ class OrderActionsForm extends Form
 
                 if ($ccFields = $this->getCCFields($gateways)) {
                     if ($this->config()->include_jquery) {
-                       Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.min.js');
+                        Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.min.js');
                     }
                     Requirements::javascript(SHOP_DIR . '/javascript/OrderActionsForm.js');
                     $fields->push($ccFields);
@@ -83,7 +99,7 @@ class OrderActionsForm extends Form
                 $actions->push(
                     FormAction::create(
                         'dopayment',
-                        _t('OrderActionsForm.PayOrder', 'Pay outstanding balance')
+                        _t('SilverShop\\Core\\OrderActionsForm.PayOrder', 'Pay outstanding balance')
                     )
                 );
             }
@@ -93,13 +109,17 @@ class OrderActionsForm extends Form
             $actions->push(
                 FormAction::create(
                     'docancel',
-                    _t('OrderActionsForm.CancelOrder', 'Cancel this order')
+                    _t('SilverShop\\Core\\OrderActionsForm.CancelOrder', 'Cancel this order')
                 )
             );
         }
-        parent::__construct($controller, $name, $fields, $actions, OrderActionsForm_Validator::create(array(
-            'PaymentMethod'
-        )));
+        parent::__construct(
+            $controller, $name, $fields, $actions, OrderActionsForm_Validator::create(
+                array(
+                'PaymentMethod'
+                )
+            )
+        );
         $this->extend("updateForm", $order);
     }
 
@@ -122,7 +142,9 @@ class OrderActionsForm extends Form
             $gateway = (!empty($data['PaymentMethod'])) ? $data['PaymentMethod'] : null;
 
             if (!GatewayInfo::isManual($gateway)) {
-                /** @var OrderProcessor $processor */
+                /**
+ * @var OrderProcessor $processor 
+*/
                 $processor = OrderProcessor::create($this->order);
                 $fieldFactory = new GatewayFieldsFactory(null);
                 $response = $processor->makePayment(
@@ -130,13 +152,13 @@ class OrderActionsForm extends Form
                     $fieldFactory->normalizeFormData($data),
                     $processor->getReturnUrl()
                 );
-                if($response && !$response->isError()){
+                if($response && !$response->isError()) {
                     return $response->redirectOrRespond();
                 } else {
                     $form->sessionMessage($processor->getError(), 'bad');
                 }
             } else {
-                $form->sessionMessage(_t('OrderActionsForm.ManualNotAllowed', "Manual payment not allowed"), 'bad');
+                $form->sessionMessage(_t('SilverShop\\Core\\OrderActionsForm.ManualNotAllowed', "Manual payment not allowed"), 'bad');
             }
 
             return $this->controller->redirectBack();
@@ -184,7 +206,8 @@ class OrderActionsForm extends Form
 
     /**
      * Get credit card fields for the given gateways
-     * @param array $gateways
+     *
+     * @param  array $gateways
      * @return CompositeField|null
      */
     protected function getCCFields(array $gateways)
@@ -241,20 +264,24 @@ class OrderActionsForm_Validator extends RequiredFields
             if (!GatewayInfo::isManual($gateway) && !GatewayInfo::isOffsite($gateway)) {
                 $fieldFactory = new GatewayFieldsFactory(null);
                 // Merge the required fields and the Credit-Card fields that are required for the gateway
-                $this->required = $fieldFactory->getFieldName(array_merge($this->required, array_intersect(
-                    array(
-                        'type',
-                        'name',
-                        'number',
-                        'startMonth',
-                        'startYear',
-                        'expiryMonth',
-                        'expiryYear',
-                        'cvv',
-                        'issueNumber'
-                    ),
-                    GatewayInfo::requiredFields($gateway)
-                )));
+                $this->required = $fieldFactory->getFieldName(
+                    array_merge(
+                        $this->required, array_intersect(
+                            array(
+                            'type',
+                            'name',
+                            'number',
+                            'startMonth',
+                            'startYear',
+                            'expiryMonth',
+                            'expiryYear',
+                            'cvv',
+                            'issueNumber'
+                            ),
+                            GatewayInfo::requiredFields($gateway)
+                        )
+                    )
+                );
             }
         }
 

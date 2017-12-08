@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+
+use BuildTask;
+use DB;
+use DataObject;
+
+
 /**
  * Adds all customers to an assigned group.
  *

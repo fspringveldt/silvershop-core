@@ -1,9 +1,18 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use Convert;
+use SilverShop\Core\ShopCountry;
+use SilverShop\Core\RestrictionRegionCountryDropdownField;
+
+
+
 class RegionRestriction extends DataObject
 {
     private static $db             = array(
-        "Country"    => "ShopCountry",
+        "Country"    => ShopCountry::class,
         "State"      => "Varchar",
         "City"       => "Varchar",
         "PostalCode" => "Varchar(10)",
@@ -36,7 +45,7 @@ class RegionRestriction extends DataObject
      * Specifies form field types to use in TableFields
      */
     private static $table_field_types = array(
-        'Country'    => 'RestrictionRegionCountryDropdownField',
+        'Country'    => RestrictionRegionCountryDropdownField::class,
         'State'      => 'TextField',
         'City'       => 'TextField',
         'PostalCode' => 'TextField',
@@ -45,10 +54,11 @@ class RegionRestriction extends DataObject
     /**
      * Parses a UK postcode to give you the different sections
      *
-     * @param str $postcode
+     * @param  str $postcode
      * @return array
      */
-    public static function parse_uk_postcode($postcode) {
+    public static function parse_uk_postcode($postcode) 
+    {
         $postcode = str_replace(' ', '', $postcode); // remove any spaces;
         $postcode = strtoupper($postcode); // force to uppercase;
         $valid_postcode_exp = "/^(([A-PR-UW-Z]{1}[A-IK-Y]?)([0-9]?[A-HJKS-UW]?[ABEHMNPRVWXY]?|[0-9]?[0-9]?))\s?([0-9]{1}[ABD-HJLNP-UW-Z]{2})$/i";
@@ -92,7 +102,7 @@ class RegionRestriction extends DataObject
             // will check for partial postcodes (eg. NE, NE17, NE177AH)
             $postcode = self::parse_uk_postcode($address->PostalCode);
             if (isset($postcode['validate']) && $postcode['validate']) {
-                $region = preg_replace("/[^a-z]+/i", "", substr($postcode['prefix'],0,2));
+                $region = preg_replace("/[^a-z]+/i", "", substr($postcode['prefix'], 0, 2));
                 $where[] = "TRIM(LOWER($rr\"PostalCode\")) = TRIM(LOWER('" . Convert::raw2sql($region)
                     . "')) OR TRIM(LOWER($rr\"PostalCode\")) = TRIM(LOWER('" . Convert::raw2sql($postcode['prefix'])
                     . "')) OR TRIM(LOWER($rr\"PostalCode\")) = TRIM(LOWER('" . Convert::raw2sql($postcode['prefix'].$postcode['suffix'])

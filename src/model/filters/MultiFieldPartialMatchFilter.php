@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+
+use PartialMatchFilter;
+use InvalidArgumentException;
+use DataQuery;
+
+
 /**
  * This must be created manually OR the subfilters set manually
  * because of the way SS cleans up the filter definitions before
@@ -7,10 +14,14 @@
  */
 class MultiFieldPartialMatchFilter extends PartialMatchFilter
 {
-    /** @var array $subfilters */
+    /**
+     * @var array $subfilters 
+     */
     protected $subfilters;
 
-    /** @var array $subfilterModifiers */
+    /**
+     * @var array $subfilterModifiers 
+     */
     protected $subfilterModifiers;
 
     /**

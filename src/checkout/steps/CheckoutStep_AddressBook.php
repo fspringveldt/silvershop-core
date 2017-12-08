@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+
+
+
 class CheckoutStep_AddressBook extends CheckoutStep_Address
 {
     private static $allowed_actions = array(

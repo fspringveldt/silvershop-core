@@ -1,6 +1,16 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use SilverStripe\Omnipay\GatewayInfo;
+use Object;
+use ArrayList;
+use FieldList;
+use ValidationResult;
+use ValidationException;
+use Member;
+
 
 /**
  * @package shop
@@ -117,7 +127,7 @@ class CheckoutComponentConfig extends Object
     /**
      * Validate every component against given data.
      *
-     * @param  array $data data to validate
+     * @param array $data data to validate
      *
      * @return boolean validation result
      * @throws ValidationException

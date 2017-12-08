@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+
+use BuildTask;
+use LogicException;
+use SS_Datetime;
+
+
 /**
  * Cart Cleanup Task.
  *

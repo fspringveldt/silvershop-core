@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+use SilverShop\Core\Order;
+
+
+
+
+
 /**
  * Order sales for the entire shop.
  *
@@ -15,7 +22,7 @@ class ShopSalesReport extends ShopPeriodReport
 
     protected $description = "Monitor shop sales performance for a particular period. Group results by year, month, or day.";
 
-    protected $dataClass   = "Order";
+    protected $dataClass   = Order::class;
 
     protected $periodfield = "\"Order\".\"Paid\"";
 

@@ -1,5 +1,24 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+
+
+use Config;
+use Exception;
+
+use TestOnly;
+use SilverShop\Core\Tests\OrderModifierTest_TestModifier;
+use SilverShop\Core\Order;
+use SilverShop\Core\FlatTaxModifier;
+use SilverShop\Core\Product;
+use SilverShop\Core\ShopTools;
+use SilverShop\Core\OrderModifier;
+
+
+
 /**
  * @package    shop
  * @subpackage tests
@@ -10,20 +29,20 @@ class OrderModifierTest extends FunctionalTest
     public static $disable_theme  = true;
     public static $use_draft_site = true;
 
-    protected $extraDataObjects = array('OrderModifierTest_TestModifier');
+    protected $extraDataObjects = array(OrderModifierTest_TestModifier::class);
 
     public function setUp()
     {
         parent::setUp();
         ShopTest::setConfiguration();
         Order::config()->modifiers = array(
-            "FlatTaxModifier",
+            FlatTaxModifier::class,
         );
         FlatTaxModifier::config()->rate = 0.25;
         FlatTaxModifier::config()->name = "GST";
 
-        $this->mp3player = $this->objFromFixture('Product', 'mp3player');
-        $this->socks = $this->objFromFixture('Product', 'socks');
+        $this->mp3player = $this->objFromFixture(Product::class, 'mp3player');
+        $this->socks = $this->objFromFixture(Product::class, 'socks');
         $this->mp3player->publish('Stage', 'Live');
         $this->socks->publish('Stage', 'Live');
     }
@@ -47,9 +66,11 @@ class OrderModifierTest extends FunctionalTest
             );
         }
 
-        Config::inst()->update('Order', 'modifiers', array(
-            'OrderModifierTest_TestModifier'
-        ));
+        Config::inst()->update(
+            Order::class, 'modifiers', array(
+            OrderModifierTest_TestModifier::class
+            )
+        );
         $order = $this->createOrder();
         $order->calculate();
         $order->write();
@@ -69,7 +90,8 @@ class OrderModifierTest extends FunctionalTest
         try {
             // Calculate will now fail!
             $order->calculate();
-        } catch (Exception $e){}
+        } catch (Exception $e){
+        }
 
         // reload order from DB
         $order = Order::get()->byID($order->ID);

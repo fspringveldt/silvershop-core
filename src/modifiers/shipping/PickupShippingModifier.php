@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+use SilverShop\Core\CanBeFreeCurrency;
+
+
+
+
+
 /**
  * Pickup the order from the store.
  *
@@ -13,7 +20,7 @@ class PickupShippingModifier extends ShippingModifier
     );
 
     private static $casting       = array(
-        'TableValue' => 'CanBeFreeCurrency',
+        'TableValue' => CanBeFreeCurrency::class,
     );
 
     private static $singular_name = "Pick Up Shipping";

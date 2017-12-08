@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Extension;
+use Director;
+
+
 /**
  * ViewableData extension that provides access to the cart from anywhere.
  * Also handles last-minute recalculation, if required.
@@ -25,8 +31,8 @@ class ViewableCart extends Extension
 
     public function getContinueLink()
     {
-        if($cartPage = CartPage::get()->first()){
-            if($cartPage->ContinuePageID){
+        if($cartPage = CartPage::get()->first()) {
+            if($cartPage->ContinuePageID) {
                 return $cartPage->ContinuePage()->Link();
             }
         }

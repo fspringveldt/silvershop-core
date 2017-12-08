@@ -1,6 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use SilverStripe\Omnipay\GatewayInfo;
+use FieldList;
+use FormAction;
+
 
 class CheckoutStep_PaymentMethod extends CheckoutStep
 {
@@ -33,7 +39,7 @@ class CheckoutStep_PaymentMethod extends CheckoutStep
         $form = CheckoutForm::create($this->owner, "PaymentMethodForm", $this->checkoutconfig());
         $form->setActions(
             FieldList::create(
-                FormAction::create("setpaymentmethod", _t('CheckoutStep.Continue', "Continue"))
+                FormAction::create("setpaymentmethod", _t('SilverShop\\Core\\CheckoutStep.Continue', "Continue"))
             )
         );
         $this->owner->extend('updatePaymentMethodForm', $form);

@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverShop\Core;
+
+use BuildTask;
+use Director;
+use DataObject;
+use SilverShop\Core\Order;
+
+
+
 /**
  * Recalculate All Orders
  * Re-runs all calculation functions on all orders so that database is populated with pre-calculated values.
@@ -21,7 +30,7 @@ class RecalculateAllOrdersTask extends BuildTask
         //TODO: figure out how to make this run faster
         //TODO: better memory managment...the destroy calls are not enough it appears.
 
-        if ($orders = DataObject::get("Order")) {
+        if ($orders = DataObject::get(Order::class)) {
             echo $br . "Writing all order items ";
             foreach ($orders as $order) {
                 $order->calculate();

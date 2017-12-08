@@ -1,5 +1,18 @@
 <?php
 
+namespace SilverShop\Core;
+
+use CsvBulkLoader;
+use Object;
+use ArrayList;
+use DataObject;
+use Convert;
+use Image;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductCategory;
+
+
+
 /**
  * ProductBulkLoader - allows loading products via CSV file.
  *
@@ -86,7 +99,7 @@ class ProductBulkLoader extends CsvBulkLoader
         $this->extend('updateColumnMap', $this->columnMap);
         // we have to check for the existence of this in case the stockcontrol module hasn't been loaded
         // and the CSV still contains a Stock column
-        self::$hasStockImpl = Object::has_extension('Product', 'ProductStockDecorator');
+        self::$hasStockImpl = Object::has_extension(Product::class, 'ProductStockDecorator');
         $results = parent::processAll($filepath, $preview);
         //After results have been processed, publish all created & updated products
         $objects = ArrayList::create();
@@ -97,21 +110,18 @@ class ProductBulkLoader extends CsvBulkLoader
                 //set parent page
                 if (is_numeric(self::$parentpageid)
                     && DataObject::get_by_id(
-                        'ProductCategory',
+                        ProductCategory::class,
                         self::$parentpageid
                     )
                 ) { //cached option
                     $object->ParentID = self::$parentpageid;
-                } elseif ($parentpage =
-                    DataObject::get_one('ProductCategory', "\"Title\" = 'Products'", '"Created" DESC')
+                } elseif ($parentpage =DataObject::get_one(ProductCategory::class, "\"Title\" = 'Products'", '"Created" DESC')
                 ) { //page called 'Products'
                     $object->ParentID = self::$parentpageid = $parentpage->ID;
-                } elseif ($parentpage =
-                    DataObject::get_one('ProductCategory', "\"ParentID\" = 0", '"Created" DESC')
+                } elseif ($parentpage =DataObject::get_one(ProductCategory::class, "\"ParentID\" = 0", '"Created" DESC')
                 ) { //root page
                     $object->ParentID = self::$parentpageid = $parentpage->ID;
-                } elseif ($parentpage =
-                    DataObject::get_one('ProductCategory', "", '"Created" DESC')
+                } elseif ($parentpage =DataObject::get_one(ProductCategory::class, "", '"Created" DESC')
                 ) { //any product page
                     $object->ParentID = self::$parentpageid = $parentpage->ID;
                 } else {
@@ -157,8 +167,7 @@ class ProductBulkLoader extends CsvBulkLoader
     {
         $title = strtolower(Convert::raw2sql($val));
         if ($title) {
-            if ($parentpage =
-                DataObject::get_one('ProductCategory', "LOWER(\"Title\") = '$title'", '"Created" DESC')
+            if ($parentpage =DataObject::get_one(ProductCategory::class, "LOWER(\"Title\") = '$title'", '"Created" DESC')
             ) { // find or create parent category, if provided
                 $obj->ParentID = $parentpage->ID;
                 $obj->write();

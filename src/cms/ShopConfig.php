@@ -1,5 +1,20 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataExtension;
+use SiteConfig;
+use FieldList;
+use Tab;
+use TabSet;
+use TreeDropdownField;
+use UploadField;
+use CheckboxSetField;
+use Config_ForClass;
+use SilverShop\Core\ShopConfig;
+
+
+
 /**
  * @package    shop
  * @subpackage cms
@@ -34,28 +49,28 @@ class ShopConfig extends DataExtension
                     "Main",
                     TreeDropdownField::create(
                         'TermsPageID',
-                        _t("ShopConfig.TermsPage", 'Terms and Conditions Page'),
+                        _t("SilverShop\\Core\\ShopConfig.TermsPage", 'Terms and Conditions Page'),
                         'SiteTree'
                     ),
                     TreeDropdownField::create(
                         "CustomerGroupID",
-                        _t("ShopConfig.CustomerGroup", "Group to add new customers to"),
+                        _t("SilverShop\\Core\\ShopConfig.CustomerGroup", "Group to add new customers to"),
                         "Group"
                     ),
-                    UploadField::create('DefaultProductImage', _t('ShopConfig.DefaultImage', 'Default Product Image'))
+                    UploadField::create('DefaultProductImage', _t('SilverShop\\Core\\ShopConfig.DefaultImage', 'Default Product Image'))
                 ),
                 $countriestab = Tab::create(
                     "Countries",
                     CheckboxSetField::create(
                         'AllowedCountries',
-                        _t('ShopConfig.AllowedCountries', 'Allowed Ordering and Shipping Countries'),
+                        _t('SilverShop\\Core\\ShopConfig.AllowedCountries', 'Allowed Ordering and Shipping Countries'),
                         self::config()->iso_3166_country_codes
                     )
                 )
             )
         );
         $fields->removeByName("CreateTopLevelGroups");
-        $countriestab->setTitle(_t('ShopConfig.AllowedCountriesTabTitle', "Allowed Countries"));
+        $countriestab->setTitle(_t('SilverShop\\Core\\ShopConfig.AllowedCountriesTabTitle', "Allowed Countries"));
     }
 
     public static function get_base_currency()
@@ -136,6 +151,6 @@ class ShopConfig extends DataExtension
      */
     public static function config()
     {
-        return new Config_ForClass("ShopConfig");
+        return new Config_ForClass(ShopConfig::class);
     }
 }

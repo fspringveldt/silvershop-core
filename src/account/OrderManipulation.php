@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Extension;
+use Session;
+use Member;
+use PaginatedList;
+use SS_HTTPRequest;
+
+
 /**
  * Provides forms and processing to a controller for editing an
  * order that has been previously placed.

@@ -1,9 +1,25 @@
 <?php
 
+namespace SilverShop\Core;
+
+use BuildTask;
+use DB;
+use Injector;
+use DataObject;
+use YamlFixture;
+use SiteConfig;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductCategory;
+use SilverShop\Core\CartPage;
+use SilverShop\Core\CheckoutPage;
+use SilverShop\Core\AccountPage;
+
+
+
 /**
  * Populate shop task
  *
- * @todo       Ideally this task should make use of Spyc, and a single Pages yml file
+ * @todo Ideally this task should make use of Spyc, and a single Pages yml file
  * instead of the YamlFixture class, which is intended for testing.
  *
  * @package    shop
@@ -30,7 +46,7 @@ class PopulateShopTask extends BuildTask
         $parentid = 0;
 
         //create products
-        if (!DataObject::get_one('Product')) {
+        if (!DataObject::get_one(Product::class)) {
             $fixture = new YamlFixture(SHOP_DIR . "/tests/fixtures/dummyproducts.yml");
             $fixture->writeInto($factory);//needs to be a data model
 
@@ -55,7 +71,7 @@ class PopulateShopTask extends BuildTask
                 'stationery',
             );
             foreach ($categoriestopublish as $categoryname) {
-                $factory->get("ProductCategory", $categoryname)->publish('Stage', 'Live');
+                $factory->get(ProductCategory::class, $categoryname)->publish('Stage', 'Live');
             }
             $productstopublish = array(
                 'mp3player',
@@ -74,7 +90,7 @@ class PopulateShopTask extends BuildTask
                 'pens',
             );
             foreach ($productstopublish as $productname) {
-                $factory->get("Product", $productname)->publish('Stage', 'Live');
+                $factory->get(Product::class, $productname)->publish('Stage', 'Live');
             }
             DB::alteration_message('Created dummy products and categories', 'created');
         } else {
@@ -82,10 +98,10 @@ class PopulateShopTask extends BuildTask
         }
 
         //cart page
-        if (!$page = DataObject::get_one('CartPage')) {
+        if (!$page = DataObject::get_one(CartPage::class)) {
             $fixture = new YamlFixture(SHOP_DIR . "/tests/fixtures/pages/Cart.yml");
             $fixture->writeInto($factory);
-            $page = $factory->get("CartPage", "cart");
+            $page = $factory->get(CartPage::class, "cart");
             $page->ParentID = $parentid;
             $page->writeToStage('Stage');
             $page->publish('Stage', 'Live');
@@ -93,10 +109,10 @@ class PopulateShopTask extends BuildTask
         }
 
         //checkout page
-        if (!$page = DataObject::get_one('CheckoutPage')) {
+        if (!$page = DataObject::get_one(CheckoutPage::class)) {
             $fixture = new YamlFixture(SHOP_DIR . "/tests/fixtures/pages/Checkout.yml");
             $fixture->writeInto($factory);
-            $page = $factory->get("CheckoutPage", "checkout");
+            $page = $factory->get(CheckoutPage::class, "checkout");
             $page->ParentID = $parentid;
             $page->writeToStage('Stage');
             $page->publish('Stage', 'Live');
@@ -104,10 +120,10 @@ class PopulateShopTask extends BuildTask
         }
 
         //account page
-        if (!DataObject::get_one('AccountPage')) {
+        if (!DataObject::get_one(AccountPage::class)) {
             $fixture = new YamlFixture(SHOP_DIR . "/tests/fixtures/pages/Account.yml");
             $fixture->writeInto($factory);
-            $page = $factory->get("AccountPage", "account");
+            $page = $factory->get(AccountPage::class, "account");
             $page->ParentID = $parentid;
             $page->writeToStage('Stage');
             $page->publish('Stage', 'Live');

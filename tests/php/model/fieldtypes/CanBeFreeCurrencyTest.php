@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use SilverShop\Core\CanBeFreeCurrency;
+
+
+
 class CanBeFreeCurrencyTest extends SapphireTest
 {
     public function testField()

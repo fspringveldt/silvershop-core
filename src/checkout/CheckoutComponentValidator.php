@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverShop\Core;
+
+use RequiredFields;
+use ValidationException;
+
+
 /**
  * Order validator makes sure everything is set correctly
  * and in place before an order can be placed.
@@ -32,7 +38,7 @@ class CheckoutComponentValidator extends RequiredFields
         if (!$valid) {
             $this->form->sessionMessage(
                 _t(
-                    "CheckoutComponentValidator.InvalidDataMessage",
+                    "SilverShop\\Core\\CheckoutComponentValidator.InvalidDataMessage",
                     "There are problems with the data you entered. See below:"
                 ),
                 "bad"

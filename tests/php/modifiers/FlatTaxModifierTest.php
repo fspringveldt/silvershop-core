@@ -1,9 +1,21 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use FunctionalTest;
+
+
+
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Order;
+use SilverShop\Core\FlatTaxModifier;
+use SilverShop\Core\Product;
+
+
+
 /**
  * @package    shop
  * @subpackage tests
- *
  */
 class FlatTaxModifierTest extends FunctionalTest
 {
@@ -22,12 +34,12 @@ class FlatTaxModifierTest extends FunctionalTest
         parent::setUp();
         ShopTest::setConfiguration();
         Order::config()->modifiers = array(
-            "FlatTaxModifier",
+            FlatTaxModifier::class,
         );
         FlatTaxModifier::config()->name = "GST";
         FlatTaxModifier::config()->rate = 0.15;
         $this->cart = ShoppingCart::singleton();
-        $this->mp3player = $this->objFromFixture('Product', 'mp3player');
+        $this->mp3player = $this->objFromFixture(Product::class, 'mp3player');
         $this->mp3player->publish('Stage', 'Live');
     }
 
@@ -39,7 +51,7 @@ class FlatTaxModifierTest extends FunctionalTest
         $order = $this->cart->current();
         $order->calculate();
         $modifier = $order->Modifiers()
-            ->filter('ClassName', 'FlatTaxModifier')
+            ->filter('ClassName', FlatTaxModifier::class)
             ->first();
         $this->assertEquals(26.09, $modifier->Amount); //remember that 15% tax inclusive is different to exclusive
         $this->assertEquals(200, $order->GrandTotal());
@@ -53,7 +65,7 @@ class FlatTaxModifierTest extends FunctionalTest
         $order = $this->cart->current();
         $order->calculate();
         $modifier = $order->Modifiers()
-            ->filter('ClassName', 'FlatTaxModifier')
+            ->filter('ClassName', FlatTaxModifier::class)
             ->first();
         $this->assertEquals(30, $modifier->Amount);
         $this->assertEquals(230, $order->GrandTotal());

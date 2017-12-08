@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use SilverShop\Core\SimpleShippingModifier;
+
+
+
 /**
  * @package    shop
  * @subpackage tests

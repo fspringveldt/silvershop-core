@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Extension;
+use Config;
+use SilverShop\Core\SteppedCheckout;
+
+
+
 /**
  * Base class for building steps for checkout processing
  */
@@ -30,7 +38,7 @@ class CheckoutStep extends Extension
         if (!$nextstep) {
             $nextstep = $this->nextstep();
         }
-        $anchor = Config::inst()->get("SteppedCheckout", "continue_anchor");
+        $anchor = Config::inst()->get(SteppedCheckout::class, "continue_anchor");
         $anchor = $anchor ? "#" . $anchor : "";
         return $this->owner->Link($nextstep) . $anchor;
     }

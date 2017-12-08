@@ -1,12 +1,22 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+
+use SilverShop\Core\Order;
+use SilverShop\Core\GlobalTaxModifier;
+
+
+
 class GlobalTaxModifierTest extends SapphireTest
 {
     public function setUp()
     {
         parent::setUp();
         Order::config()->modifiers = array(
-            'GlobalTaxModifier',
+            GlobalTaxModifier::class,
         );
         GlobalTaxModifier::config()->country_rates = array(
             'NZ' => array('rate' => 0.15, 'name' => 'GST', 'exclusive' => false),

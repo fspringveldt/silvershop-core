@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use Exception;
+use SilverShop\Core\Address;
+
+
+
 class AddressTest extends SapphireTest
 {
     public function testForm()

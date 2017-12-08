@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use SilverShop\Core\ShopSalesReport;
+
+
+
 class ShopReportTest extends SapphireTest
 {
     protected static $fixture_file = 'silvershop/tests/fixtures/shop.yml';

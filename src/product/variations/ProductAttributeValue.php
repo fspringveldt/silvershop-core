@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use SilverShop\Core\ProductAttributeType;
+use SilverShop\Core\ProductVariation;
+
+
+
 /**
  * Product Attribute Value
  * The actual values for a type of product attribute.
@@ -15,11 +23,11 @@ class ProductAttributeValue extends DataObject
     );
 
     private static $has_one           = array(
-        'Type' => 'ProductAttributeType',
+        'Type' => ProductAttributeType::class,
     );
 
     private static $belongs_many_many = array(
-        'ProductVariation' => 'ProductVariation',
+        'ProductVariation' => ProductVariation::class,
     );
 
     private static $summary_fields    = array(

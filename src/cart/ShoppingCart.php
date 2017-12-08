@@ -1,5 +1,32 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Object;
+use Injector;
+use Session;
+use Member;
+use Exception;
+use Config;
+use Controller;
+use SecurityToken;
+use Director;
+use Convert;
+use ClassInfo;
+use Versioned;
+use DataObject;
+use ErrorPage;
+use Permission;
+use Requirements;
+use Debug;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Order;
+use SilverShop\Core\ProductVariationsExtension;
+use SilverShop\Core\Product;
+use SilverShop\Core\Buyable;
+
+
+
 /**
  * Encapsulated manipulation of the current order using a singleton pattern.
  *
@@ -28,7 +55,7 @@ class ShoppingCart extends Object
      */
     public static function singleton()
     {
-        return Injector::inst()->get('ShoppingCart');
+        return Injector::inst()->get(ShoppingCart::class);
     }
 
     /**
@@ -108,8 +135,8 @@ class ShoppingCart extends Object
      * Adds an item to the cart
      *
      * @param Buyable $buyable
-     * @param int $quantity
-     * @param array $filter
+     * @param int     $quantity
+     * @param array   $filter
      *
      * @return boolean|OrderItem false or the new/existing item
      */
@@ -125,7 +152,7 @@ class ShoppingCart extends Object
         }
 
         if (!$buyable) {
-            return $this->error(_t("ShoppingCart.ProductNotFound", "Product not found."));
+            return $this->error(_t("SilverShop\\Core\\ShoppingCart.ProductNotFound", "Product not found."));
         }
 
         $item = $this->findOrMakeItem($buyable, $quantity, $filter);
@@ -146,7 +173,7 @@ class ShoppingCart extends Object
         }
 
         $item->write();
-        $this->message(_t("ShoppingCart.ItemAdded", "Item has been added successfully."));
+        $this->message(_t("SilverShop\\Core\\ShoppingCart.ItemAdded", "Item has been added successfully."));
 
         return $item;
     }
@@ -155,8 +182,8 @@ class ShoppingCart extends Object
      * Remove an item from the cart.
      *
      * @param Buyable $buyable
-     * @param int $quantity - number of items to remove, or leave null for all items (default)
-     * @param array $filter
+     * @param int     $quantity - number of items to remove, or leave null for all items (default)
+     * @param array   $filter
      *
      * @return boolean success/failure
      */
@@ -165,7 +192,7 @@ class ShoppingCart extends Object
         $order = $this->current();
 
         if (!$order) {
-            return $this->error(_t("ShoppingCart.NoOrder", "No current order."));
+            return $this->error(_t("SilverShop\\Core\\ShoppingCart.NoOrder", "No current order."));
         }
 
         // If an extension throws an exception, error out
@@ -189,15 +216,16 @@ class ShoppingCart extends Object
             return $this->error($exception->getMessage());
         }
 
-        $this->message(_t("ShoppingCart.ItemRemoved", "Item has been successfully removed."));
+        $this->message(_t("SilverShop\\Core\\ShoppingCart.ItemRemoved", "Item has been successfully removed."));
 
         return true;
     }
 
     /**
      * Remove a specific order item from cart
-     * @param OrderItem $item
-     * @param int $quantity - number of items to remove or leave `null` to remove all items (default)
+     *
+     * @param  OrderItem $item
+     * @param  int       $quantity - number of items to remove or leave `null` to remove all items (default)
      * @return boolean success/failure
      */
     public function removeOrderItem(OrderItem $item, $quantity = null)
@@ -205,11 +233,11 @@ class ShoppingCart extends Object
         $order = $this->current();
 
         if (!$order) {
-            return $this->error(_t("ShoppingCart.NoOrder", "No current order."));
+            return $this->error(_t("SilverShop\\Core\\ShoppingCart.NoOrder", "No current order."));
         }
 
         if (!$item || $item->OrderID != $order->ID) {
-            return $this->error(_t("ShoppingCart.ItemNotFound", "Item not found."));
+            return $this->error(_t("SilverShop\\Core\\ShoppingCart.ItemNotFound", "Item not found."));
         }
 
         //if $quantity will become 0, then remove all
@@ -229,8 +257,8 @@ class ShoppingCart extends Object
      * Will automatically add or remove item, if necessary.
      *
      * @param Buyable $buyable
-     * @param int $quantity
-     * @param array $filter
+     * @param int     $quantity
+     * @param array   $filter
      *
      * @return boolean|OrderItem false or the new/existing item
      */
@@ -251,9 +279,10 @@ class ShoppingCart extends Object
 
     /**
      * Update quantity of a given order item
-     * @param OrderItem $item
-     * @param int $quantity the new quantity to use
-     * @param array $filter
+     *
+     * @param  OrderItem $item
+     * @param  int       $quantity the new quantity to use
+     * @param  array     $filter
      * @return boolean success/failure
      */
     public function updateOrderItemQuantity(OrderItem $item, $quantity = 1, $filter = array())
@@ -261,11 +290,11 @@ class ShoppingCart extends Object
         $order = $this->current();
 
         if (!$order) {
-            return $this->error(_t("ShoppingCart.NoOrder", "No current order."));
+            return $this->error(_t("SilverShop\\Core\\ShoppingCart.NoOrder", "No current order."));
         }
 
         if (!$item || $item->OrderID != $order->ID) {
-            return $this->error(_t("ShoppingCart.ItemNotFound", "Item not found."));
+            return $this->error(_t("SilverShop\\Core\\ShoppingCart.ItemNotFound", "Item not found."));
         }
 
         $buyable = $item->Buyable();
@@ -286,7 +315,7 @@ class ShoppingCart extends Object
         }
 
         $item->write();
-        $this->message(_t("ShoppingCart.QuantitySet", "Quantity has been set."));
+        $this->message(_t("SilverShop\\Core\\ShoppingCart.QuantitySet", "Quantity has been set."));
 
         return true;
     }
@@ -294,9 +323,9 @@ class ShoppingCart extends Object
     /**
      * Finds or makes an order item for a given product + filter.
      *
-     * @param Buyable $buyable the buyable
-     * @param int $quantity quantity to add
-     * @param array $filter
+     * @param Buyable $buyable  the buyable
+     * @param int     $quantity quantity to add
+     * @param array   $filter
      *
      * @return OrderItem the found or created item
      */
@@ -318,7 +347,7 @@ class ShoppingCart extends Object
             if (!$buyable->canPurchase($member, $quantity)) {
                 return $this->error(
                     _t(
-                        'ShoppingCart.CannotPurchase',
+                        'SilverShop\\Core\\ShoppingCart.CannotPurchase',
                         'This {Title} cannot be purchased.',
                         '',
                         array('Title' => $buyable->i18n_singular_name())
@@ -343,7 +372,7 @@ class ShoppingCart extends Object
      * Finds an existing order item.
      *
      * @param Buyable $buyable
-     * @param array $customfilter
+     * @param array   $customfilter
      *
      * @return OrderItem the item requested, or false
      */
@@ -362,14 +391,14 @@ class ShoppingCart extends Object
         $itemclass = Config::inst()->get(get_class($buyable), 'order_item');
         $relationship = Config::inst()->get($itemclass, 'buyable_relationship');
         $filter[$relationship . "ID"] = $buyable->ID;
-        $required = array('Order', $relationship);
+        $required = array(Order::class, $relationship);
         if (is_array($itemclass::config()->required_fields)) {
             $required = array_merge($required, $itemclass::config()->required_fields);
         }
         $query = new MatchObjectFilter($itemclass, array_merge($customfilter, $filter), $required);
         $item = $itemclass::get()->where($query->getFilter())->first();
         if (!$item) {
-            return $this->error(_t("ShoppingCart.ItemNotFound", "Item not found."));
+            return $this->error(_t("SilverShop\\Core\\ShoppingCart.ItemNotFound", "Item not found."));
         }
 
         return $item;
@@ -379,15 +408,15 @@ class ShoppingCart extends Object
      * Ensure the proper buyable will be returned for a given buyable…
      * This is being used to ensure a product with variations cannot be added to the cart…
      * a Variation has to be added instead!
-     * @param Buyable $buyable
+     *
+     * @param  Buyable $buyable
      * @return Buyable
      */
     public function getCorrectBuyable(Buyable $buyable)
     {
-        if (
-            $buyable instanceof Product &&
-            $buyable->hasExtension('ProductVariationsExtension') &&
-            $buyable->Variations()->count() > 0
+        if ($buyable instanceof Product 
+            && $buyable->hasExtension(ProductVariationsExtension::class) 
+            && $buyable->Variations()->count() > 0
         ) {
             foreach ($buyable->Variations() as $variation) {
                 if ($variation->canPurchase()) {
@@ -401,6 +430,7 @@ class ShoppingCart extends Object
 
     /**
      * Store old cart id in session order history
+     *
      * @param int|null $requestedOrderId optional parameter that denotes the order that was requested
      */
     public function archiveorderid($requestedOrderId = null)
@@ -424,7 +454,7 @@ class ShoppingCart extends Object
     /**
      * Empty / abandon the entire cart.
      *
-     * @param bool $write whether or not to write the abandoned order
+     * @param  bool $write whether or not to write the abandoned order
      * @return bool - true if successful, false if no cart found
      */
     public function clear($write = true)
@@ -433,12 +463,12 @@ class ShoppingCart extends Object
         $order = $this->current();
         $this->order = null;
         if (!$order) {
-            return $this->error(_t("ShoppingCart.NoCartFound", "No cart found."));
+            return $this->error(_t("SilverShop\\Core\\ShoppingCart.NoCartFound", "No cart found."));
         }
         if ($write) {
             $order->write();
         }
-        $this->message(_t("ShoppingCart.Cleared", "Cart was successfully cleared."));
+        $this->message(_t("SilverShop\\Core\\ShoppingCart.Cleared", "Cart was successfully cleared."));
 
         return true;
     }
@@ -457,7 +487,7 @@ class ShoppingCart extends Object
      * Store a message to be fed back to user.
      *
      * @param string $message
-     * @param string $type - good, bad, warning
+     * @param string $type    - good, bad, warning
      */
     protected function message($message, $type = "good")
     {
@@ -608,14 +638,13 @@ class ShoppingCart_Controller extends Controller
     protected function buyableFromRequest()
     {
         $request = $this->getRequest();
-        if (
-            SecurityToken::is_enabled() &&
-            !self::config()->disable_security_token &&
-            !SecurityToken::inst()->checkRequest($request)
+        if (SecurityToken::is_enabled() 
+            && !self::config()->disable_security_token 
+            && !SecurityToken::inst()->checkRequest($request)
         ) {
             return $this->httpError(
                 400,
-                _t("ShoppingCart.InvalidSecurityToken", "Invalid security token, possible CSRF attack.")
+                _t("SilverShop\\Core\\ShoppingCart.InvalidSecurityToken", "Invalid security token, possible CSRF attack.")
             );
         }
         $id = (int)$request->param('ID');
@@ -623,8 +652,8 @@ class ShoppingCart_Controller extends Controller
             //TODO: store error message
             return null;
         }
-        $buyableclass = "Product";
-        if ($class = $request->param('Buyable')) {
+        $buyableclass = Product::class;
+        if ($class = $request->param(Buyable::class)) {
             $buyableclass = Convert::raw2sql($class);
         }
         if (!ClassInfo::exists($buyableclass)) {
@@ -749,7 +778,7 @@ class ShoppingCart_Controller extends Controller
         } elseif ($response = ErrorPage::response_for(404)) {
             return $response;
         }
-        return $this->httpError(404, _t("ShoppingCart.NoCartInitialised", "no cart initialised"));
+        return $this->httpError(404, _t("SilverShop\\Core\\ShoppingCart.NoCartInitialised", "no cart initialised"));
     }
 
     /**

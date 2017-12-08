@@ -1,15 +1,27 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Form;
+use SiteConfig;
+use FieldList;
+use DropdownField;
+use FormAction;
+use Extension;
+use SilverShop\Core\SetLocationForm;
+
+
+
 class SetLocationForm extends Form
 {
-    public function __construct($controller, $name = "SetLocationForm")
+    public function __construct($controller, $name = SetLocationForm::class)
     {
         $countries = SiteConfig::current_site_config()->getCountriesList();
         $fields = FieldList::create(
-            $countryfield = DropdownField::create("Country", _t('SetLocationForm.Country', 'Country'), $countries)
+            $countryfield = DropdownField::create("Country", _t('SilverShop\\Core\\SetLocationForm.Country', 'Country'), $countries)
         );
         $countryfield->setHasEmptyDefault(true);
-        $countryfield->setEmptyString(_t('SetLocationForm.ChooseCountry', 'Choose country...'));
+        $countryfield->setEmptyString(_t('SilverShop\\Core\\SetLocationForm.ChooseCountry', 'Choose country...'));
         $actions = FieldList::create(
             FormAction::create("setLocation", "set")
         );
@@ -31,7 +43,7 @@ class SetLocationForm extends Form
 class LocationFormPageDecorator extends Extension
 {
     public static $allowed_actions = array(
-        "SetLocationForm",
+        SetLocationForm::class,
     );
 
     public function SetLocationForm()

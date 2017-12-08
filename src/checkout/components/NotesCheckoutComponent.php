@@ -1,11 +1,17 @@
 <?php
 
+namespace SilverShop\Core;
+
+use FieldList;
+use TextareaField;
+
+
 class NotesCheckoutComponent extends CheckoutComponent
 {
     public function getFormFields(Order $order)
     {
         return FieldList::create(
-            TextareaField::create("Notes", _t("Order.db_Notes", "Message"))
+            TextareaField::create("Notes", _t("SilverShop\\Core\\Order.db_Notes", "Message"))
         );
     }
 

@@ -1,5 +1,22 @@
 <?php
 
+namespace SilverShop\Core;
+
+use SS_Report;
+use i18nEntityProvider;
+use Member;
+use FieldList;
+use DateField;
+use DropdownField;
+use CheckboxField;
+use SQLQueryList;
+use DB;
+use SQLQuery;
+use SilverShop\Core\Order;
+use SilverShop\Core\ShopPeriodReport;
+
+
+
 /**
  * Base class for creating reports that can be filtered to a specific range.
  * Record grouping is also supported.
@@ -8,7 +25,7 @@ class ShopPeriodReport extends SS_Report implements i18nEntityProvider
 {
     private static $display_uncategorised_data = false;
 
-    protected      $dataClass                  = 'Order';
+    protected      $dataClass                  = Order::class;
 
     protected      $periodfield                = "\"Order\".\"Created\"";
 
@@ -69,7 +86,7 @@ class ShopPeriodReport extends SS_Report implements i18nEntityProvider
 
     public function canView($member = null)
     {
-        if (get_class($this) == "ShopPeriodReport") {
+        if (get_class($this) == ShopPeriodReport::class) {
             return false;
         }
         return parent::canView($member);
@@ -142,21 +159,21 @@ class ShopPeriodReport extends SS_Report implements i18nEntityProvider
         }
         if ($this->grouping) {
             switch ($params['Grouping']) {
-                case "Year":
-                    $query->addGroupBy($this->fd($filterperiod, '%Y'));
-                    break;
-                case "Month":
-                default:
-                    $query->addGroupBy($this->fd($filterperiod, '%Y') . "," . $this->fd($filterperiod, '%m'));
-                    break;
-                case "Day":
-                    $query->addGroupBy(
-                        $this->fd($filterperiod, '%Y') . "," . $this->fd($filterperiod, '%m') . "," . $this->fd(
-                            $filterperiod,
-                            '%d'
-                        )
-                    );
-                    break;
+            case "Year":
+                $query->addGroupBy($this->fd($filterperiod, '%Y'));
+                break;
+            case "Month":
+            default:
+                $query->addGroupBy($this->fd($filterperiod, '%Y') . "," . $this->fd($filterperiod, '%m'));
+                break;
+            case "Day":
+                $query->addGroupBy(
+                    $this->fd($filterperiod, '%Y') . "," . $this->fd($filterperiod, '%m') . "," . $this->fd(
+                        $filterperiod,
+                        '%d'
+                    )
+                );
+                break;
             }
         }
         $query->setOrderBy("\"FilterPeriod\"", "ASC");

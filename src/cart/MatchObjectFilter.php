@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Convert;
+
+
 /**
  * Helper class to create a filter for matching a dataobject,
  * using field values or relationship ids and only those ids.
@@ -30,7 +35,6 @@
  *
  * Example output:
  * "FieldName" = 'data' AND  "AnotherField" = 32 AND "ARequiredField" IS NULL
- *
  */
 class MatchObjectFilter
 {

@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverShop\Core;
+
+use ValidationResult;
+use ValidationException;
+use Config;
+use Member;
+use Convert;
+
+
 class ShopMemberFactory
 {
     /**
@@ -17,7 +26,7 @@ class ShopMemberFactory
         $result = ValidationResult::create();
         if (!Checkout::member_creation_enabled()) {
             $result->error(
-                _t("Checkout.MembershipIsNotAllowed", "Creating new memberships is not allowed")
+                _t("SilverShop\\Core\\Checkout.MembershipIsNotAllowed", "Creating new memberships is not allowed")
             );
             throw new ValidationException($result);
         }
@@ -25,7 +34,7 @@ class ShopMemberFactory
         if (!isset($data[$idfield]) || empty($data[$idfield])) {
             $result->error(
                 _t(
-                    'Checkout.IdFieldNotFound',
+                    'SilverShop\\Core\\Checkout.IdFieldNotFound',
                     'Required field not found: {IdentifierField}',
                     'Identifier is the field that holds the unique user-identifier, commonly this is \'Email\'',
                     array('IdentifierField' => $idfield)
@@ -34,7 +43,7 @@ class ShopMemberFactory
             throw new ValidationException($result);
         }
         if (!isset($data['Password']) || empty($data['Password'])) {
-            $result->error(_t("Checkout.PasswordRequired", "A password is required"));
+            $result->error(_t("SilverShop\\Core\\Checkout.PasswordRequired", "A password is required"));
             throw new ValidationException($result);
         }
         $idval = $data[$idfield];
@@ -46,7 +55,7 @@ class ShopMemberFactory
 
             $result->error(
                 _t(
-                    'Checkout.MemberExists',
+                    'SilverShop\\Core\\Checkout.MemberExists',
                     'A member already exists with the {Field} {Identifier}',
                     '',
                     array('Field' => $fieldLabel, 'Identifier' => $idval)

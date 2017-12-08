@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use BuildTask;
+
+
 class CreateInternationalZoneTask extends BuildTask
 {
     protected $title       = "Create International Zone";

@@ -1,7 +1,15 @@
 <?php
 
+namespace SilverShop\Core;
+
+
 use SilverStripe\Omnipay\GatewayInfo;
 use SilverStripe\Omnipay\GatewayFieldsFactory;
+use Injector;
+use SilverShop\Core\OrderProcessor;
+use SilverShop\Core\OnsitePaymentCheckoutComponent;
+
+
 
 class PaymentForm extends CheckoutForm
 {
@@ -26,7 +34,7 @@ class PaymentForm extends CheckoutForm
     {
         parent::__construct($controller, $name, $config);
 
-        $this->orderProcessor = Injector::inst()->create('OrderProcessor', $config->getOrder());
+        $this->orderProcessor = Injector::inst()->create(OrderProcessor::class, $config->getOrder());
     }
 
     public function setSuccessLink($link)
@@ -55,10 +63,9 @@ class PaymentForm extends CheckoutForm
         $this->config->setData($form->getData());
         $order = $this->config->getOrder();
         $gateway = Checkout::get($order)->getSelectedPaymentMethod(false);
-        if (
-            GatewayInfo::isOffsite($gateway)
+        if (GatewayInfo::isOffsite($gateway)
             || GatewayInfo::isManual($gateway)
-            || $this->config->getComponentByType('OnsitePaymentCheckoutComponent')
+            || $this->config->getComponentByType(OnsitePaymentCheckoutComponent::class)
         ) {
             return $this->submitpayment($data, $form);
         }

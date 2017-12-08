@@ -1,5 +1,16 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Form;
+use Member;
+use FieldList;
+use FormAction;
+use RequiredFields;
+use SilverShop\Core\AccountPage_Controller;
+
+
+
 /**
  * Allows shop members to update their details with the shop.
  *
@@ -22,7 +33,7 @@ class ShopAccountForm extends Form
         } else {
             $fields = FieldList::create();
         }
-        if (get_class($controller) == 'AccountPage_Controller') {
+        if (get_class($controller) == AccountPage_Controller::class) {
             $actions = FieldList::create(FormAction::create('submit', _t('MemberForm.Save', 'Save Changes')));
         } else {
             $actions = FieldList::create(
@@ -120,7 +131,7 @@ class ShopAccountFormValidator extends RequiredFields
                     $field,
                     // re-use the message from checkout
                     _t(
-                        'Checkout.MemberExists',
+                        'SilverShop\\Core\\Checkout.MemberExists',
                         'A member already exists with the {Field} {Identifier}',
                         '',
                         array('Field' => $fieldLabel, 'Identifier' => $uid)

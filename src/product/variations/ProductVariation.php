@@ -1,5 +1,21 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use FieldList;
+use TextField;
+use LiteralField;
+use UploadField;
+use ArrayList;
+use Versioned;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductAttributeValue;
+use SilverShop\Core\ProductVariation_OrderItem;
+use SilverShop\Core\ProductVariation;
+
+
+
 /**
  * Product Variation
  *
@@ -24,12 +40,12 @@ class ProductVariation extends DataObject implements Buyable
     );
 
     private static $has_one           = array(
-        'Product' => 'Product',
+        'Product' => Product::class,
         'Image'   => 'Image'
     );
 
     private static $many_many         = array(
-        'AttributeValues' => 'ProductAttributeValue'
+        'AttributeValues' => ProductAttributeValue::class
     );
 
     private static $casting           = array(
@@ -68,7 +84,7 @@ class ProductVariation extends DataObject implements Buyable
 
     private static $default_sort      = "InternalItemID";
 
-    private static $order_item        = "ProductVariation_OrderItem";
+    private static $order_item        = ProductVariation_OrderItem::class;
 
     private static $title_has_label   = true;
 
@@ -79,8 +95,8 @@ class ProductVariation extends DataObject implements Buyable
     public function getCMSFields()
     {
         $fields = FieldList::create(
-            TextField::create('InternalItemID', _t('Product.Code', 'Product Code')),
-            TextField::create('Price', _t('Product.db_BasePrice', 'Price'))
+            TextField::create('InternalItemID', _t('SilverShop\\Core\\Product.Code', 'Product Code')),
+            TextField::create('Price', _t('SilverShop\\Core\\Product.db_BasePrice', 'Price'))
         );
         //add attributes dropdowns
         $attributes = $this->Product()->VariationAttributeTypes();
@@ -97,7 +113,7 @@ class ProductVariation extends DataObject implements Buyable
                             'novalues' . $attribute->Name,
                             '<p class="message warning">' .
                             _t(
-                                'ProductVariation.NoAttributeValuesMessage',
+                                'SilverShop\\Core\\ProductVariation.NoAttributeValuesMessage',
                                 '{attribute} has no values to choose from. You can create them in the "Products" &#62; "Product Attribute Type" section of the CMS.',
                                 'Warning that will be shown if an attribute doesn\'t have any values',
                                 array('attribute' => $attribute->Name)
@@ -114,7 +130,7 @@ class ProductVariation extends DataObject implements Buyable
                     'savefirst',
                     '<p class="message warning">' .
                     _t(
-                        'ProductVariation.MustSaveFirstMessage',
+                        'SilverShop\\Core\\ProductVariation.MustSaveFirstMessage',
                         "You can choose variation attributes after saving for the first time, if they exist."
                     ) .
                     '</p>'
@@ -122,7 +138,7 @@ class ProductVariation extends DataObject implements Buyable
             );
         }
         $fields->push(
-            UploadField::create('Image', _t('Product.Image', 'Product Image'))
+            UploadField::create('Image', _t('SilverShop\\Core\\Product.Image', 'Product Image'))
         );
 
         //physical measurement units
@@ -134,9 +150,11 @@ class ProductVariation extends DataObject implements Buyable
         $fields->push(
             TextField::create(
                 'Weight',
-                _t('Product.WeightWithUnit', 'Weight ({WeightUnit})', '', array(
+                _t(
+                    'SilverShop\\Core\\Product.WeightWithUnit', 'Weight ({WeightUnit})', '', array(
                     'WeightUnit' => Product::config()->weight_unit
-                )),
+                    )
+                ),
                 '',
                 12
             )
@@ -145,7 +163,7 @@ class ProductVariation extends DataObject implements Buyable
         $fields->push(
             TextField::create(
                 'Height',
-                _t('Product.HeightWithUnit', 'Height ({LengthUnit})', '', $fieldSubstitutes),
+                _t('SilverShop\\Core\\Product.HeightWithUnit', 'Height ({LengthUnit})', '', $fieldSubstitutes),
                 '',
                 12
             )
@@ -154,7 +172,7 @@ class ProductVariation extends DataObject implements Buyable
         $fields->push(
             TextField::create(
                 'Width',
-                _t('Product.WidthWithUnit', 'Width ({LengthUnit})', '', $fieldSubstitutes),
+                _t('SilverShop\\Core\\Product.WidthWithUnit', 'Width ({LengthUnit})', '', $fieldSubstitutes),
                 '',
                 12
             )
@@ -163,7 +181,7 @@ class ProductVariation extends DataObject implements Buyable
         $fields->push(
             TextField::create(
                 'Depth',
-                _t('Product.DepthWithUnit', 'Depth ({LengthUnit})', '', $fieldSubstitutes),
+                _t('SilverShop\\Core\\Product.DepthWithUnit', 'Depth ({LengthUnit})', '', $fieldSubstitutes),
                 '',
                 12
             )
@@ -307,10 +325,10 @@ class ProductVariation_OrderItem extends Product_OrderItem
     );
 
     private static $has_one              = array(
-        'ProductVariation' => 'ProductVariation',
+        'ProductVariation' => ProductVariation::class,
     );
 
-    private static $buyable_relationship = "ProductVariation";
+    private static $buyable_relationship = ProductVariation::class;
 
     /**
      * Overloaded relationship, for getting versioned variations
@@ -321,12 +339,12 @@ class ProductVariation_OrderItem extends Product_OrderItem
     {
         if ($this->ProductVariationID && $this->ProductVariationVersion && !$forcecurrent) {
             return Versioned::get_version(
-                'ProductVariation',
+                ProductVariation::class,
                 $this->ProductVariationID,
                 $this->ProductVariationVersion
             );
         } elseif ($this->ProductVariationID
-            && $product = DataObject::get_by_id('ProductVariation', $this->ProductVariationID)
+            && $product = DataObject::get_by_id(ProductVariation::class, $this->ProductVariationID)
         ) {
             return $product;
         }
@@ -349,28 +367,32 @@ class ProductVariation_OrderItem extends Product_OrderItem
         return $this->Product()->Image();
     }
 
-    public function Width() {
+    public function Width() 
+    {
         if($this->ProductVariation()->Width) {
             return $this->ProductVariation()->Width;
         }
         return $this->Product()->Width;
     }
 
-    public function Height() {
+    public function Height() 
+    {
         if($this->ProductVariation()->Height) {
             return $this->ProductVariation()->Height;
         }
         return $this->Product()->Height;
     }
 
-    public function Depth() {
+    public function Depth() 
+    {
         if($this->ProductVariation()->Depth) {
             return $this->ProductVariation()->Depth;
         }
         return $this->Product()->Depth;
     }
 
-    public function Weight() {
+    public function Weight() 
+    {
         if($this->ProductVariation()->Weight) {
             return $this->ProductVariation()->Weight;
         }

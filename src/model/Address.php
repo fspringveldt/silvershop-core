@@ -1,5 +1,18 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataObject;
+use FieldList;
+use TextField;
+use SiteConfig;
+use ReadonlyField;
+use DropdownField;
+use SilverShop\Core\ShopCountry;
+use SilverShop\Core\Address;
+
+
+
 /**
  * Address model using a generic format for storing international addresses.
  *
@@ -26,7 +39,7 @@
 class Address extends DataObject
 {
     private static $db              = array(
-        'Country'    => 'ShopCountry',
+        'Country'    => ShopCountry::class,
         //level1: Country = ISO 2-character country code
         'State'      => 'Varchar(100)',
         //level2: Locality, Administrative Area, State, Province, Region, Territory, Island
@@ -59,33 +72,35 @@ class Address extends DataObject
     );
 
     private static $casting         = array(
-        'Country' => 'ShopCountry',
+        'Country' => ShopCountry::class,
     );
 
     private static $required_fields = array(
         'Country',
         'State',
         'City',
-        'Address',
+        Address::class,
     );
 
     private static $summary_fields  = array(
-        'toString' => 'Address',
+        'toString' => Address::class,
     );
 
     public function getCMSFields()
     {
         $self = $this;
 
-        $this->beforeUpdateCMSFields(function(FieldList $fields) use ($self) {
-            $fields->addFieldToTab(
-                "Root.Main",
-                $self->getCountryField(),
-                'State'
-            );
+        $this->beforeUpdateCMSFields(
+            function (FieldList $fields) use ($self) {
+                $fields->addFieldToTab(
+                    "Root.Main",
+                    $self->getCountryField(),
+                    'State'
+                );
 
-            $fields->removeByName("MemberID");
-        });
+                $fields->removeByName("MemberID");
+            }
+        );
 
         return parent::getCMSFields();
     }
@@ -94,23 +109,23 @@ class Address extends DataObject
     {
         $fields = new FieldList(
             $this->getCountryField(),
-            $addressfield = TextField::create('Address', _t('Address.db_Address', 'Address')),
+            $addressfield = TextField::create(Address::class, _t('SilverShop\\Core\\Address.db_Address', Address::class)),
             $address2field =
-                TextField::create('AddressLine2', _t('Address.db_AddressLine2', 'Address Line 2 (optional)')),
-            $cityfield = TextField::create('City', _t('Address.db_City', 'City')),
-            $statefield = TextField::create('State', _t('Address.db_State', 'State')),
-            $postcodefield = TextField::create('PostalCode', _t('Address.db_PostalCode', 'Postal Code')),
-            $phonefield = TextField::create('Phone', _t('Address.db_Phone', 'Phone Number'))
+                TextField::create('AddressLine2', _t('SilverShop\\Core\\Address.db_AddressLine2', 'Address Line 2 (optional)')),
+            $cityfield = TextField::create('City', _t('SilverShop\\Core\\Address.db_City', 'City')),
+            $statefield = TextField::create('State', _t('SilverShop\\Core\\Address.db_State', 'State')),
+            $postcodefield = TextField::create('PostalCode', _t('SilverShop\\Core\\Address.db_PostalCode', 'Postal Code')),
+            $phonefield = TextField::create('Phone', _t('SilverShop\\Core\\Address.db_Phone', 'Phone Number'))
         );
         if (isset($params['addfielddescriptions']) && !empty($params['addfielddescriptions'])) {
             $addressfield->setDescription(
-                _t("Address.AddressHint", "street / thoroughfare number, name, and type or P.O. Box")
+                _t("SilverShop\\Core\\Address.AddressHint", "street / thoroughfare number, name, and type or P.O. Box")
             );
             $address2field->setDescription(
-                _t("Address.AddressLine2Hint", "premises, building, apartment, unit, floor")
+                _t("SilverShop\\Core\\Address.AddressLine2Hint", "premises, building, apartment, unit, floor")
             );
-            $cityfield->setDescription(_t("Address.CityHint", "or suburb, county, district"));
-            $statefield->setDescription(_t("Address.StateHint", "or province, territory, island"));
+            $cityfield->setDescription(_t("SilverShop\\Core\\Address.CityHint", "or suburb, county, district"));
+            $statefield->setDescription(_t("SilverShop\\Core\\Address.StateHint", "or province, territory, island"));
         }
 
         $this->extend('updateFormFields', $fields);
@@ -124,13 +139,13 @@ class Address extends DataObject
             //field name is Country_readonly so it's value doesn't get updated
             return ReadonlyField::create(
                 "Country_readonly",
-                _t('Address.db_Country', 'Country'),
+                _t('SilverShop\\Core\\Address.db_Country', 'Country'),
                 array_pop($countries)
             );
         }
         $field = DropdownField::create(
             "Country",
-            _t('Address.db_Country', 'Country'),
+            _t('SilverShop\\Core\\Address.db_Country', 'Country'),
             $countries
         )->setHasEmptyDefault(true);
 
@@ -207,7 +222,7 @@ class Address extends DataObject
 
     public function forTemplate()
     {
-        return $this->renderWith('Address');
+        return $this->renderWith(Address::class);
     }
 
     /**

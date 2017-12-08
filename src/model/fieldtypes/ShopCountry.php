@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Varchar;
+use Convert;
+
+
 class ShopCountry extends Varchar
 {
     public function __construct($name, $size = 3, $options = array())
@@ -21,7 +27,7 @@ class ShopCountry extends Varchar
         if (!$val) {
             $val = $this->value;
         }
-        return _t("ShopCountry." . $this->value, $val);
+        return _t("SilverShop\\Core\\ShopCountry." . $this->value, $val);
     }
 
     public function XML()

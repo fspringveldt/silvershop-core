@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverShop\Core;
+use SilverShop\Core\Order;
+
+
+
+
+
 /**
  * List top customers, especially those who spend alot, and those who buy alot.
  *
@@ -49,7 +56,7 @@ class CustomerReport extends ShopPeriodReport
             )
             ->selectField("Count(Order.ID)", "Orders")
             ->selectField("Sum(Order.Total)", "Spent");
-        $query->addInnerJoin("Order", "Member.ID = Order.MemberID");
+        $query->addInnerJoin(Order::class, "Member.ID = Order.MemberID");
         $query->addGroupBy("Member.ID");
         if (!$query->getOrderBy()) {
             $query->setOrderBy("Spent DESC,Orders DESC");

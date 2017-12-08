@@ -1,5 +1,16 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Exception;
+use Convert;
+use SQLQuery;
+use HiddenField;
+use SilverShop\Core\VariationForm;
+use SilverShop\Core\ProductVariation;
+
+
+
 /**
  * @package shop
  */
@@ -9,7 +20,7 @@ class VariationForm extends AddProductForm
 
     protected $requiredFields = ['Quantity'];
 
-    public function __construct($controller, $name = "VariationForm")
+    public function __construct($controller, $name = VariationForm::class)
     {
         parent::__construct($controller, $name);
         $this->extend('updateVariationForm');
@@ -64,7 +75,7 @@ class VariationForm extends AddProductForm
 
             if ($cart->add($variation, $quantity, $saveabledata)) {
                 $form->sessionMessage(
-                    _t('ShoppingCart.ItemAdded', "Item has been added successfully."),
+                    _t('SilverShop\\Core\\ShoppingCart.ItemAdded', "Item has been added successfully."),
                     "good"
                 );
             } else {
@@ -73,7 +84,7 @@ class VariationForm extends AddProductForm
         } else {
             $variation = null;
             $form->sessionMessage(
-                _t('VariationForm.VariationNotAvailable', "That variation is not available, sorry."),
+                _t('SilverShop\\Core\\VariationForm.VariationNotAvailable', "That variation is not available, sorry."),
                 "bad"
             ); //validation fail
         }
@@ -108,7 +119,7 @@ class VariationForm extends AddProductForm
         foreach ($attributes as $attribute) {
             $attributeDropdown = $attribute->getDropDownField(
                 _t(
-                    'VariationForm.ChooseAttribute',
+                    'SilverShop\\Core\\VariationForm.ChooseAttribute',
                     "Choose {attribute} …",
                     '',
                     array('attribute' => $attribute->Label)
@@ -116,7 +127,7 @@ class VariationForm extends AddProductForm
                 $product->possibleValuesForAttributeType($attribute)
             );
 
-            if($attributeDropdown){
+            if($attributeDropdown) {
                 $fields->push($attributeDropdown);
                 $this->requiredFields[] = "ProductAttributes[$attribute->ID]";
             }
@@ -128,7 +139,7 @@ class VariationForm extends AddProductForm
             $query = $query2 = new SQLQuery();
 
             $query->setSelect('ID')
-                ->setFrom('ProductVariation')
+                ->setFrom(ProductVariation::class)
                 ->addWhere(array('ProductID' => $product->ID));
 
             if (!Product::config()->allow_zero_price) {

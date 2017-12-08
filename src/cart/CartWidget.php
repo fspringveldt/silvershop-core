@@ -1,4 +1,10 @@
 <?php
+
+namespace SilverShop\Core;
+
+use Widget;
+use Controller;
+
 /**
  * CartWidget displays the current contents of the user's cart.
  *

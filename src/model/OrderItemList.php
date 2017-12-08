@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+use HasManyList;
+
+
 /**
  * Additional functions for Item lists.
  */
@@ -19,8 +24,8 @@ class OrderItemList extends HasManyList
      * Sums up all of desired field for items, and multiply by quantity.
      * Optionally sum product field instead.
      *
-     * @param         $field     - field to sum
-     * @param boolean $onproduct - sum from product or not
+     * @param $field     - field to sum
+     * @param boolean                  $onproduct - sum from product or not
      *
      * @return number - sum total of field
      */

@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverShop\Core;
+
+
+
+
 class FreeShippingModifier extends ShippingModifier
 {
     /**
@@ -11,6 +16,6 @@ class FreeShippingModifier extends ShippingModifier
 
     public function TableValue()
     {
-        return _t("FreeShippingModifier.Free", "FREE");
+        return _t("SilverShop\\Core\\FreeShippingModifier.Free", "FREE");
     }
 }

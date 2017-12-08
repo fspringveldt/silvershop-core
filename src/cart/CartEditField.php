@@ -1,5 +1,17 @@
 <?php
 
+namespace SilverShop\Core;
+
+use FormField;
+use SS_List;
+use Closure;
+use SSViewer;
+use ArrayList;
+use TextField;
+use DropdownField;
+use CheckboxField;
+
+
 /**
  * Field for editing cart/items within a form
  *

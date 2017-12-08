@@ -1,5 +1,23 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+use Config;
+
+use Extension;
+use TestOnly;
+use Exception;
+use SilverShop\Core\Order;
+use SilverShop\Core\Tests\ShoppingCartTest_TestShoppingCartHooksExtension;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Product;
+use SilverShop\Core\ProductVariation;
+use SilverShop\Core\ProductVariation_OrderItem;
+use SilverShop\Core\Tests\ShoppingCartTest_TestShoppingCartErroringHooksExtension;
+
+
+
 class ShoppingCartTest extends SapphireTest
 {
     public static $fixture_file   = 'silvershop/tests/fixtures/shop.yml';
@@ -10,12 +28,12 @@ class ShoppingCartTest extends SapphireTest
     {
         parent::setUp();
         ShopTest::setConfiguration(); //reset config
-        Config::inst()->update('Order', 'extensions', ['ShoppingCartTest_TestShoppingCartHooksExtension']);
+        Config::inst()->update(Order::class, 'extensions', [ShoppingCartTest_TestShoppingCartHooksExtension::class]);
 
         ShoppingCart::singleton()->clear();
         ShoppingCartTest_TestShoppingCartHooksExtension::reset();
         $this->cart = ShoppingCart::singleton();
-        $this->product = $this->objFromFixture('Product', 'mp3player');
+        $this->product = $this->objFromFixture(Product::class, 'mp3player');
         $this->product->publish('Stage', 'Live');
     }
 
@@ -74,7 +92,7 @@ class ShoppingCartTest extends SapphireTest
         //$this->assertFalse($this->cart->current(),"there is no cart initally");
         $this->assertTrue((boolean)$this->cart->add($this->product), "add one item");
         $this->assertTrue((boolean)$this->cart->add($this->product), "add another item");
-        $this->assertEquals($this->cart->current()->class, "Order", "there a cart");
+        $this->assertEquals($this->cart->current()->class, Order::class, "there a cart");
         $this->assertTrue($this->cart->clear(), "clear the cart");
         $this->assertFalse($this->cart->current(), "there is no cart");
     }
@@ -82,8 +100,8 @@ class ShoppingCartTest extends SapphireTest
     public function testProductVariations()
     {
         $this->loadFixture('silvershop/tests/fixtures/variations.yml');
-        $ball1 = $this->objFromFixture('ProductVariation', 'redlarge');
-        $ball2 = $this->objFromFixture('ProductVariation', 'redsmall');
+        $ball1 = $this->objFromFixture(ProductVariation::class, 'redlarge');
+        $ball2 = $this->objFromFixture(ProductVariation::class, 'redsmall');
 
         $this->assertTrue((boolean)$this->cart->add($ball1), "add one item");
 
@@ -115,8 +133,8 @@ class ShoppingCartTest extends SapphireTest
     public function testAddProductWithVariations()
     {
         $this->loadFixture('silvershop/tests/fixtures/variations.yml');
-        $ball = $this->objFromFixture('Product', 'ball');
-        $redlarge = $this->objFromFixture('ProductVariation', 'redlarge');
+        $ball = $this->objFromFixture(Product::class, 'ball');
+        $redlarge = $this->objFromFixture(ProductVariation::class, 'redlarge');
         // setting price of variation to zero, so it can't be added to cart.
         $redlarge->Price = 0;
         $redlarge->write();
@@ -126,13 +144,13 @@ class ShoppingCartTest extends SapphireTest
 
         $item = $this->cart->add($ball);
         $this->assertNotNull($item, "Product with variations can be added to cart");
-        $this->assertInstanceOf('ProductVariation_OrderItem', $item, 'A variation should be added to cart.');
+        $this->assertInstanceOf(ProductVariation_OrderItem::class, $item, 'A variation should be added to cart.');
         $this->assertEquals(20, $item->Buyable()->Price, 'The buyable variation was added');
     }
 
     public function testErrorInCartHooks()
     {
-        Config::inst()->update('Order', 'extensions', ['ShoppingCartTest_TestShoppingCartErroringHooksExtension']);
+        Config::inst()->update(Order::class, 'extensions', [ShoppingCartTest_TestShoppingCartErroringHooksExtension::class]);
 
         ShoppingCart::singleton()->clear();
         $cart = ShoppingCart::singleton();

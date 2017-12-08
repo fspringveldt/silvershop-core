@@ -1,5 +1,15 @@
 <?php
 
+namespace SilverShop\Core;
+
+use Form;
+use FieldList;
+use FormAction;
+use SiteConfig;
+use Member;
+use Session;
+
+
 class CheckoutForm extends Form
 {
     protected $config;
@@ -16,7 +26,7 @@ class CheckoutForm extends Form
         if($text = $this->config()->get('submit_button_text')) {
             $submitBtnText = $text;
         } else {
-            $submitBtnText = _t('CheckoutPage.ProceedToPayment', 'Proceed to payment');
+            $submitBtnText = _t('SilverShop\\Core\\CheckoutPage.ProceedToPayment', 'Proceed to payment');
         }
 
         $actions = FieldList::create(

@@ -1,5 +1,16 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataExtension;
+use Member;
+use FieldList;
+use DropdownField;
+use SiteConfig;
+use SilverShop\Core\Address;
+
+
+
 /**
  * ShopMember provides customisations to {@link Member} for shop purposes
  *
@@ -8,12 +19,12 @@
 class ShopMember extends DataExtension
 {
     private static $has_many = array(
-        'AddressBook' => 'Address',
+        'AddressBook' => Address::class,
     );
 
     private static $has_one  = array(
-        'DefaultShippingAddress' => 'Address',
-        'DefaultBillingAddress'  => 'Address',
+        'DefaultShippingAddress' => Address::class,
+        'DefaultBillingAddress'  => Address::class,
     );
 
     /**
@@ -38,7 +49,7 @@ class ShopMember extends DataExtension
             'Root.Main',
             DropdownField::create(
                 'Country',
-                _t('Address.db_Country', 'Country'),
+                _t('SilverShop\\Core\\Address.db_Country', 'Country'),
                 SiteConfig::current_site_config()->getCountriesList()
             )
         );

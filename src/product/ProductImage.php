@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core;
+
+use DataExtension;
+use Config_ForClass;
+use SilverShop\Core\Product_Image;
+
+
+
 /**
  * Adds some image size functions to the Image DataObject.
  *
@@ -7,7 +15,9 @@
  */
 class Product_Image extends DataExtension
 {
-    /** @var Image */
+    /**
+     * @var Image 
+     */
     protected $owner;
 
     /**
@@ -50,8 +60,8 @@ class Product_Image extends DataExtension
      * Resizes image by width or height only if the source image is bigger than the given width/height.
      * This prevents ugly upscaling.
      *
-     * @param int  $width [optional]
-     * @param int  $height [optional]
+     * @param int  $width   [optional]
+     * @param int  $height  [optional]
      * @param bool $upscale [optional]
      *
      * @return Image
@@ -93,6 +103,6 @@ class Product_Image extends DataExtension
 
     public static function config()
     {
-        return new Config_ForClass("Product_Image");
+        return new Config_ForClass(Product_Image::class);
     }
 }

@@ -1,5 +1,21 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+
+
+
+use SiteConfig;
+use SilverShop\Core\ShoppingCart;
+use SilverShop\Core\Product;
+use SilverShop\Core\CheckoutPage_Controller;
+use SilverShop\Core\SinglePageCheckoutComponentConfig;
+use SilverShop\Core\CheckoutForm;
+
+
+
 class CheckoutFormTest extends SapphireTest
 {
     public static $fixture_file = 'silvershop/tests/fixtures/shop.yml';
@@ -15,11 +31,11 @@ class CheckoutFormTest extends SapphireTest
     {
         parent::setUp();
         ShopTest::setConfiguration();
-        $this->mp3player = $this->objFromFixture('Product', 'mp3player');
+        $this->mp3player = $this->objFromFixture(Product::class, 'mp3player');
         $this->mp3player->publish('Stage', 'Live');
-        $this->socks = $this->objFromFixture('Product', 'socks');
+        $this->socks = $this->objFromFixture(Product::class, 'socks');
         $this->socks->publish('Stage', 'Live');
-        $this->beachball = $this->objFromFixture('Product', 'beachball');
+        $this->beachball = $this->objFromFixture(Product::class, 'beachball');
         $this->beachball->publish('Stage', 'Live');
 
         $this->checkoutcontroller = new CheckoutPage_Controller();

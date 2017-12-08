@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverShop\Core\Tests;
+
+use SapphireTest;
+
+use SilverShop\Core\ShopCountry;
+
+
+
 class ShopCountryTest extends SapphireTest
 {
     public function testField()
